@@ -1,0 +1,167 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Galeri Desa - GreenVillage" activePage="galeri">
+  <!-- Hero Section -->
+  <section class="bg-surface py-section-padding-desktop px-6">
+    <div class="max-w-[1200px] mx-auto text-center">
+      <h1 class="font-headline-xl text-headline-xl text-primary mb-4 font-bold text-3xl md:text-4xl">Galeri Desa</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+        Menangkap esensi kehidupan di GreenVillage—dari keindahan alam yang asri hingga kehangatan budaya dan semangat gotong royong warga kami.
+      </p>
+    </div>
+  </section>
+
+  <!-- Category Filter -->
+  <div class="bg-surface-container-low py-4 px-6 sticky top-20 z-40 border-b border-outline-variant">
+    <div class="max-w-[1200px] mx-auto flex gap-4 overflow-x-auto no-scrollbar">
+      <button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md text-label-md whitespace-nowrap filter-btn" data-category="all">Semua</button>
+      <button class="bg-surface text-on-surface-variant border border-outline-variant px-6 py-2 rounded-full font-label-md text-label-md whitespace-nowrap hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors filter-btn" data-category="alam">Alam</button>
+      <button class="bg-surface text-on-surface-variant border border-outline-variant px-6 py-2 rounded-full font-label-md text-label-md whitespace-nowrap hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors filter-btn" data-category="budaya">Budaya</button>
+      <button class="bg-surface text-on-surface-variant border border-outline-variant px-6 py-2 rounded-full font-label-md text-label-md whitespace-nowrap hover:bg-primary-fixed hover:text-on-primary-fixed transition-colors filter-btn" data-category="komunitas">Komunitas</button>
+    </div>
+  </div>
+
+  <!-- Gallery Grid -->
+  <section class="max-w-[1200px] mx-auto px-6 py-section-padding-desktop">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+      <!-- Large Feature Card -->
+      <div class="md:col-span-8 gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm transition-all duration-300 hover:shadow-md cursor-pointer" data-item="alam">
+        <img 
+          alt="Sawah Terasering" 
+          class="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105" 
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuATGJrsaX_6FeodDNTu1FMcX_CxIoyZFnQRGHS4RDLdicU3ETGgF9TPDu3KrEtfxWQNrHtSScb1G8wsqkFDKtvfF2Ls5rwo07u7y70xWDOD3p9v5rwdpuc7W3g1YfQZQTHL3NdWLkQfIRr06f4KF4V1_bzbtpuvP4WGsnPSXq7lZXmUc8qhWInlKJehDVQRq5wEAStooUyn70FXPOkb3wX5A49adYW-5h4PkacxB6YI3GFrVk9ZMHQFe-Ugy-aPe9v4wKXbzQXctu4"
+        />
+        <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
+          <div>
+            <span class="inline-block bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full font-label-md text-[12px] mb-3 font-bold">ALAM</span>
+            <h3 class="font-headline-lg text-headline-lg text-white text-xl font-bold">Sawah Terasering</h3>
+            <p class="text-white/80 font-body-md text-sm">Sistem irigasi tradisional yang menjaga kesuburan tanah GreenVillage.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Small Grid Items -->
+      <div class="md:col-span-4 flex flex-col gap-gutter">
+        <div class="gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm h-[238px] cursor-pointer" data-item="budaya">
+          <img 
+            alt="Festival Budaya" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4jFuAzqrLZaMj0nxrDSXxKvsY2_GycCL-pv6AXqUtyfUkU2gWv8hF00r_LkSLSXX1jEx8R9V9k9Xyc6u9Gzofj--RCxFAr0lupvsIzUMwEiAN-llybR8ENKN3mtgvOZRAjl3ObyjanKvp9hcFMWIVc193rhMbNHjQSqE3FK1K4Y5rrAcBdr4-H7N8Lko6mbMRnHI7gj_X5uLnfTfaH_zHMM-0959eRBg8TjY-I2z9d956kt9NAGPVF-7c_NxFJpk7payOiZ7kVkA"
+          />
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <div>
+              <span class="inline-block bg-secondary-fixed text-on-secondary-fixed px-3 py-1 rounded-full font-label-md text-[12px] mb-2 font-bold">BUDAYA</span>
+              <h3 class="font-headline-md text-headline-md text-white font-bold text-lg">Festival Budaya</h3>
+            </div>
+          </div>
+        </div>
+        <div class="gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm h-[238px] cursor-pointer" data-item="komunitas">
+          <img 
+            alt="Gotong Royong Warga" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVpwZu41-OlYlXqcJjyXz_x3QnE2wnC_hXnC_HuK1Cte45VabznCghYrJtRiaIr3tBIwb-id4uzZBdpctbTbWpyLjGuDkFb73kRzxpoeLGT6Q7fBLY4ZTsphLsDZu-7S4smK3OBrtXjamiqx0tqeQBxg75ADKoYooPo5Grx5ne7NkAzW4zOyi1W980MG1VWNlbk2m0na_bRa4GD5aZ5uV_82McvP5M5IWM7rT9s0ujMIo6uqJs15ZXPBDpfMn4gvo7UtfSt4ZaILU"
+          />
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+            <div>
+              <span class="inline-block bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full font-label-md text-[12px] mb-2 font-bold">KOMUNITAS</span>
+              <h3 class="font-headline-md text-headline-md text-white font-bold text-lg">Gotong Royong Warga</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Secondary Row -->
+      <div class="md:col-span-4 gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm h-[350px] cursor-pointer animate-fade" data-item="alam">
+        <div class="w-full h-full bg-surface-variant flex items-center justify-center p-8 text-center" style="background-image: linear-gradient(rgba(1, 45, 29, 0.05), rgba(1, 45, 29, 0.05)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBwDIK_OuUdX81wbI_sf4qUjSAej2mFIdSDIO3AJTPwEY1YjNOO3QGiGk9nWNhAfR0xrxL-EeDRob85WVUbAOSNdGCURJ1wib_atNcRvwu8xLLx7J3Tu2ZYnWvrq1pUYlq8Fauz8P1ugikuMRhuXSLT2qWrtP3S0s5HMokQg11xbK3EvXBzXa4xbYtiXkEwEDXYokVYuja4QnTTMTdUW-8nQjNeOE3XpIKAgh13QyBBAeppWv1EHz1m4K8rB7pPdBs0G3BEyWi4VE'); background-size: cover; background-position: center;">
+          <div class="relative z-10 text-white bg-black/40 p-4 rounded-xl backdrop-blur-sm">
+            <h3 class="font-headline-md text-headline-md text-white font-bold text-lg">Pagi Hari di Desa</h3>
+            <span class="text-white/80 font-body-md text-sm">Momen tenang sebelum aktivitas dimulai.</span>
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-4 gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm h-[350px] cursor-pointer" data-item="budaya">
+        <div class="w-full h-full bg-surface-variant relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCpEPxTQP71O4jwfPR44J8Cb383HGF2vBG1xpFRbjzh2gbD5q6VX_epN5CNvxmDF1D9ckiHFo6OOH0748h9PSflL0G2jXxwkQg6RVDvaVUbB6FZp8hXaKo769fdd4ouAcCHbdudtck2nW4EF-HvJhVXkqV6JJQMkNUaUwyv_KaShFjvDO53ZoufpQ7M_heU8s2YUTas5Z70i5ePhoPrRebiV1CPyEiSOMMZO3x-YrajRq3JWfLJrtDTKfNa_CAfZ6kafJM4ovgiuGQ'); background-size: cover; background-position: center;">
+          <div class="overlay absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <span class="text-white font-label-md border-2 border-white px-6 py-2 rounded-full uppercase tracking-wider text-xs font-bold">Lihat Detail</span>
+          </div>
+        </div>
+        <div class="p-4 bg-surface border-t border-outline-variant">
+          <h4 class="font-label-md text-primary font-bold">Kerajinan Tangan Lokal</h4>
+        </div>
+      </div>
+      <div class="md:col-span-4 gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm h-[350px] cursor-pointer" data-item="komunitas">
+        <div class="w-full h-full bg-surface-variant relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjkDUjKrnGaIZMnwY2jRmGaViaLlsdSgwSYxgH_2KnC_Z7JOJ9Jr9rimIZrlI2cWgLJhmpQMDpgShdn3A-mkVoPMNe-Y2JvrVuQEiZCLm5HTzVvgXo0g6VR22e1dLCSG_Ii8gRT3wQmvyktE54KW63wmC1al7UPNZm5Dn3TXk478XZ9J5Hq73mohDprxeoQSGAbA4uDwhv5IDorWH6I_a0PWBMWUeYSfIPfPzqUmwwKVVNPGCer5BHpbk-HNab2k4hXS87Lm6SRvo'); background-size: cover; background-position: center;">
+          <div class="overlay absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <span class="text-white font-label-md border-2 border-white px-6 py-2 rounded-full uppercase tracking-wider text-xs font-bold">Lihat Detail</span>
+          </div>
+        </div>
+        <div class="p-4 bg-surface border-t border-outline-variant">
+          <h4 class="font-label-md text-primary font-bold">Jamuan Makan Warga</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upload CTA Section -->
+  <section class="bg-primary-container text-on-primary-container py-section-padding-desktop px-6">
+    <div class="max-w-[800px] mx-auto text-center">
+      <span class="material-symbols-outlined text-[48px] mb-6">camera_enhance</span>
+      <h2 class="font-headline-lg text-headline-lg mb-4 text-2xl font-bold">Ingin Menampilkan Foto Anda?</h2>
+      <p class="font-body-lg text-body-lg mb-8 opacity-90">
+        Kami selalu mencari sudut pandang baru dari keindahan GreenVillage. Kirimkan foto terbaik Anda dan jadilah bagian dari cerita kami.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/layanan" class="bg-secondary text-on-secondary px-8 py-4 rounded-full font-label-md text-label-md hover:opacity-90 transition-all flex items-center justify-center gap-2 font-bold">
+          <span class="material-symbols-outlined">upload</span>
+          Kirim Foto
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Smooth interaction for gallery cards
+      document.querySelectorAll('.gallery-card').forEach(card => {
+        card.addEventListener('mousedown', () => {
+          card.classList.add('scale-95', 'opacity-80');
+        });
+        card.addEventListener('mouseup', () => {
+          card.classList.remove('scale-95', 'opacity-80');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.classList.remove('scale-95', 'opacity-80');
+        });
+      });
+
+      // Filtering logic
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const galleryCards = document.querySelectorAll('.gallery-card');
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.getAttribute('data-category');
+
+          // Highlight current button
+          filterButtons.forEach(b => {
+            b.classList.remove('bg-primary', 'text-on-primary');
+            b.classList.add('bg-surface', 'text-on-surface-variant', 'border', 'border-outline-variant');
+          });
+          btn.classList.remove('bg-surface', 'text-on-surface-variant', 'border', 'border-outline-variant');
+          btn.classList.add('bg-primary', 'text-on-primary');
+
+          // Filter items
+          galleryCards.forEach(card => {
+            const itemCat = card.getAttribute('data-item');
+            if (category === 'all' || itemCat === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</Layout>

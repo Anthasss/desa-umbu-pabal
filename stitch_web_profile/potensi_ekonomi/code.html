@@ -1,0 +1,388 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Potential &amp; Economy | GreenVillage</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#3b1f00",
+                    "on-error-container": "#93000a",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#414844",
+                    "inverse-primary": "#a5d0b9",
+                    "secondary-fixed-dim": "#58d6f1",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed": "#c1ecd4",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#86af99",
+                    "error-container": "#ffdad6",
+                    "secondary": "#006878",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c1c8c2",
+                    "inverse-surface": "#2e3132",
+                    "on-secondary-fixed": "#001f25",
+                    "outline": "#717973",
+                    "primary-container": "#1b4332",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-container-high": "#e7e8e9",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#a7edff",
+                    "primary": "#012d1d",
+                    "on-secondary-container": "#006575",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#56340e",
+                    "tertiary-fixed": "#ffdcbd",
+                    "tertiary-fixed-dim": "#f0bd8b",
+                    "surface-bright": "#f8f9fa",
+                    "on-surface": "#191c1d",
+                    "surface-container": "#edeeef",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-fixed": "#2c1600",
+                    "on-background": "#191c1d",
+                    "background": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#004e5b",
+                    "on-tertiary-fixed-variant": "#623f18",
+                    "primary-fixed-dim": "#a5d0b9",
+                    "surface-tint": "#3f6653",
+                    "secondary-container": "#69e5ff",
+                    "on-tertiary-container": "#cd9d6d",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-primary-fixed": "#002114",
+                    "on-primary-fixed-variant": "#274e3d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max": "1200px",
+                    "section-padding-mobile": "40px",
+                    "section-padding-desktop": "80px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-xl": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "headline-md": ["Montserrat"],
+                    "headline-xl-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-xl-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(233, 236, 239, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface-bright dark:bg-surface-dim">
+<nav class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">
+                GreenVillage
+            </div>
+<div class="hidden md:flex items-center space-x-8"><a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">Home</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md" href="#">About</a>
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1 font-body-md text-body-md" href="#">Economy</a></div>
+<button class="bg-primary-container text-on-primary px-6 py-2 rounded-full font-label-md text-label-md hover:opacity-90 transition-all">
+                Contact Us
+            </button>
+</nav>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[614px] flex items-center overflow-hidden">
+<img alt="Village Economy Hero" class="absolute inset-0 w-full h-full object-cover" data-alt="A sprawling panoramic view of lush green terraced rice fields in a traditional village at sunrise. Golden sunlight filters through misty mountains in the background, creating a serene and prosperous atmosphere. The visual style is professional architectural photography with a clean, light-mode aesthetic and deep forest green accents. The mood is hopeful and grounded." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnme8SDZy1OvJqpr4rhGbCsB6uTmpvLe2av7Wk2i07V-tPzVizKpgpqa-jSVOa-oNHZjYUDHIKHzlKrP7mE6EFr9OuzeyhOsG_YxNHz96ZxaM8AJQbLLWj1pvh3Bj6uQ4OPtzEbYlqLKIUO7b80db8YzcFxGe9JNA0niGJUXNVfPc6Wf5seo_mp9rA3gqp_BMVGefsvvC-Ph7mN05WG91Akcnj5dSEECvkDAoWu2tmN2FdGqBSn97fMMke_FuSTPq25ToGT_kGkT0">
+<div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-transparent"></div>
+<div class="relative max-w-container-max mx-auto px-gutter w-full">
+<div class="max-w-2xl">
+<span class="inline-block bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full text-label-md font-label-md mb-4">Potensi &amp; Ekonomi</span>
+<h1 class="font-headline-xl text-headline-xl text-on-primary mb-6">Nurturing Local Strengths for a Sustainable Future.</h1>
+<p class="font-body-lg text-body-lg text-primary-fixed mb-8">Discover how GreenVillage blends traditional wisdom with modern innovation to drive economic growth and community stewardship.</p>
+</div>
+</div>
+</section>
+<!-- Main Sectors Bento Grid -->
+<section class="py-section-padding-desktop max-w-container-max mx-auto px-gutter">
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Economic Pillars</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Strategic sectors driving our village's independence and growth.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Agriculture (Large) -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-xl h-[400px]">
+<img alt="Modern Agriculture" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close-up of healthy organic vegetable crops growing in a modern sustainable village farm. The lighting is bright and natural, emphasizing the vibrant greens and earthy brown soil. Professional agriculture photography style with a focus on precision and growth. The scene represents modern stewardship and efficiency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnCdzWoyipAcZ4RZJFwEMBxfdCiVJ6uyzr2kuP9XcwlED2CePQT-b7bLgLUuae0mn4zSTgSEDtV-ROIhr8JXx9z4xOTyDKsjIbJU-FyI3NEG65KQYm2O-DMAYxLz5so3OnaKoDMZoPsg30Dnm4838L2yJpJ_GEqEnC6H8EFxk2d88-c9DNZBYjNynVbiPdkCU0c5yM4BF1BumhBt9UCFsi1ZKU_zu_LFBN7Yc6nwTDwtJmLc4ZMhqLkQYhIFqhjg1gBpXoEgepWE4">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined">eco</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Primary Sector</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Smart Agriculture</h3>
+<p class="font-body-md text-body-md opacity-90 max-w-lg">Integrating IoT and organic practices to maximize yields while preserving our ancestral lands.</p>
+</div>
+</div>
+<!-- Fishing (Tall) -->
+<div class="md:col-span-4 group relative overflow-hidden rounded-xl h-[400px]">
+<img alt="Fishery Sector" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A clean, professional shot of a local fisherman's boat on a calm, crystal clear lake at dawn. The water reflects the soft blue and gold of the early morning sky. The visual style is minimalist and high-end, evoking a sense of stable, sustainable industry and natural abundance. Cool blue tones dominate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrMA5eNmu8KrlJV19BQJ86KVLiL8ti0Gbdaf4k-Gao01oLTgABFvlnhgpgIvZ6PORKuMXUdpFycA4SFVM9isrpo6lhKQp4JBMHbpzhZLwMd8RCpo5xvaDYxtajq1Vo1QHhVvDPgwJPRfLe6vNcaNdw8F3pWPSmtvJgTllU2R5ZtUYYMI52jysr3scOGhjZPY9nkcR59Pw915gyfeNOYqNolyUrJM9AIM_79r_0t-9m2hLsm7o20aoReY2WiMbRJSzgeFiFWp5CIps">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 text-white">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined">tsunami</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Sustainable Industry</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-2">Aquatic Resources</h3>
+<p class="font-body-md text-body-md opacity-90">Responsible freshwater fishing and aquaculture supporting 30% of local households.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Tourism (Wisata) Section -->
+<section class="py-section-padding-desktop bg-surface-container-low">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Tourism Highlights</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Experience the hidden gems of GreenVillage.</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-label-md text-label-md hover:translate-x-1 transition-transform">
+                        Explore All Spots <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Spot 1 -->
+<div class="bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-shadow">
+<div class="h-64 relative overflow-hidden">
+<img alt="Hidden Waterfall" class="w-full h-full object-cover" data-alt="Aerial view of a secluded forest waterfall with clear turquoise water falling into a natural pool. Surrounded by dense, dark green tropical foliage. The lighting is diffused and soft, creating a tranquil, high-end travel photography look. Professional color grading with a focus on deep forest greens and clear water." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6jPu0n4gxWIFEYYwBHugUm1_9RhZ-pJFKSe30_2kVOIpIA9QP1ylKIKaRpV5C8poWeeD9FPbWhHxyIzA90W3jf_DULJihd8_GAPCFNbKphyWIb6eBZBDCfJiHLEebRRRIMCf9DeEaenHUDs0K9Aets_jXuaTEm2i6LAQ8yGWgnB7Q8Y6gZv-l2X1LHL0A6KFxq7LHRKjLc5ahmCg-ewQUtgBpJFxKh2_hhQTUhrIEZ45HtXlaaFOdQ-tJFp0MjOgN8BJq6-j7SMs">
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold">NATURE</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md mb-2 text-primary">Emerald Falls</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">A pristine three-tier waterfall tucked away in the protected highland forest.</p>
+<div class="flex items-center text-on-surface-variant text-sm gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> 2km from Center</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-tertiary-container">star</span> 4.9</span>
+</div>
+</div>
+</div>
+<!-- Spot 2 -->
+<div class="bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-shadow">
+<div class="h-64 relative overflow-hidden">
+<img alt="Traditional Village" class="w-full h-full object-cover" data-alt="A charming, well-maintained traditional village street with wooden architecture and hanging flower baskets. The morning light is warm and inviting, casting long soft shadows. Minimalist and clean aesthetic, emphasizing heritage and community order. Colors are warm browns, greens, and soft earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6Cj6Nn6OrfDxh0ZXqKL2cYFLjMOdEwulujkYmS_XTmXjGyesVDpWatmsT0YuX0KaVzIcnjqZCaLWjB1cMPIdsyrnBUGYEk5dcSTbFZT5ysSXHhoKaCat2o1R0tKdg-qUsayQ1zp-5IRGMbtQIHaXWMhRlN7cc8eVBmeImLkvtgp_KBgVv0nbbKBbgTYtDwure4lqZVz-xKWKA1mwIsPpt9YP7ymfcYlolIp91boscFQHrp_TMiVQwTcBch14PVDfJPStavvEpAeA">
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold">CULTURE</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md mb-2 text-primary">Heritage Row</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Experience authentic village life in our meticulously preserved cultural district.</p>
+<div class="flex items-center text-on-surface-variant text-sm gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Village Core</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-tertiary-container">star</span> 4.8</span>
+</div>
+</div>
+</div>
+<!-- Spot 3 -->
+<div class="bg-surface rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-shadow">
+<div class="h-64 relative overflow-hidden">
+<img alt="Mountain Peak" class="w-full h-full object-cover" data-alt="Magnificent mountain peak at sunset with vibrant orange and purple skies. Below the peak are pine forests and mist-filled valleys. The visual style is epic and landscape-focused, with high contrast and sharp details. Represents the majestic natural beauty of the village's geography. Professional travel adventure aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl4WoIFApe5iRx5ToqzsZQlRFTBjCqHwIeZAV7fX5WH24eEusfaHREXPCBjsT04WD6X0A2QNOxAsZUW5hqPq-Iv73NR4632wsFf9ucE4jym2m8gHxEclAkEirw31fkf9p9j07cstlVSbNX9-LB7DcdChBNAadiZg3zKrCZDE2sE2wZJKfb5sE_2LNsgMffM9KBRoFozQT5oqIZr1Xl2wmgKKrHhLdjppEdXIV60T6QGQSURZoZlrobAY7ViAR0gIB708VPIRVZl0Q">
+<div class="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold">ADVENTURE</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-md text-headline-md mb-2 text-primary">Summit Trail</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">A challenging but rewarding trek offering 360-degree views of the entire valley.</p>
+<div class="flex items-center text-on-surface-variant text-sm gap-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> North Ridge</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-base text-tertiary-container">star</span> 5.0</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- UMKM / SME Section -->
+<section class="py-section-padding-desktop max-w-container-max mx-auto px-gutter">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter items-center">
+<div class="lg:col-span-1">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">Produk Unggulan</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Support our local artisans. Every purchase contributes directly to the village economic fund.</p>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4 p-4 glass-card rounded-xl">
+<span class="material-symbols-outlined text-secondary bg-secondary-container/30 p-3 rounded-full">shopping_basket</span>
+<div>
+<h5 class="font-label-md text-label-md text-primary">Local Empowerment</h5>
+<p class="text-sm text-on-surface-variant">100+ Active SMEs</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 glass-card rounded-xl">
+<span class="material-symbols-outlined text-secondary bg-secondary-container/30 p-3 rounded-full">public</span>
+<div>
+<h5 class="font-label-md text-label-md text-primary">Global Standards</h5>
+<p class="text-sm text-on-surface-variant">Export Ready Quality</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- SME Product 1 -->
+<div class="group relative bg-surface p-4 rounded-xl border border-outline-variant flex gap-4 transition-all hover:-translate-y-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Local Textile" class="w-full h-full object-cover" data-alt="Close-up of artisan hand-woven textile featuring intricate geometric patterns. The fabric has a rich texture and natural earthy dyes in deep forest green and warm gold. The style is minimalist craft photography with soft lighting to highlight the fiber detail. Professional, high-end product presentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnLSoXYxYyU0Fqw9gmAJaPP9ANoWN-myxiTMlnhpzcQimC97D17uFP0kPFZzA612TxZ42X-N3zIrKl0p4hc8kL5yyOsRrTixPweA-e35NJSs74_2cNtjEpS1QPj_JCMqw7OZE9j0rPYkrXmqLQotAJiw_xyf44dte6flkMPmqcApprZDC8ykj-ShdVeiA_-0wDHuISsLjMdzmsXiCVekr0xBdhgDP7ER77un-NxG1QU89BR_MXpuCYvf9FjHLim4TaDjv5NdQ1kUY">
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-headline-md text-headline-md text-sm mb-1">Traditional Weaving</h4>
+<p class="text-xs text-on-surface-variant mb-2">Handmade by the Village Women's Cooperative.</p>
+<span class="text-primary font-bold text-sm">Rp 250.000+</span>
+</div>
+</div>
+<!-- SME Product 2 -->
+<div class="group relative bg-surface p-4 rounded-xl border border-outline-variant flex gap-4 transition-all hover:-translate-y-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Forest Honey" class="w-full h-full object-cover" data-alt="A jar of dark, rich organic forest honey next to a honeycomb on a clean wooden table. The lighting is warm and bright, emphasizing the golden viscosity of the honey. Clean, modern product photography style for a premium food brand. Natural, healthy aesthetic with high clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTmgu0aspOTP5gy5vDmaLeOLskyOFjTDc7hOMUBZaqEEjOj_mgacXuQxQNNWNtoK6qw-yNrcp37_Xjzyq2C07R6wYkB3I1g7NflwuDRiqX_R6TbFiUVtGNmcIJfv7Jlf-0Lvu1dK-gS7trBXRF9o-2vRnZ_KsjKLYELDdZarP-qR9hU7BzpOBNRlqviaj1wGz79CORs1lPLtgd18-Ykty16FNA7FobiBuvhg6eSKx5mf7tKPDhoYqKkheXjvrATOzX5EHxcmy9rtk">
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-headline-md text-headline-md text-sm mb-1">Raw Forest Honey</h4>
+<p class="text-xs text-on-surface-variant mb-2">Organic, pure honey harvested from the highlands.</p>
+<span class="text-primary font-bold text-sm">Rp 85.000</span>
+</div>
+</div>
+<!-- SME Product 3 -->
+<div class="group relative bg-surface p-4 rounded-xl border border-outline-variant flex gap-4 transition-all hover:-translate-y-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Specialty Coffee" class="w-full h-full object-cover" data-alt="Freshly roasted specialty coffee beans being poured into a ceramic bowl. The lighting is dramatic but clean, highlighting the oily sheen and rich brown color of the beans. Modern cafe aesthetic with a focus on quality and origin. Minimalist background in soft gray tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv8Y2biyZVXaJ5_saY5QpCkgoAydZiZMz84SnIcMJfeUcasz9cmlgAGymIWnu_uOdnI54rlnNgM6gGAz4F7eBEO_YUOBLDXJZQVoaXMbPp2im0IoUW_rut4vuZsQuQBro2W4SlDk7_klp4khWj5iHIXAB686ZudaP2fl4CWZ8fRL5SYasrbZjGipJXHNZesdK2H6Lq8yRtuylHl7vQ00Cp09QMrNGo79oQDRgyZornQNKSW6MeBSZKkIUWP5xJEZcjD6_QoZhPQW4">
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-headline-md text-headline-md text-sm mb-1">Highland Coffee</h4>
+<p class="text-xs text-on-surface-variant mb-2">Single-origin Arabica with unique citrus notes.</p>
+<span class="text-primary font-bold text-sm">Rp 120.000</span>
+</div>
+</div>
+<!-- SME Product 4 -->
+<div class="group relative bg-surface p-4 rounded-xl border border-outline-variant flex gap-4 transition-all hover:-translate-y-1">
+<div class="w-32 h-32 rounded-lg overflow-hidden flex-shrink-0">
+<img alt="Bamboo Craft" class="w-full h-full object-cover" data-alt="Sleek, modern bamboo handicraft items like a minimalist lamp and desk organizer. The bamboo has a smooth, polished finish and a light blonde color. Professional studio lighting on a white background, creating a high-end designer product feel. Focus on sustainable craftsmanship and modern form." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9m3gnLBDVBKHs5hVTGxd7acTdenv0cRnk7ol5kvkmD6eNhGBgH8o1j4z8V6k8XqaPWBUeskwYv52EKLbYkKmoZsKIFYyYjZt33zIAS2M-_znJ2qlOfuGuq8zourgEbU8HHGPmewh-kyCDEVqTkreOkB_MbQO-gLxY0rzbT5_3I8Rz2bgmyhDdFUHf6NjXpy5RZVtOWAHkTMBCQ789BYYUCW-AmNa-iAfA62GAoDEMCN5svyBzGdGTkK2aYplresMSuM7LMJTWDDU">
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="font-headline-md text-headline-md text-sm mb-1">Bamboo Modernity</h4>
+<p class="text-xs text-on-surface-variant mb-2">Sustainable home decor with a modern minimalist twist.</p>
+<span class="text-primary font-bold text-sm">Rp 150.000+</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="py-section-padding-desktop bg-primary text-on-primary">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter text-center">
+<div>
+<span class="font-headline-xl text-headline-xl block mb-2">12</span>
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-widest">Tourism Spots</span>
+</div>
+<div>
+<span class="font-headline-xl text-headline-xl block mb-2">450+</span>
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-widest">Hectares Farmed</span>
+</div>
+<div>
+<span class="font-headline-xl text-headline-xl block mb-2">85</span>
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-widest">Active SMEs</span>
+</div>
+<div>
+<span class="font-headline-xl text-headline-xl block mb-2">15%</span>
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-widest">Annual Growth</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-section-padding-desktop bg-surface-bright">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="bg-tertiary-container rounded-3xl p-12 text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #ffffff 1px, transparent 0); background-size: 32px 32px;"></div>
+<div class="relative z-10">
+<h2 class="font-headline-lg text-headline-lg text-on-tertiary-container mb-6">Partner With Our Village</h2>
+<p class="font-body-lg text-body-lg text-on-tertiary-container/80 max-w-2xl mx-auto mb-8">Whether you are an investor, a tourist, or a wholesaler, there are endless opportunities to grow with GreenVillage.</p>
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md text-label-md hover:scale-105 transition-transform">Investment Portal</button>
+<button class="bg-white/20 backdrop-blur text-on-tertiary-container border border-on-tertiary-container/30 px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-white/30 transition-all">Download Brochure</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary-container">
+<div class="max-w-container-max mx-auto px-gutter py-section-padding-desktop flex flex-col md:flex-row justify-between gap-base">
+<div class="flex flex-col gap-4 max-w-xs">
+<div class="font-headline-md text-headline-md font-bold text-on-primary">GreenVillage</div>
+<p class="text-primary-fixed text-sm">Building a sustainable digital ecosystem for rural prosperity and heritage preservation.</p>
+</div>
+<div class="flex flex-col md:flex-row gap-12">
+<div class="flex flex-col gap-2">
+<span class="text-white font-bold mb-2">Explore</span>
+<a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors font-body-md text-body-md" href="#">Privacy Policy</a>
+<a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-white font-bold mb-2">Transparency</span>
+<a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors font-body-md text-body-md" href="#">Public Disclosures</a>
+<a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors font-body-md text-body-md" href="#">Accessibility</a>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-gutter pb-8 border-t border-white/10 pt-8">
+<p class="text-primary-fixed/50 text-sm">© 2024 GreenVillage Digital Stewardship. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions for hovering cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const img = card.querySelector('img');
+                if (img) img.style.transform = 'scale(1.05)';
+            });
+            card.addEventListener('mouseleave', () => {
+                const img = card.querySelector('img');
+                if (img) img.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+
+
+</body></html>
