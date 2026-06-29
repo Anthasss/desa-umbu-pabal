@@ -1,0 +1,52 @@
+---
+const sambutan =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime iste dolorum deleniti voluptates harum totam perferendis libero ipsa, architecto commodi blanditiis, officia, ducimus repellat autem? Dicta vitae nam odit ipsa.";
+
+const kepalaDesa = "Dr. Ir. Kepa Ladesa";
+
+const kepalaDesaImage =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCIVznAlW8Ze5Kwi4FmAqA4zNIZiuNkumg7gQKUmJeuDQgA3SW4KlWJR9G_h3tiwmizfL2oKEv2YybW6u9J_UEVP6noUQaegyS11uZmgsLfmGOqqZIOQTQiZJQxqW9AYVWFI5w2coNFN5H9IbZmKqJU7HpHiYba0lZ_4aE_a5E10X8As8rz61EbnO4gVq_pCth_Bd8I-fG23lsxWsraGRNSi1NFycPQ1sN5tBJ3qlGdTNz8phtVF30jweA25C36RmisiCke6S4Krn8";
+---
+
+<section class="py-section-padding-desktop bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-gutter">
+    <div class="flex flex-col md:flex-row items-center gap-16">
+      <div class="w-full md:w-5/12 relative">
+        <div
+          class="absolute -top-4 -left-4 w-24 h-24 bg-primary-container rounded-2xl -z-10 opacity-20"
+        >
+        </div>
+        <img
+          class="w-full h-125 object-cover asymmetric-shape shadow-xl"
+          alt="Portrait of a village leader"
+          src={kepalaDesaImage}
+        />
+      </div>
+      <div class="w-full md:w-7/12">
+        <h2 class="font-headline-lg text-headline-lg text-primary mb-6">
+          Sambutan Kepala Desa
+        </h2>
+        <div class="w-20 h-1 bg-[#D4AF37] mb-8"></div>
+        <p
+          class="font-body-lg text-body-lg text-on-surface-variant italic mb-8"
+        >
+          {'"' + sambutan + '"'}
+        </p>
+        <div class="mb-8">
+          <h4 class="font-headline-md text-headline-md text-primary">
+            {kepalaDesa}
+          </h4>
+          <p class="text-on-surface-variant opacity-70">
+            Kepala Desa Umbu Pabal
+          </p>
+        </div>
+        <a
+          href="/pemerintahan"
+          class="flex items-center gap-2 text-primary font-label-md group hover:underline"
+        >
+          Lihat Struktur Kepemimpinan Selengkapnya &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
