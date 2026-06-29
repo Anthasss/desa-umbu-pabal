@@ -7,136 +7,221 @@ interface Props {
 }
 
 const { title, activePage = "home" } = Astro.props;
+
+const navItems = [
+  { page: "home", label: "Home", href: "/" },
+  { page: "pemerintahan", label: "Pemerintahan", href: "/pemerintahan" },
+  { page: "ekonomi", label: "Ekonomi", href: "/ekonomi" },
+  { page: "berita", label: "Berita", href: "/berita" },
+  { page: "event", label: "Event", href: "/event" },
+  { page: "galeri", label: "Galeri", href: "/galeri" },
+  { page: "heritage", label: "Heritage", href: "/heritage" },
+  { page: "layanan", label: "Layanan", href: "/layanan" },
+];
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html class="light" lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>{title}</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="icon" href="/favicon.ico" />
-  <meta name="generator" content={Astro.generator} />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-</head>
-<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
-  <!-- TopNavBar -->
-  <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm transition-all duration-300">
-    <nav class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20">
-      <div class="font-headline-md text-headline-md font-bold text-primary">Desa Umbu Pabal</div>
-      <div class="hidden lg:flex gap-6 items-center">
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'home' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/">Home</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'pemerintahan' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/pemerintahan">Pemerintahan</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'ekonomi' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/ekonomi">Ekonomi</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'berita' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/berita">Berita</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'event' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/event">Event</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'galeri' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/galeri">Galeri</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'heritage' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/heritage">Heritage</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'layanan' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/layanan">Layanan</a>
-      </div>
-      <div class="flex items-center gap-4">
-        <!-- Contact Button -->
-        <a href="/layanan" class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center">
-          Hubungi Kami
-        </a>
-        <!-- Mobile menu toggle button -->
-        <button id="mobile-menu-toggle" class="lg:hidden p-2 text-on-surface-variant hover:text-primary focus:outline-none">
-          <span class="material-symbols-outlined text-3xl">menu</span>
-        </button>
-      </div>
-    </nav>
-    
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden w-full bg-surface dark:bg-inverse-surface border-t border-outline-variant py-4 px-gutter flex flex-col gap-4 shadow-inner">
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'home' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/">Home</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'pemerintahan' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/pemerintahan">Pemerintahan</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'ekonomi' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/ekonomi">Ekonomi</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'berita' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/berita">Berita</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'event' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/event">Event</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'galeri' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/galeri">Galeri</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'heritage' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/heritage">Heritage</a>
-      <a class={`font-body-md text-body-md transition-colors py-2 ${activePage === 'layanan' ? 'text-primary dark:text-primary-fixed font-bold' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/layanan">Layanan</a>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+    <!-- TopNavBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm transition-all duration-300"
+    >
+      <nav
+        class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20"
+      >
+        <div class="font-headline-md text-headline-md font-bold text-primary">
+          Desa Umbu Pabal
+        </div>
+        <div class="hidden lg:flex gap-6 items-center">
+          {
+            navItems.map((item) => (
+              <a
+                class={`font-body-md text-body-md transition-colors ${
+                  activePage === item.page
+                    ? "text-primary font-bold border-b-2 border-primary pb-1"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+                href={item.href}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Contact Button -->
+          <a
+            href="/layanan"
+            class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center"
+          >
+            Hubungi Kami
+          </a>
+          <!-- Mobile menu toggle button -->
+          <button
+            id="mobile-menu-toggle"
+            class="lg:hidden p-2 text-on-surface-variant hover:text-primary focus:outline-none"
+          >
+            <span class="material-symbols-outlined text-3xl">menu</span>
+          </button>
+        </div>
+      </nav>
 
-  <!-- Main Content spacing top since header is fixed -->
-  <main class="pt-20">
-    <slot />
-  </main>
+      <!-- Mobile Navigation Drawer -->
+      <div
+        id="mobile-menu"
+        class="lg:hidden w-full bg-surface border-t border-outline-variant py-4 px-gutter flex flex-col gap-4 shadow-inner"
+      >
+        {
+          navItems.map((item) => (
+            <a
+              class={`font-body-md text-body-md transition-colors ${
+                activePage === item.page
+                  ? "text-primary font-bold border-b-2 border-primary pb-1"
+                  : "text-on-surface-variant hover:text-primary"
+              }`}
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </header>
 
-  <!-- Footer -->
-  <footer class="bg-primary dark:bg-primary-container w-full">
-    <div class="max-w-container-max mx-auto px-gutter py-section-padding-desktop flex flex-col md:flex-row justify-between gap-base">
-      <div class="max-w-xs">
-        <div class="font-headline-md text-headline-md font-bold text-on-primary mb-6">Desa Umbu Pabal</div>
-        <p class="text-primary-fixed dark:text-primary-fixed-dim font-body-md opacity-80">
-          Kawasan Pusat Pemerintahan Desa Desa Umbu Pabal, Kec. Alam Subur, Kab. Lestari, Indonesia 65432.
+    <!-- Main Content spacing top since header is fixed -->
+    <main class="pt-20">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary w-full">
+      <div
+        class="max-w-container-max mx-auto px-gutter py-section-padding-desktop flex flex-col md:flex-row justify-between gap-base"
+      >
+        <div class="max-w-xs">
+          <div
+            class="font-headline-md text-headline-md font-bold text-on-primary mb-6"
+          >
+            Desa Umbu Pabal
+          </div>
+          <p class="text-primary-fixed -dim font-body-md opacity-80">
+            Kawasan Pusat Pemerintahan Desa Desa Umbu Pabal, Kec. Alam Subur,
+            Kab. Lestari, Indonesia 65432.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-12">
+          <div class="flex flex-col gap-4">
+            <h5 class="text-on-primary font-bold mb-2">Navigasi</h5>
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/">Home</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/pemerintahan">Pemerintahan</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/ekonomi">Ekonomi</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/berita">Berita</a
+            >
+          </div>
+          <div class="flex flex-col gap-4">
+            <h5 class="text-on-primary font-bold mb-2">Publikasi</h5>
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/event">Event Desa</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/galeri">Galeri</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/heritage">Heritage</a
+            >
+            <a
+              class="text-primary-fixed -dim hover:text-white transition-colors"
+              href="/layanan">Layanan</a
+            >
+          </div>
+        </div>
+        <div class="flex flex-col gap-6">
+          <h5 class="text-on-primary font-bold">Ikuti Kami</h5>
+          <div class="flex gap-4">
+            <a
+              class="w-10 h-10 rounded-full border border-primary-fixed flex items-center justify-center text-on-primary hover:bg-on-primary hover:text-primary transition-all active:scale-95"
+              href="#"
+            >
+              <span class="material-symbols-outlined">share</span>
+            </a>
+            <a
+              class="w-10 h-10 rounded-full border border-primary-fixed flex items-center justify-center text-on-primary hover:bg-on-primary hover:text-primary transition-all active:scale-95"
+              href="#"
+            >
+              <span class="material-symbols-outlined">public</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="max-w-container-max mx-auto px-gutter py-8 border-t border-primary-container"
+      >
+        <p class="text-primary-fixed -dim font-body-md text-sm opacity-60">
+          © 2024 Desa Umbu Pabal Digital Stewardship. All rights reserved.
         </p>
       </div>
-      <div class="grid grid-cols-2 gap-12">
-        <div class="flex flex-col gap-4">
-          <h5 class="text-on-primary font-bold mb-2">Navigasi</h5>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/">Home</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/pemerintahan">Pemerintahan</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/ekonomi">Ekonomi</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/berita">Berita</a>
-        </div>
-        <div class="flex flex-col gap-4">
-          <h5 class="text-on-primary font-bold mb-2">Publikasi</h5>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/event">Event Desa</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/galeri">Galeri</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/heritage">Heritage</a>
-          <a class="text-primary-fixed dark:text-primary-fixed-dim hover:text-white transition-colors" href="/layanan">Layanan</a>
-        </div>
-      </div>
-      <div class="flex flex-col gap-6">
-        <h5 class="text-on-primary font-bold">Ikuti Kami</h5>
-        <div class="flex gap-4">
-          <a class="w-10 h-10 rounded-full border border-primary-fixed flex items-center justify-center text-on-primary hover:bg-on-primary hover:text-primary transition-all active:scale-95" href="#">
-            <span class="material-symbols-outlined">share</span>
-          </a>
-          <a class="w-10 h-10 rounded-full border border-primary-fixed flex items-center justify-center text-on-primary hover:bg-on-primary hover:text-primary transition-all active:scale-95" href="#">
-            <span class="material-symbols-outlined">public</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="max-w-container-max mx-auto px-gutter py-8 border-t border-primary-container">
-      <p class="text-primary-fixed dark:text-primary-fixed-dim font-body-md text-sm opacity-60">
-        © 2024 Desa Umbu Pabal Digital Stewardship. All rights reserved.
-      </p>
-    </div>
-  </footer>
+    </footer>
 
-  <script>
-    // Header effect
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const nav = document.querySelector('header');
-      if (nav) {
-        if (scrolled > 50) {
-          nav.classList.add('shadow-md', 'bg-opacity-95');
-        } else {
-          nav.classList.remove('shadow-md', 'bg-opacity-95');
-        }
-      }
-    });
-
-    // Mobile Menu Toggle logic
-    const toggleBtn = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (toggleBtn && mobileMenu) {
-      toggleBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-        const icon = toggleBtn.querySelector('span');
-        if (icon) {
-          icon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+    <script>
+      // Header effect
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const nav = document.querySelector("header");
+        if (nav) {
+          if (scrolled > 50) {
+            nav.classList.add("shadow-md", "bg-opacity-95");
+          } else {
+            nav.classList.remove("shadow-md", "bg-opacity-95");
+          }
         }
       });
-    }
-  </script>
-</body>
+
+      // Mobile Menu Toggle logic
+      const toggleBtn = document.getElementById("mobile-menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      if (toggleBtn && mobileMenu) {
+        toggleBtn.addEventListener("click", () => {
+          mobileMenu.classList.toggle("hidden");
+          const icon = toggleBtn.querySelector("span");
+          if (icon) {
+            icon.textContent = mobileMenu.classList.contains("hidden")
+              ? "menu"
+              : "close";
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
