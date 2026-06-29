@@ -1,0 +1,93 @@
+---
+const villageHead = {
+  name: "Bpk. Ahmad Subarjo",
+  role: "Kepala Desa",
+  image:
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuACbovTfhJi7W1B9bKN3_mAgHlK-MY48ucCTDUfEBS8mGMUNQ13-h_boGePdDiAxdESklPVnK_9NFQB5pOL18J_dDHtDN3CFTlzqkoLxWGtC5_3GGqdNr6ZWJK9-0Zy7yDkJVapo1fR3i19EfSZ4FKhZkf4BeMp5kfAXfmzpIYX3RvKtRQ3N2g0YC7gEkN_yrY6Y6d1W-Y5jM5ZFocT7-1CHLaa6X1Eh0WjRwIYHeCx3DTGheq-6c_JAMcy9sCyEt9vn5WeLVYhsD4",
+};
+
+const staffMembers = [
+  {
+    name: "Ibu Siti Aminah",
+    role: "Sekretaris Desa",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAPVZxfo__g2AocL3F4cKoC26EpbObA1J2qndoPwmE3yajDcFxzuixOF4KDwUHUPGzFYL-mvJTV7P6nvEh3bDpRXfc9adyCyWxvzH3bzyEEPvd-kINpkujqtxRWJMLtSZNL8EXDXNJlTbR6OdHULG9qcnrEUdJZOMbvjNQ_UzF9NH1i8zt9N2CVG9SIUEdcSCFo-eEp1KKqUyVlQZ0UU66TNT6TusX3XSb8L1BnZ6W17FVPkGs9oPzGnQ2OjEJt4M5KdlPqFtIbeVM",
+  },
+  {
+    name: "Bpk. Hendra Wijaya",
+    role: "Bendahara Desa",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAp5IMvd35GIP0jCDWp0Ia9puHS7T9Po4W2d7233eZtEorZe6khWrPQUUIcJy6nFR3E2ps2z_6-55taJWuidCut6Cnc5KMyP-MRWXKIC86UkZ4-YW9oIomUMrN8vDJqx6tzo5Y5gSPC8bYkWp_ptRf9KLLDozukeQX3w2T2wshHKLjHDgt9EdIzBIEkw51KCbSNpQA2RPntXsfpnYSX7BzPu8PUmd9NGeaA1Hbq-5kWxEt-9TW2x4JTMDzMuDh_CozgiyeJhrmZvsY",
+  },
+  {
+    name: "Ibu Maya Lestari",
+    role: "Kaur Pembangunan",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCEq9Phij20MvrytHEkAmxv-R4b2A8PNukOlmQw5gWKs7bFx1DGmR6Xr7Op1n3uPMkYSa5-iUpDJmlgC79QFp3HKvPSN671ybV7ogKWGKxub_3w-PNMsHpwVUeSD3qeGt_lmBhREECxhvgQ0YthGgj9TOSPf8Cugdwk4jmZOdPd-lNi3muECkausPETS6yXunESlDVlvv__fUY6fhBWSwV3IkvtvPJ-fLMjVb36rN-JO87hEG35tvFYkaNWDGvaQZApgLeu1tLFfMo",
+  },
+];
+---
+
+<section
+  class="py-section-padding-desktop px-gutter max-w-container-max mx-auto border-t border-outline-variant/30 transition-all duration-700 opacity-100 translate-y-0"
+>
+  <div class="text-center mb-16">
+    <h2 class="font-headline-lg text-headline-lg text-primary">
+      Struktur Organisasi
+    </h2>
+    <p class="text-on-surface-variant font-body-md text-body-md mt-4">
+      Kepemimpinan yang berdedikasi melayani kepentingan warga.
+    </p>
+  </div>
+
+  <div class="space-y-16">
+    <!-- Village Head -->
+    <div class="flex justify-center">
+      <div class="group relative w-full max-w-sm">
+        <div
+          class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm group-hover:shadow-lg transition-all text-center p-6"
+        >
+          <div
+            class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-primary-fixed"
+          >
+            <img
+              alt={villageHead.role}
+              class="w-full h-full object-cover"
+              src={villageHead.image}
+            />
+          </div>
+          <h3 class="font-headline-md text-headline-md text-primary">
+            {villageHead.name}
+          </h3>
+          <span
+            class="text-secondary font-label-md uppercase tracking-wider block mt-1"
+            >{villageHead.role}</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        staffMembers.map((member) => (
+          <div class="bg-surface border border-outline-variant rounded-xl overflow-hidden p-6 text-center shadow-sm">
+            <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-primary-fixed">
+              <img
+                alt={member.role}
+                class="w-full h-full object-cover"
+                src={member.image}
+              />
+            </div>
+            <h4 class="font-headline-md text-headline-md text-primary">
+              {member.name}
+            </h4>
+            <span class="text-secondary font-label-md uppercase tracking-wider block">
+              {member.role}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,87 @@
+---
+const geographyItems = [
+  {
+    icon: "landscape",
+    label: "Luas Wilayah Total",
+    value: "1.250 Ha",
+    containerClass: "bg-primary-container text-white",
+  },
+  {
+    icon: "calendar_today",
+    label: "Tahun Berdiri",
+    value: "1999",
+    containerClass: "bg-primary-container text-white",
+  },
+  {
+    icon: "groups_3",
+    label: "Jumlah Populasi",
+    value: "1234 jiwa",
+    containerClass: "bg-primary-container text-white",
+  },
+];
+---
+
+<section
+  class="bg-surface-container-low py-section-padding-desktop transition-all duration-700 opacity-100 translate-y-0"
+>
+  <div class="px-gutter max-w-container-max mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="font-headline-lg text-headline-lg text-primary">
+        Wilayah Desa
+      </h2>
+    </div>
+    <!-- NOTE: Map and Stats Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <!-- NOTE: Map Area -->
+      <div
+        class="lg:col-span-2 bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm h-full md:h-125 relative"
+      >
+        <div
+          class="absolute inset-0 bg-surface-container-highest flex items-center justify-center h-full"
+        >
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d85868.42436753213!2d119.58531259104541!3d-9.6091680376952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4b16554381184b%3A0x58ec71d8fa9844ef!2sUmbu%20Pabal%2C%20Umbu%20Ratu%20Nggay%20Barat%2C%20Central%20Sumba%20Regency%2C%20East%20Nusa%20Tenggara!5e1!3m2!1sen!2sid!4v1782736239254!5m2!1sen!2sid"
+            allowfullscreen=""
+            class="w-full h-full border-0"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div
+            class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded shadow-md pointer-events-none"
+          >
+            <span
+              class="text-label-md text-primary flex items-center gap-2 font-bold"
+            >
+              <span class="material-symbols-outlined text-sm">location_on</span>
+              Lokasi Kantor Desa Desa Umbu Pabal
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTE: Statistics Cards -->
+      <div class="grid grid-cols-1 gap-4 h-full">
+        {
+          geographyItems.map((item) => (
+            <div class="bg-surface border border-outline-variant p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow h-full">
+              <div class="flex items-center gap-4 h-full">
+                <div
+                  class={`${item.containerClass} p-3 rounded-lg flex items-center justify-center`}
+                >
+                  <span class="material-symbols-outlined">{item.icon}</span>
+                </div>
+                <div>
+                  <h4 class="text-label-md text-on-surface-variant mb-1">
+                    {item.label}
+                  </h4>
+                  <p class="font-headline-md text-primary font-bold text-xl">
+                    {item.value}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
