@@ -9,7 +9,7 @@ const geographyItems = [
   {
     icon: "calendar_today",
     label: "Tahun Berdiri",
-    value: "1999",
+    value: "1824",
     containerClass: "bg-primary-container text-white",
   },
   {
@@ -22,11 +22,21 @@ const geographyItems = [
 ---
 
 <section
-  class="bg-surface-container-low py-section-padding-desktop transition-all duration-700 opacity-100 translate-y-0"
+  class="bg-primary-container py-section-padding-desktop transition-all duration-700 opacity-100 translate-y-0"
 >
-  <div class="px-gutter max-w-container-max mx-auto">
+  <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <div class="grid grid-cols-6 h-full w-full">
+      <div class="border-r border-on-primary-container"></div>
+      <div class="border-r border-on-primary-container"></div>
+      <div class="border-r border-on-primary-container"></div>
+      <div class="border-r border-on-primary-container"></div>
+      <div class="border-r border-on-primary-container"></div>
+    </div>
+  </div>
+
+  <div class="px-gutter max-w-container-max mx-auto z-10">
     <div class="text-center mb-16">
-      <h2 class="font-headline-lg text-headline-lg text-primary">
+      <h2 class="font-headline-lg text-headline-lg text-on-primary">
         Wilayah Desa
       </h2>
     </div>
@@ -42,7 +52,7 @@ const geographyItems = [
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d85868.42436753213!2d119.58531259104541!3d-9.6091680376952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2c4b16554381184b%3A0x58ec71d8fa9844ef!2sUmbu%20Pabal%2C%20Umbu%20Ratu%20Nggay%20Barat%2C%20Central%20Sumba%20Regency%2C%20East%20Nusa%20Tenggara!5e1!3m2!1sen!2sid!4v1782736239254!5m2!1sen!2sid"
             allowfullscreen=""
-            class="w-full h-full border-0"
+            class="w-full h-full opacity-90 border-0"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"></iframe>
           <div
@@ -59,7 +69,7 @@ const geographyItems = [
       </div>
 
       <!-- NOTE: Statistics Cards -->
-      <div class="grid grid-cols-1 gap-4 h-full">
+      <div class="grid grid-cols-1 gap-4 h-full z-10">
         {
           geographyItems.map((item) => (
             <div class="bg-surface border border-outline-variant p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow h-full">

@@ -1,0 +1,59 @@
+---
+const timelineEvents = [
+  {
+    year: "1824",
+    title: "Awal Pemukiman Agraris",
+    description:
+      "Didirikan oleh sekelompok pelopor petani padi yang menjunjung tinggi semangat gotong royong dan keselarasan dengan hutan tropis di sekitar lembah.",
+  },
+  {
+    year: "1945",
+    title: "Integrasi Administratif",
+    description:
+      "Menyusul kemerdekaan Indonesia, desa secara resmi diakui dalam tata kelola pemerintahan kabupaten dengan nama resmi Desa Umbu Pabal (Desa Lestari).",
+  },
+  {
+    year: "2004",
+    title: "Deklarasi Cagar Alam & Konservasi",
+    description:
+      "Masyarakat berkomitmen menjaga 85% wilayah sebagai hutan lindung dan menerapkan batasan ketat pembangunan demi kelestarian mata air alami.",
+  },
+  {
+    year: "2024",
+    title: "Era Digital Stewardship",
+    description:
+      "Menerapkan teknologi digital, sensor IoT pertanian, dan layanan mandiri online demi efisiensi tanpa mengorbankan nilai sosial dan budaya adat.",
+  },
+];
+---
+
+<section class="py-section-padding-desktop bg-surface-bright">
+  <div class="max-w-container-max mx-auto px-gutter">
+    <div class="text-center mb-16">
+      <h2
+        class="font-headline-lg text-headline-lg text-primary text-3xl font-bold"
+      >
+        Garis Waktu Sejarah Desa
+      </h2>
+    </div>
+
+    <div
+      class="relative border-l border-outline-variant max-w-3xl mx-auto pl-8 space-y-12"
+    >
+      {
+        timelineEvents.map((event) => (
+          <div class="relative">
+            <div class="absolute -left-10.25 top-1.5 bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center border-4 border-white shadow" />
+            <span class="text-secondary font-headline-md text-xl font-bold block">
+              {event.year}
+            </span>
+            <h3 class="text-lg font-bold text-primary mt-1">{event.title}</h3>
+            <p class="text-on-surface-variant mt-2 font-body-md">
+              {event.description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
