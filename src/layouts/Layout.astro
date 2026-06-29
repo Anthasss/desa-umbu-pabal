@@ -23,18 +23,18 @@ const { title, activePage = "home" } = Astro.props;
 </head>
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
   <!-- TopNavBar -->
-  <header class="fixed top-0 w-full z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant shadow-sm transition-all duration-300">
+  <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm transition-all duration-300">
     <nav class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20">
-      <div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">GreenVillage</div>
+      <div class="font-headline-md text-headline-md font-bold text-primary">Desa Umbu Pabal</div>
       <div class="hidden lg:flex gap-6 items-center">
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'home' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/">Home</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'pemerintahan' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/pemerintahan">Pemerintahan</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'ekonomi' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/ekonomi">Ekonomi</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'berita' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/berita">Berita</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'event' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/event">Event</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'galeri' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/galeri">Galeri</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'heritage' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/heritage">Heritage</a>
-        <a class={`font-body-md text-body-md transition-colors ${activePage === 'layanan' ? 'text-primary dark:text-primary-fixed font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/layanan">Layanan</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'home' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/">Home</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'pemerintahan' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/pemerintahan">Pemerintahan</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'ekonomi' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/ekonomi">Ekonomi</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'berita' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/berita">Berita</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'event' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/event">Event</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'galeri' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/galeri">Galeri</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'heritage' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant hover:text-primary'}`} href="/heritage">Heritage</a>
+        <a class={`font-body-md text-body-md transition-colors ${activePage === 'layanan' ? 'text-primary font-bold border-b-2 border-primary dark:border-primary-fixed pb-1' : 'text-on-surface-variant dark:text-outline-variant hover:text-primary'}`} href="/layanan">Layanan</a>
       </div>
       <div class="flex items-center gap-4">
         <!-- Contact Button -->
@@ -70,9 +70,9 @@ const { title, activePage = "home" } = Astro.props;
   <footer class="bg-primary dark:bg-primary-container w-full">
     <div class="max-w-container-max mx-auto px-gutter py-section-padding-desktop flex flex-col md:flex-row justify-between gap-base">
       <div class="max-w-xs">
-        <div class="font-headline-md text-headline-md font-bold text-on-primary mb-6">GreenVillage</div>
+        <div class="font-headline-md text-headline-md font-bold text-on-primary mb-6">Desa Umbu Pabal</div>
         <p class="text-primary-fixed dark:text-primary-fixed-dim font-body-md opacity-80">
-          Kawasan Pusat Pemerintahan Desa GreenVillage, Kec. Alam Subur, Kab. Lestari, Indonesia 65432.
+          Kawasan Pusat Pemerintahan Desa Desa Umbu Pabal, Kec. Alam Subur, Kab. Lestari, Indonesia 65432.
         </p>
       </div>
       <div class="grid grid-cols-2 gap-12">
@@ -105,7 +105,7 @@ const { title, activePage = "home" } = Astro.props;
     </div>
     <div class="max-w-container-max mx-auto px-gutter py-8 border-t border-primary-container">
       <p class="text-primary-fixed dark:text-primary-fixed-dim font-body-md text-sm opacity-60">
-        © 2024 GreenVillage Digital Stewardship. All rights reserved.
+        © 2024 Desa Umbu Pabal Digital Stewardship. All rights reserved.
       </p>
     </div>
   </footer>
