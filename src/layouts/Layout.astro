@@ -11,9 +11,9 @@ const { title, activePage = "home" } = Astro.props;
 const navItems = [
   { page: "home", label: "Home", href: "/" },
   { page: "tentangKami", label: "Tentang Kami", href: "/tentang" },
-  { page: "ekonomi", label: "Ekonomi", href: "/ekonomi" },
+  // { page: "ekonomi", label: "Ekonomi", href: "/ekonomi" },
   { page: "berita", label: "Berita", href: "/berita" },
-  { page: "event", label: "Event", href: "/event" },
+  // { page: "event", label: "Event", href: "/event" },
   { page: "galeri", label: "Galeri", href: "/galeri" },
   // { page: "budaya", label: "Budaya", href: "/budaya" },
   { page: "layanan", label: "Layanan", href: "/layanan" },
@@ -26,8 +26,8 @@ const navItems = [
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{title}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+    <link rel="icon" href="/lambang-sumba-tengah.ico" />
     <meta name="generator" content={Astro.generator} />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;600&display=swap"
@@ -46,40 +46,49 @@ const navItems = [
       <nav
         class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20"
       >
-        <div class="font-headline-md text-headline-md font-bold text-primary">
-          Desa Umbu Pabal
+        <div class="flex gap-4 items-center">
+          <img
+            src="/lambang-sumba-tengah.png"
+            alt="lambang-sumba-tengah"
+            class="w-auto h-12"
+          />
+          <div class="font-headline-md text-headline-md font-bold text-primary">
+            Desa Umbu Pabal
+          </div>
         </div>
-        <div class="hidden lg:flex gap-6 items-center">
-          {
-            navItems.map((item) => (
-              <a
-                class={`font-body-md text-body-md transition-colors ${
-                  activePage === item.page
-                    ? "text-primary font-bold border-b-2 border-primary pb-1"
-                    : "text-on-surface-variant hover:text-primary"
-                }`}
-                href={item.href}
-              >
-                {item.label}
-              </a>
-            ))
-          }
-        </div>
-        <div class="flex items-center gap-4">
-          <!-- Contact Button -->
-          <a
-            href="/layanan"
-            class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center"
-          >
-            Hubungi Kami
-          </a>
-          <!-- Mobile menu toggle button -->
-          <button
-            id="mobile-menu-toggle"
-            class="lg:hidden p-2 text-on-surface-variant hover:text-primary focus:outline-none"
-          >
-            <span class="material-symbols-outlined text-3xl">menu</span>
-          </button>
+        <div class="flex justify-end items-center gap-6">
+          <div class="hidden lg:flex gap-6 items-center">
+            {
+              navItems.map((item) => (
+                <a
+                  class={`font-body-md text-body-md transition-colors ${
+                    activePage === item.page
+                      ? "text-primary font-bold border-b-2 border-primary pb-1"
+                      : "text-on-surface-variant hover:text-primary"
+                  }`}
+                  href={item.href}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </div>
+          <div class="flex items-center gap-4">
+            <!-- Contact Button -->
+            <a
+              href="/layanan"
+              class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center"
+            >
+              Hubungi Kami
+            </a>
+            <!-- Mobile menu toggle button -->
+            <button
+              id="mobile-menu-toggle"
+              class="lg:hidden p-2 text-on-surface-variant hover:text-primary focus:outline-none"
+            >
+              <span class="material-symbols-outlined text-3xl">menu</span>
+            </button>
+          </div>
         </div>
       </nav>
 
