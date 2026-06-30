@@ -1,209 +1,186 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/berita/hero.astro";
+
+const categoryStyles: Record<string, string> = {
+  Infrastruktur: "bg-primary-container/90 text-on-primary-container",
+  Ekonomi: "bg-secondary/90 text-white",
+  Kesehatan: "bg-tertiary-container/90 text-on-tertiary-container",
+  Pendidikan: "bg-secondary-fixed-dim/90 text-on-secondary-fixed-variant",
+  Masyarakat: "bg-primary-container/90 text-on-primary-container",
+};
+
+const newsItems = [
+  {
+    slug: "pembangunan-irigasi",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuA3j1w_kAIkZAZNs3DjERDc1Uf58qKQv3meyvsAdPMA_HDXR-k8lrEhVqwOuiwVRA-HxwKfYwywepBo8SCZPT1yEwAbn_y4Nh1fKv5vaIwu6IQ_26-8K7orqRDNDw7ApxYW5CXAjmfc8LwdacO4vyQ7Vr-YFscfnecIHtvNF5Af5L0RdPgCyOgyRl6rKYuQLSBnPjIKOHrI-AKdv31mMVbUjOYf_ZLWeUR8EWzrrgp1Gux47LbhfwfmmJzeoc2JyeOjO4Wxq-JPKrw",
+    category: "Infrastruktur",
+    date: "20 Mei 2024",
+    title: "Pembangunan Irigasi Baru Selesai Tepat Waktu",
+    excerpt:
+      "Proyek strategis pengairan sawah di wilayah Dusun Utara telah rampung, menjamin pasokan air bagi 50 hektar lahan pertanian...",
+  },
+  {
+    slug: "panen-raya-organik",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCaGnv7_fym1BQ8YP1vaU9AaP43pVHzmh4G52VFawK5Op9Dh0a3Z4UFHLN4ZR30TlUQna22j1IBTZRtWjbahqnC27Pv0RTBw2Pj6zJGserdzzp-9P9FKd-3jWB7PrwrMkGMzJ-dGF_EyWWFzzM14S8OFX5iUdypJBIb2XpZedXw8qwvbB64oh0gjq0XBuy8RIbTc-LmekUyVtU4yZtvzgYKkc_-yECvzxtuanC8NCBtYz85xnIRb47tT0SFACMAGkPXIKEmfp0Qta8",
+    category: "Ekonomi",
+    date: "18 Mei 2024",
+    title: "Panen Raya Padi Organik Meningkat 20%",
+    excerpt:
+      "Penggunaan pupuk organik mandiri mulai menunjukkan hasil signifikan pada hasil panen musim ini, meningkatkan kesejahteraan petani...",
+  },
+  {
+    slug: "imunisasi-posyandu-anggrek",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuA9f5ltezy-AC2lU4q_wtmHw4GynU48GMM_WGGL26KKiQ4X2u9tYiZGjaDR3zuANnBDnrW6KfdZywlouhExcwG0ulh1GZoNOfUFxTFxfD1YObnxsu-cJbgzEWB2bys6MWOdl_BlY2T7Od_rAytjQLnyaTpfuMc_rAhJf6pSfWycbiYTjUpwxBbEXp04zSLjc40NChzCUiSiXz7Ao4c9fN-kxDDMye9dRLf6DVgxf_b9LC4TOpbuJjdlznsOlrQQoJHoEvn1YtdQdDw",
+    category: "Kesehatan",
+    date: "15 Mei 2024",
+    title: "Jadwal Imunisasi Bulanan Posyandu Anggrek",
+    excerpt:
+      "Mari pastikan tumbuh kembang si buah hati dengan mengikuti jadwal imunisasi rutin yang akan dilaksanakan serentak di Balai Desa...",
+  },
+  {
+    slug: "beasiswa-berprestasi",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBNaSrxlQlETs0101Q2KNa65WpXED0fjDKsdjApBb4fsGO26Bd1sAE-3QjRN98aVcsYvdGkPtU-YMG_96-J4NK8AhluZ45WNVS9_spT6DC_vux2__f9GMMpocHwbveOctMFrxD-nbG-Iy74AovL17MNyMR3pKKTTJ1uz09-AgAsqk1JeGZVWk7rPgmI3IcgHwfltWwxGbmFVVixkMmzEEcLSfuiH9b5Bid8xjxbPfAZKwe-1yaMVLV-cuah01Wszbc3drGEYnuT_BM",
+    category: "Pendidikan",
+    date: "12 Mei 2024",
+    title: "Beasiswa Berprestasi Kembali Dibuka",
+    excerpt:
+      "Pemerintah Desa mengalokasikan dana pendidikan bagi siswa berprestasi dari keluarga kurang mampu untuk jenjang SMA dan Kuliah...",
+  },
+  {
+    slug: "pelatihan-pemasaran-digital-umkm",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBA10VqMUYnyUvoFDF91K2itj68qLNX7Xn1ygupIcrrQ1IU53660V-r2KrHw8HP1KmZ1i68MWDFR41UiYa17Kv0jMuQmHbyROfODCbuCOQBSMvh7wFiLeXPXjHt5oAg0eq2TRiDWiTmdPnjkwQDaIsUNeooIQx70Cznu7pu7UlcLYPTemkPG2FIBBKdft-wzGAo6LWxMhReC1ORse-4q__Ns9HHwlUWeTPVNz3sVL13j7tLEKfurhFnkizt1pymR6ZVxZ1LXmwz5hM",
+    category: "Ekonomi",
+    date: "10 Mei 2024",
+    title: "Pelatihan Pemasaran Digital bagi UMKM",
+    excerpt:
+      "Mendorong produk lokal menjangkau pasar nasional, Desa menyelenggarakan workshop optimasi marketplace bagi pengrajin lokal...",
+  },
+  {
+    slug: "gerakan-sabtu-bersih",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAuJi0RQPzPjnlYsUkUNZBoKI5xIR3WLD7egWN9l-oceilNdjFlwN8aUvXinppjjSxucyD1J8KLUKQe0PHUr1HoIh7PNEUvNc07t3FigHIEO270D2PFZuCiTg4obk7n33c_iPw7R6neLvLwAEVRz3n8IKRT7YJfXKW-Ivd99SmYYH9W-jnUx1g6i08q-obkzTyP0DAJfCKkl-pcKT2Fh4FUROppZVfVWRYnN7ysZdGC6Uh7MArBZ2fdy8x5fJJHPgtI7YFxqCRl5sw",
+    category: "Masyarakat",
+    date: "08 Mei 2024",
+    title: "Gerakan Sabtu Bersih di Lingkungan Desa",
+    excerpt:
+      "Menjaga kelestarian alam dan kebersihan lingkungan, warga secara antusias mengikuti kegiatan rutin gotong royong akhir pekan...",
+  },
+];
+
+const categories = [
+  "Semua",
+  "Ekonomi",
+  "Pendidikan",
+  "Kesehatan",
+  "Infrastruktur",
+];
 ---
 
 <Layout title="Berita Terkini - Desa Umbu Pabal" activePage="berita">
-  <!-- Hero Section -->
-  <section class="relative bg-surface-container-low overflow-hidden py-section-padding-mobile md:py-24 hero-pattern">
-    <div class="max-w-container-max mx-auto px-gutter relative z-10">
-      <div class="max-w-3xl">
-        <span class="inline-block bg-primary-fixed text-on-primary-fixed px-4 py-1 rounded-full font-label-md mb-6 font-bold">Informasi Desa</span>
-        <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary mb-6">Kabar Desa Umbu Pabal</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl">
-          Menghadirkan transparansi dan akses informasi terintegrasi bagi seluruh warga. Ikuti perkembangan terkini mengenai pembangunan, ekonomi, dan kesejahteraan masyarakat kita.
-        </p>
+  <Hero />
+
+  <section
+    class="bg-surface-container-low py-12 md:py-section-padding-desktop md:pt-4"
+  >
+    <div class="max-w-container-max mx-auto px-gutter">
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
+      >
         <div class="flex gap-4">
           <div class="relative flex-1 max-w-md">
-            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-            <input 
-              class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:outline-none focus:border-primary transition-colors" 
-              placeholder="Cari berita..." 
+            <span
+              class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline"
+              >search</span
+            >
+            <input
+              class="w-full pl-12 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl focus:outline-none focus:border-primary transition-colors"
+              placeholder="Cari berita..."
               type="text"
             />
           </div>
         </div>
-      </div>
-    </div>
-    <!-- Decorative Element -->
-    <div class="absolute right-0 bottom-0 w-1/3 h-full opacity-10 pointer-events-none hidden lg:block">
-      <img 
-        alt="Decorative botanical illustration" 
-        class="h-full w-full object-contain object-right" 
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuArdum8iYsraapIdYHiGejazocAXMLzYJmVdoV6fNZSa-spa_SN8nCn9AlJpfD_XT8Hev6QO2g5nqsHRwi7iAoMUqbu1YU5QAs6ke1NMe52F4oGVqmtmlLnwV2YaPE4Htu9R-CwhvpLBMj6cslm99DTBVP8M1iYzuB8tqeBlg2ui8RnWglahSLGHEJiwoTIRuzVJznhcSfdgz1jBhHdvGORpWu0kaSrApMU8UoIjvL4fdc-wqDFiYdOp3zpdReA-J869EbHe7OmeaQ"
-      />
-    </div>
-  </section>
-
-  <!-- News Grid -->
-  <section class="bg-surface-container-low py-12 md:py-section-padding-desktop">
-    <div class="max-w-container-max mx-auto px-gutter">
-      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-        <div>
-          <h2 class="font-headline-lg text-headline-lg text-primary mb-2">Arsip Berita</h2>
-          <p class="text-on-surface-variant font-body-md">Jelajahi informasi berdasarkan kategori yang Anda butuhkan.</p>
-        </div>
         <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto">
-          <button class="px-6 py-2 rounded-full bg-primary text-on-primary font-label-md whitespace-nowrap">Semua</button>
-          <button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-primary-fixed transition-colors">Ekonomi</button>
-          <button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-primary-fixed transition-colors">Pendidikan</button>
-          <button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-primary-fixed transition-colors">Kesehatan</button>
-          <button class="px-6 py-2 rounded-full bg-surface-container-lowest border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-primary-fixed transition-colors">Infrastruktur</button>
+          {
+            categories.map((cat, index) => (
+              <button
+                class:list={[
+                  "px-6 py-2 rounded-full font-label-md whitespace-nowrap transition-colors",
+                  index === 0
+                    ? "bg-primary text-on-primary"
+                    : "bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-primary-fixed",
+                ]}
+              >
+                {cat}
+              </button>
+            ))
+          }
         </div>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        <!-- Card 1 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="Irigasi" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3j1w_kAIkZAZNs3DjERDc1Uf58qKQv3meyvsAdPMA_HDXR-k8lrEhVqwOuiwVRA-HxwKfYwywepBo8SCZPT1yEwAbn_y4Nh1fKv5vaIwu6IQ_26-8K7orqRDNDw7ApxYW5CXAjmfc8LwdacO4vyQ7Vr-YFscfnecIHtvNF5Af5L0RdPgCyOgyRl6rKYuQLSBnPjIKOHrI-AKdv31mMVbUjOYf_ZLWeUR8EWzrrgp1Gux47LbhfwfmmJzeoc2JyeOjO4Wxq-JPKrw"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-primary-container/90 backdrop-blur-md text-on-primary-container text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Infrastruktur</span>
+        {
+          newsItems.map((item) => (
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
+              <div class="h-56 overflow-hidden relative">
+                <img
+                  alt={item.title}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  src={item.image}
+                />
+                <div class="absolute top-4 left-4">
+                  <span
+                    class:list={[
+                      "backdrop-blur-md text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider",
+                      categoryStyles[item.category],
+                    ]}
+                  >
+                    {item.category}
+                  </span>
+                </div>
+              </div>
+              <div class="p-6">
+                <span class="text-on-surface-variant text-label-md block mb-2">
+                  {item.date}
+                </span>
+                <a href={`/berita/${item.slug}`}>
+                  <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">
+                    {item.title}
+                  </h3>
+                </a>
+                <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">
+                  {item.excerpt}
+                </p>
+                <a
+                  class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold hover:underline"
+                  href={`/berita/${item.slug}`}
+                >
+                  Selengkapnya
+                  <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">
+                    arrow_forward
+                  </span>
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">20 Mei 2024</span>
-            <a href="/berita/pembangunan-irigasi">
-              <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Pembangunan Irigasi Baru Selesai Tepat Waktu</h3>
-            </a>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Proyek strategis pengairan sawah di wilayah Dusun Utara telah rampung, menjamin pasokan air bagi 50 hektar lahan pertanian...</p>
-            <a class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold hover:underline" href="/berita/pembangunan-irigasi">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </a>
-          </div>
-        </div>
-        
-        <!-- Card 2 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="Panen Raya" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaGnv7_fym1BQ8YP1vaU9AaP43pVHzmh4G52VFawK5Op9Dh0a3Z4UFHLN4ZR30TlUQna22j1IBTZRtWjbahqnC27Pv0RTBw2Pj6zJGserdzzp-9P9FKd-3jWB7PrwrMkGMzJ-dGF_EyWWFzzM14S8OFX5iUdypJBIb2XpZedXw8qwvbB64oh0gjq0XBuy8RIbTc-LmekUyVtU4yZtvzgYKkc_-yECvzxtuanC8NCBtYz85xnIRb47tT0SFACMAGkPXIKEmfp0Qta8"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary/90 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Ekonomi</span>
-            </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">18 Mei 2024</span>
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Panen Raya Padi Organik Meningkat 20%</h3>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Penggunaan pupuk organik mandiri mulai menunjukkan hasil signifikan pada hasil panen musim ini, meningkatkan kesejahteraan petani...</p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold cursor-pointer hover:underline">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </span>
-          </div>
-        </div>
-        
-        <!-- Card 3 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="Posyandu" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9f5ltezy-AC2lU4q_wtmHw4GynU48GMM_WGGL26KKiQ4X2u9tYiZGjaDR3zuANnBDnrW6KfdZywlouhExcwG0ulh1GZoNOfUFxTFxfD1YObnxsu-cJbgzEWB2bys6MWOdl_BlY2T7Od_rAytjQLnyaTpfuMc_rAhJf6pSfWycbiYTjUpwxBbEXp04zSLjc40NChzCUiSiXz7Ao4c9fN-kxDDMye9dRLf6DVgxf_b9LC4TOpbuJjdlznsOlrQQoJHoEvn1YtdQdDw"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-tertiary-container/90 backdrop-blur-md text-on-tertiary-container text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Kesehatan</span>
-            </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">15 Mei 2024</span>
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Jadwal Imunisasi Bulanan Posyandu Anggrek</h3>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Mari pastikan tumbuh kembang si buah hati dengan mengikuti jadwal imunisasi rutin yang akan dilaksanakan serentak di Balai Desa...</p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold cursor-pointer hover:underline">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </span>
-          </div>
-        </div>
-        
-        <!-- Card 4 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="Sekolah" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNaSrxlQlETs0101Q2KNa65WpXED0fjDKsdjApBb4fsGO26Bd1sAE-3QjRN98aVcsYvdGkPtU-YMG_96-J4NK8AhluZ45WNVS9_spT6DC_vux2__f9GMMpocHwbveOctMFrxD-nbG-Iy74AovL17MNyMR3pKKTTJ1uz09-AgAsqk1JeGZVWk7rPgmI3IcgHwfltWwxGbmFVVixkMmzEEcLSfuiH9b5Bid8xjxbPfAZKwe-1yaMVLV-cuah01Wszbc3drGEYnuT_BM"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary-fixed-dim/90 backdrop-blur-md text-on-secondary-fixed-variant text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Pendidikan</span>
-            </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">12 Mei 2024</span>
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Beasiswa Berprestasi Kembali Dibuka</h3>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Pemerintah Desa mengalokasikan dana pendidikan bagi siswa berprestasi dari keluarga kurang mampu untuk jenjang SMA dan Kuliah...</p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold cursor-pointer hover:underline">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </span>
-          </div>
-        </div>
-        
-        <!-- Card 5 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="UMKM" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA10VqMUYnyUvoFDF91K2itj68qLNX7Xn1ygupIcrrQ1IU53660V-r2KrHw8HP1KmZ1i68MWDFR41UiYa17Kv0jMuQmHbyROfODCbuCOQBSMvh7wFiLeXPXjHt5oAg0eq2TRiDWiTmdPnjkwQDaIsUNeooIQx70Cznu7pu7UlcLYPTemkPG2FIBBKdft-wzGAo6LWxMhReC1ORse-4q__Ns9HHwlUWeTPVNz3sVL13j7tLEKfurhFnkizt1pymR6ZVxZ1LXmwz5hM"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-secondary/90 backdrop-blur-md text-white text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Ekonomi</span>
-            </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">10 Mei 2024</span>
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Pelatihan Pemasaran Digital bagi UMKM</h3>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Mendorong produk lokal menjangkau pasar nasional, Desa menyelenggarakan workshop optimasi marketplace bagi pengrajin lokal...</p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold cursor-pointer hover:underline">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </span>
-          </div>
-        </div>
-        
-        <!-- Card 6 -->
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300">
-          <div class="h-56 overflow-hidden relative">
-            <img 
-              alt="Gotong Royong" 
-              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuJi0RQPzPjnlYsUkUNZBoKI5xIR3WLD7egWN9l-oceilNdjFlwN8aUvXinppjjSxucyD1J8KLUKQe0PHUr1HoIh7PNEUvNc07t3FigHIEO270D2PFZuCiTg4obk7n33c_iPw7R6neLvLwAEVRz3n8IKRT7YJfXKW-Ivd99SmYYH9W-jnUx1g6i08q-obkzTyP0DAJfCKkl-pcKT2Fh4FUROppZVfVWRYnN7ysZdGC6Uh7MArBZ2fdy8x5fJJHPgtI7YFxqCRl5sw"
-            />
-            <div class="absolute top-4 left-4">
-              <span class="bg-primary-container/90 backdrop-blur-md text-on-primary-container text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider">Masyarakat</span>
-            </div>
-          </div>
-          <div class="p-6">
-            <span class="text-on-surface-variant text-label-md block mb-2">08 Mei 2024</span>
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold text-lg leading-snug">Gerakan Sabtu Bersih di Lingkungan Desa</h3>
-            <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">Menjaga kelestarian alam dan kebersihan lingkungan, warga secara antusias mengikuti kegiatan rutin gotong royong akhir pekan...</p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md group/link font-bold cursor-pointer hover:underline">
-              Selengkapnya <span class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
-            </span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="mt-12 flex justify-center">
-        <button class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md hover:shadow-lg transition-all active:scale-95">
-          Muat Lebih Banyak
-        </button>
+          ))
+        }
       </div>
     </div>
   </section>
 
   <script is:inline>
-    // Micro-interactions for news cards
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.group').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          card.style.transform = 'translateY(-4px)';
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".group").forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.style.transform = "translateY(-4px)";
         });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'translateY(0)';
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "translateY(0)";
         });
       });
     });
