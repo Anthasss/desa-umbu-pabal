@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/galeri/hero.astro";
 
 const categories = [
   { label: "Semua", value: "all" },
@@ -90,22 +91,7 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
 ---
 
 <Layout title="Galeri Desa - Desa Umbu Pabal" activePage="galeri">
-  <!-- Hero -->
-  <section class="bg-surface py-section-padding-desktop px-6">
-    <div class="max-w-[1200px] mx-auto text-center">
-      <h1
-        class="font-headline-xl text-headline-xl text-primary mb-4 font-bold text-3xl md:text-4xl"
-      >
-        Galeri Desa
-      </h1>
-      <p
-        class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto"
-      >
-        Menangkap esensi kehidupan di Desa Umbu Pabal dari keindahan alam yang
-        asri hingga kehangatan budaya dan semangat gotong royong warga kami.
-      </p>
-    </div>
-  </section>
+  <Hero />
 
   <!-- Category Filter -->
   <!-- <div class="bg-surface-container-low py-4 mb-8 px-6 sticky top-20 z-40"> -->

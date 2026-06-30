@@ -1,29 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hero from "../components/berita/hero.astro";
 import { categoryStyles, categories, newsItems } from "../data/berita";
 
 const newsItemsDouble = [...newsItems, ...newsItems];
 ---
 
 <Layout title="Berita Desa - Desa Umbu Pabal" activePage="berita">
-  <!-- Hero -->
-  <section class="bg-surface py-section-padding-desktop px-6">
-    <div class="max-w-[1200px] mx-auto text-center">
-      <h1
-        class="font-headline-xl text-headline-xl text-primary mb-4 font-bold text-3xl md:text-4xl"
-      >
-        Berita Desa
-      </h1>
-      <p
-        class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto"
-      >
-        Menghadirkan transparansi dan akses informasi terintegrasi bagi seluruh
-        warga. Ikuti perkembangan terkini mengenai pembangunan, ekonomi, dan
-        kesejahteraan masyarakat kita.
-      </p>
-    </div>
-  </section>
-
+  <Hero />
   <!-- Search + Category Filter -->
   <div class="bg-surface-container-low py-4 mb-8 px-6 sticky top-20 z-40">
     <div
