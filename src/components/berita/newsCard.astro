@@ -42,14 +42,17 @@ const { item } = Astro.props;
     <p class="text-on-surface-variant text-body-md mb-6 line-clamp-3">
       {item.excerpt}
     </p>
-
-    class="inline-flex items-center gap-2 text-secondary font-label-md
-    group/link font-bold hover:underline" href={`/berita/${item.slug}`}
-    > Selengkapnya
-    <span
-      class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform"
+    <a
+      class="inline-flex items-center gap-2 text-secondary font-label-md
+    group/link font-bold hover:underline"
+      href={`/berita/${item.slug}`}
     >
-      arrow_forward
-    </span>
+      Selengkapnya
+      <span
+        class="material-symbols-outlined text-[18px] group-hover/link:translate-x-1 transition-transform"
+      >
+        arrow_forward
+      </span>
+    </a>
   </div>
 </div>

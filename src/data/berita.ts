@@ -8,20 +8,18 @@ export interface NewsItem {
 }
 
 export const categoryStyles: Record<string, string> = {
-  Infrastruktur: "bg-primary-container/90 text-on-primary-container",
-  Ekonomi: "bg-secondary/90 text-white",
-  Kesehatan: "bg-tertiary-container/90 text-on-tertiary-container",
-  Pendidikan: "bg-secondary-fixed-dim/90 text-on-secondary-fixed-variant",
-  Masyarakat: "bg-primary-container/90 text-on-primary-container",
+  Event: "bg-amber-500 text-black-500",
+  Ekonomi: "bg-green-500 text-black-500",
+  Berita: "bg-blue-500 text-black-500",
 };
 
-export const categories = ["Semua", "Ekonomi", "Pendidikan", "Kesehatan", "Infrastruktur"];
+export const categories = ["Semua", "Event", "Ekonomi", "Berita"];
 
 export const newsItems: NewsItem[] = [
   {
     slug: "pembangunan-irigasi",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA3j1w_kAIkZAZNs3DjERDc1Uf58qKQv3meyvsAdPMA_HDXR-k8lrEhVqwOuiwVRA-HxwKfYwywepBo8SCZPT1yEwAbn_y4Nh1fKv5vaIwu6IQ_26-8K7orqRDNDw7ApxYW5CXAjmfc8LwdacO4vyQ7Vr-YFscfnecIHtvNF5Af5L0RdPgCyOgyRl6rKYuQLSBnPjIKOHrI-AKdv31mMVbUjOYf_ZLWeUR8EWzrrgp1Gux47LbhfwfmmJzeoc2JyeOjO4Wxq-JPKrw",
-    category: "Infrastruktur",
+    category: "Event",
     date: "20 Mei 2024",
     title: "Pembangunan Irigasi Baru Selesai Tepat Waktu",
     excerpt: "Proyek strategis pengairan sawah di wilayah Dusun Utara telah rampung, menjamin pasokan air bagi 50 hektar lahan pertanian...",
@@ -37,7 +35,7 @@ export const newsItems: NewsItem[] = [
   {
     slug: "imunisasi-posyandu-anggrek",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA9f5ltezy-AC2lU4q_wtmHw4GynU48GMM_WGGL26KKiQ4X2u9tYiZGjaDR3zuANnBDnrW6KfdZywlouhExcwG0ulh1GZoNOfUFxTFxfD1YObnxsu-cJbgzEWB2bys6MWOdl_BlY2T7Od_rAytjQLnyaTpfuMc_rAhJf6pSfWycbiYTjUpwxBbEXp04zSLjc40NChzCUiSiXz7Ao4c9fN-kxDDMye9dRLf6DVgxf_b9LC4TOpbuJjdlznsOlrQQoJHoEvn1YtdQdDw",
-    category: "Kesehatan",
+    category: "Berita",
     date: "15 Mei 2024",
     title: "Jadwal Imunisasi Bulanan Posyandu Anggrek",
     excerpt: "Mari pastikan tumbuh kembang si buah hati dengan mengikuti jadwal imunisasi rutin yang akan dilaksanakan serentak di Balai Desa...",
@@ -45,7 +43,7 @@ export const newsItems: NewsItem[] = [
   {
     slug: "beasiswa-berprestasi",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBNaSrxlQlETs0101Q2KNa65WpXED0fjDKsdjApBb4fsGO26Bd1sAE-3QjRN98aVcsYvdGkPtU-YMG_96-J4NK8AhluZ45WNVS9_spT6DC_vux2__f9GMMpocHwbveOctMFrxD-nbG-Iy74AovL17MNyMR3pKKTTJ1uz09-AgAsqk1JeGZVWk7rPgmI3IcgHwfltWwxGbmFVVixkMmzEEcLSfuiH9b5Bid8xjxbPfAZKwe-1yaMVLV-cuah01Wszbc3drGEYnuT_BM",
-    category: "Pendidikan",
+    category: "Event",
     date: "12 Mei 2024",
     title: "Beasiswa Berprestasi Kembali Dibuka",
     excerpt: "Pemerintah Desa mengalokasikan dana pendidikan bagi siswa berprestasi dari keluarga kurang mampu untuk jenjang SMA dan Kuliah...",
@@ -61,7 +59,7 @@ export const newsItems: NewsItem[] = [
   {
     slug: "gerakan-sabtu-bersih",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAuJi0RQPzPjnlYsUkUNZBoKI5xIR3WLD7egWN9l-oceilNdjFlwN8aUvXinppjjSxucyD1J8KLUKQe0PHUr1HoIh7PNEUvNc07t3FigHIEO270D2PFZuCiTg4obk7n33c_iPw7R6neLvLwAEVRz3n8IKRT7YJfXKW-Ivd99SmYYH9W-jnUx1g6i08q-obkzTyP0DAJfCKkl-pcKT2Fh4FUROppZVfVWRYnN7ysZdGC6Uh7MArBZ2fdy8x5fJJHPgtI7YFxqCRl5sw",
-    category: "Masyarakat",
+    category: "Berita",
     date: "08 Mei 2024",
     title: "Gerakan Sabtu Bersih di Lingkungan Desa",
     excerpt: "Menjaga kelestarian alam dan kebersihan lingkungan, warga secara antusias mengikuti kegiatan rutin gotong royong akhir pekan...",
