@@ -17,7 +17,7 @@ if (session.user.role !== "admin") {
 }
 ---
 
-<Layout title="Kotak Saran - Admin Panel" session={session}>
+<Layout title="Kotak Saran - Admin Panel" activePage="admin-kotak-saran" session={session}>
   <div class="min-h-screen px-gutter py-20">
     <div class="max-w-container-max mx-auto">
       <div
@@ -35,14 +35,6 @@ if (session.user.role !== "admin") {
             <p class="text-on-surface-variant">
               Semua saran yang dikirim warga secara anonim
             </p>
-          </div>
-          <div class="flex gap-3">
-            <a
-              href="/admin"
-              class="bg-on-surface-variant text-on-primary px-6 py-2.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95"
-            >
-              Admin Panel
-            </a>
           </div>
         </div>
 

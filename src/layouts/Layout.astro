@@ -1,13 +1,16 @@
 ---
 import "../styles/global.css";
+import AdminLayout from "./AdminLayout.astro";
 
 interface Props {
   title: string;
   activePage?: string;
-  session?: { user: { name: string } } | null;
+  session?: { user: { name: string; role?: string | null } } | null;
 }
 
 const { title, activePage = "home", session = null } = Astro.props;
+
+const isAdmin = session?.user?.role === "admin";
 
 const avatarName = session?.user?.name || "";
 const avatarUrl = avatarName
@@ -50,10 +53,15 @@ const layananItems = [
     />
   </head>
   <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
-    <!-- TopNavBar -->
-    <header
-      class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm transition-all duration-300"
-    >
+    {isAdmin ? (
+      <AdminLayout title={title} activePage={activePage} session={session}>
+        <slot />
+      </AdminLayout>
+    ) : (
+      <Fragment>
+      <header
+        class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm transition-all duration-300"
+      >
       <nav
         class="max-w-container-max mx-auto px-gutter flex justify-between items-center h-20"
       >
@@ -323,5 +331,7 @@ const layananItems = [
         });
       }
     </script>
+      </Fragment>
+    )}
   </body>
 </html>
