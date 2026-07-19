@@ -1,0 +1,197 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout
+  title="Kotak Saran - Desa Umbu Pabal"
+  activePage="layanan"
+  session={session}
+>
+  <section class="relative h-[300px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img
+        class="w-full h-full object-cover"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBour6fg3F6hJkfooFWJUPQ0BX81M5yMIyjQdX8LyDg5kqsNQ75tk69GSBy-NxQIPHHdoNYPTZaix0i8ai2bBPfYmDOsSdhBB_cJQBRUc13YjG-cy9u-hleFv6zZbGciEmo7SRzjPkrAyB8WUJTDSwWyXf9yZ-NDOiYtTPUKc0loSS_rTa7WUPZr4KdUpMOatQT-1q0A0JKPWmfMae7Sbp3EE2C9yJlY_eaHwsQ5mF0Z0duf5ymd0axwPVBRPGGhgC08MWY3_15fBc"
+      />
+      <div class="absolute inset-0 bg-primary/60 mix-blend-multiply"></div>
+    </div>
+    <div
+      class="relative z-10 max-w-[1200px] mx-auto px-gutter w-full text-on-primary"
+    >
+      <h1
+        class="font-headline-xl text-headline-xl mb-4 font-bold text-3xl md:text-4xl"
+      >
+        Kotak Saran
+      </h1>
+      <p class="font-body-lg text-body-lg opacity-90 max-w-2xl">
+        Sampaikan masukan, saran, atau keluhan Anda untuk kemajuan desa kami.
+        Identitas Anda dirahasiakan.
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-[800px] mx-auto px-gutter py-section-padding-desktop">
+    <div
+      class="bg-surface-bright rounded-2xl border border-outline-variant p-8"
+    >
+      <div class="flex items-center gap-4 mb-6">
+        <div
+          class="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center text-primary"
+        >
+          <span class="material-symbols-outlined text-2xl">feedback</span>
+        </div>
+        <div>
+          <h2
+            class="font-headline-md text-headline-md text-primary font-bold text-lg"
+          >
+            Kirim Saran
+          </h2>
+          <p class="text-on-surface-variant text-sm">
+            Pesan Anda dikirim secara anonim.
+          </p>
+        </div>
+      </div>
+
+      <form id="feedback-form">
+        <div class="mb-6">
+          <label
+            for="feedback-message"
+            class="block font-label-md text-on-surface mb-2">Pesan Anda *</label
+          >
+          <textarea
+            id="feedback-message"
+            rows="6"
+            required
+            minlength="10"
+            maxlength="2000"
+            class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+            placeholder="Tulis saran, masukan, atau keluhan Anda di sini..."
+          ></textarea>
+          <div class="flex justify-between mt-1">
+            <span id="char-error" class="text-error text-xs hidden"
+              >Minimal 10 karakter.</span
+            >
+            <span class="text-on-surface-variant text-xs ml-auto"
+              ><span id="char-count">0</span>/2000</span
+            >
+          </div>
+        </div>
+
+        <div
+          id="submit-error"
+          class="hidden mb-4 p-3 bg-error-container text-on-error-container rounded-xl text-sm"
+        >
+        </div>
+        <div
+          id="submit-success"
+          class="hidden mb-4 p-3 bg-green-100 text-green-800 rounded-xl text-sm"
+        >
+        </div>
+
+        <button
+          type="submit"
+          id="submit-btn"
+          class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-bold cursor-pointer"
+        >
+          Kirim Saran
+        </button>
+      </form>
+    </div>
+
+    <div
+      class="mt-8 p-6 bg-surface-container-low rounded-2xl border border-outline-variant"
+    >
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-primary mt-0.5">info</span>
+        <div>
+          <h3 class="font-label-lg text-on-surface mb-1">Tentang Anonimitas</h3>
+          <p class="text-on-surface-variant font-body-md text-sm">
+            Semua saran yang dikirim melalui form ini bersifat anonim. Identitas
+            pengirim tidak disimpan atau ditampilkan kepada siapa pun, termasuk
+            admin desa. Kami hanya menerima isi pesan dan waktu pengiriman.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  const textarea = document.getElementById("feedback-message");
+  const charCount = document.getElementById("char-count");
+  const charError = document.getElementById("char-error");
+
+  textarea.addEventListener("input", () => {
+    const len = textarea.value.length;
+    charCount.textContent = len;
+    if (len > 0 && len < 10) {
+      charError.classList.remove("hidden");
+    } else {
+      charError.classList.add("hidden");
+    }
+  });
+
+  document
+    .getElementById("feedback-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = textarea.value.trim();
+      const errorDiv = document.getElementById("submit-error");
+      const successDiv = document.getElementById("submit-success");
+      const btn = document.getElementById("submit-btn");
+
+      errorDiv.classList.add("hidden");
+      successDiv.classList.add("hidden");
+
+      if (message.length < 10) {
+        errorDiv.textContent = "Pesan harus minimal 10 karakter.";
+        errorDiv.classList.remove("hidden");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Mengirim...";
+
+      try {
+        const res = await fetch("/api/feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorDiv.textContent = data.error || "Gagal mengirim saran.";
+          errorDiv.classList.remove("hidden");
+          btn.disabled = false;
+          btn.textContent = "Kirim Saran";
+          return;
+        }
+
+        successDiv.textContent =
+          "Terima kasih! Saran Anda telah berhasil dikirim secara anonim.";
+        successDiv.classList.remove("hidden");
+        textarea.value = "";
+        charCount.textContent = "0";
+        btn.disabled = false;
+        btn.textContent = "Kirim Saran";
+      } catch {
+        errorDiv.textContent = "Terjadi kesalahan. Coba lagi nanti.";
+        errorDiv.classList.remove("hidden");
+        btn.disabled = false;
+        btn.textContent = "Kirim Saran";
+      }
+    });
+</script>
