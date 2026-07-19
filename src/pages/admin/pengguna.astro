@@ -1,6 +1,6 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { auth } from "../lib/auth";
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
 
 export const prerender = false;
 
@@ -17,7 +17,7 @@ if (session.user.role !== "admin") {
 }
 ---
 
-<Layout title="Admin Panel - Desa Umbu Pabal" activePage="admin" session={session}>
+<Layout title="Kelola Pengguna - Admin Panel" activePage="admin-pengguna" session={session}>
   <div class="min-h-screen px-gutter py-20">
     <div class="max-w-container-max mx-auto">
       <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
@@ -109,7 +109,7 @@ if (session.user.role !== "admin") {
 </Layout>
 
 <script>
-  import { authClient } from "../lib/auth-client";
+  import { authClient } from "../../lib/auth-client";
 
   const searchInput = document.getElementById("search-input") as HTMLInputElement;
   const searchBtn = document.getElementById("search-btn") as HTMLButtonElement;
