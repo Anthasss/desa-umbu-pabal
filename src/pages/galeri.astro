@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
+import { db } from "../db";
+import { galleryImages } from "../db/schema";
 import Hero from "../components/galeri/hero.astro";
+import { desc } from "drizzle-orm";
 
 export const prerender = false;
 
@@ -9,92 +12,16 @@ const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
 
-const categories = [
-  { label: "Semua", value: "all" },
-  { label: "Alam", value: "alam" },
-  { label: "Budaya", value: "budaya" },
-  { label: "Komunitas", value: "komunitas" },
-];
+const dbImages = await db
+  .select()
+  .from(galleryImages)
+  .orderBy(desc(galleryImages.createdAt));
 
-const galleryItemsRaw = [
-  {
-    title: "Sawah Terasering",
-    category: "alam",
-    image: "https://picsum.photos/seed/sawah/600/600",
-  },
-  {
-    title: "Festival Budaya",
-    category: "budaya",
-    image: "https://picsum.photos/seed/festival/600/600",
-  },
-  {
-    title: "Gotong Royong Warga",
-    category: "komunitas",
-    image: "https://picsum.photos/seed/gotong/600/600",
-  },
-  {
-    title: "Pagi Hari di Desa",
-    category: "alam",
-    image: "https://picsum.photos/seed/pagi/600/600",
-  },
-  {
-    title: "Kerajinan Tangan Lokal",
-    category: "budaya",
-    image: "https://picsum.photos/seed/kerajinan/600/600",
-  },
-  {
-    title: "Jamuan Makan Warga",
-    category: "komunitas",
-    image: "https://picsum.photos/seed/jamuan/600/600",
-  },
-  {
-    title: "Hutan Lindung",
-    category: "alam",
-    image: "https://picsum.photos/seed/hutan/600/600",
-  },
-  {
-    title: "Tarian Adat",
-    category: "budaya",
-    image: "https://picsum.photos/seed/tarian/600/600",
-  },
-  {
-    title: "Kerja Bakti",
-    category: "komunitas",
-    image: "https://picsum.photos/seed/bakti/600/600",
-  },
-  {
-    title: "Sungai Jernih",
-    category: "alam",
-    image: "https://picsum.photos/seed/sungai/600/600",
-  },
-  {
-    title: "Upacara Adat",
-    category: "budaya",
-    image: "https://picsum.photos/seed/upacara/600/600",
-  },
-  {
-    title: "Rapat Warga",
-    category: "komunitas",
-    image: "https://picsum.photos/seed/rapat/600/600",
-  },
-  {
-    title: "Ladang Jagung",
-    category: "alam",
-    image: "https://picsum.photos/seed/jagung/600/600",
-  },
-  {
-    title: "Musik Tradisional",
-    category: "budaya",
-    image: "https://picsum.photos/seed/musik/600/600",
-  },
-  {
-    title: "Pasar Desa",
-    category: "komunitas",
-    image: "https://picsum.photos/seed/pasar/600/600",
-  },
-];
-
-const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
+const galleryItems = dbImages.map((img) => ({
+  id: img.id,
+  title: img.title,
+  imageUrl: img.imageUrl,
+}));
 ---
 
 <Layout title="Galeri Desa - Desa Umbu Pabal" activePage="galeri" session={session}>
@@ -155,26 +82,19 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
 <script is:inline define:vars={{ galleryItems }}>
   const PAGE_SIZE = 9;
   let currentPage = 0;
-  let activeCategory = "all";
   let isLoading = false;
 
   const grid = document.getElementById("gallery-grid");
   const sentinel = document.getElementById("scroll-sentinel");
   const loadingIndicator = document.getElementById("loading-indicator");
 
-  function getFilteredItems() {
-    if (activeCategory === "all") return galleryItems;
-    return galleryItems.filter((item) => item.category === activeCategory);
-  }
-
   function createCard(item) {
     const card = document.createElement("div");
     card.className =
       "gallery-card group relative overflow-hidden rounded-xl bg-surface-container shadow-sm cursor-pointer aspect-square";
-    card.dataset.item = item.category;
     card.innerHTML = `
       <img
-        src="${item.image}"
+        src="/api/gallery/image/${item.id}?v=${encodeURIComponent(item.imageUrl)}"
         alt="${item.title}"
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
@@ -187,13 +107,11 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
   }
 
   function loadNextPage() {
-    const filtered = getFilteredItems();
     const start = currentPage * PAGE_SIZE;
     const end = start + PAGE_SIZE;
-    const slice = filtered.slice(start, end);
+    const slice = galleryItems.slice(start, end);
 
     if (slice.length === 0) {
-      // No more items — disconnect observer
       observer.disconnect();
       loadingIndicator.classList.add("hidden");
       loadingIndicator.classList.remove("flex");
@@ -204,7 +122,6 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
     loadingIndicator.classList.remove("hidden");
     loadingIndicator.classList.add("flex");
 
-    // Simulate async fetch delay
     setTimeout(() => {
       slice.forEach((item) => grid.appendChild(createCard(item)));
       currentPage++;
@@ -212,21 +129,12 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
       loadingIndicator.classList.add("hidden");
       loadingIndicator.classList.remove("flex");
 
-      // If we've loaded everything, stop observing
-      if (currentPage * PAGE_SIZE >= filtered.length) {
+      if (currentPage * PAGE_SIZE >= galleryItems.length) {
         observer.disconnect();
       }
     }, 600);
   }
 
-  function resetGallery() {
-    currentPage = 0;
-    grid.innerHTML = "";
-    observer.observe(sentinel);
-    loadNextPage();
-  }
-
-  // Infinite scroll observer
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting && !isLoading) {
@@ -236,33 +144,6 @@ const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
     { rootMargin: "200px" },
   );
 
-  // Filter buttons
-  document.querySelectorAll(".filter-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      activeCategory = btn.dataset.category;
-
-      document.querySelectorAll(".filter-btn").forEach((b) => {
-        b.classList.remove("bg-primary", "text-on-primary");
-        b.classList.add(
-          "bg-surface",
-          "text-on-surface-variant",
-          "border",
-          "border-outline-variant",
-        );
-      });
-      btn.classList.remove(
-        "bg-surface",
-        "text-on-surface-variant",
-        "border",
-        "border-outline-variant",
-      );
-      btn.classList.add("bg-primary", "text-on-primary");
-
-      resetGallery();
-    });
-  });
-
-  // Initial load
   observer.observe(sentinel);
   loadNextPage();
 </script>
