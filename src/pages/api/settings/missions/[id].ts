@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import { db } from "../../../../../db";
-import { vmMissions } from "../../../../../db/schema";
-import { auth } from "../../../../../lib/auth";
+import { db } from "../../../../db";
+import { vmMissions } from "../../../../db/schema";
+import { auth } from "../../../../lib/auth";
 import { eq } from "drizzle-orm";
 
 export const prerender = false;
