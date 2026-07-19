@@ -156,3 +156,9 @@ export const letterSubmissionRelations = relations(letterSubmissions, ({ one }) 
     references: [letterTemplates.id],
   }),
 }));
+
+export const feedback = pgTable("feedback", {
+  id: serial("id").primaryKey(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
