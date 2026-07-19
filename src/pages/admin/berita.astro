@@ -1,0 +1,400 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Kelola Berita - Admin Panel" activePage="admin-berita" session={session}>
+  <div class="min-h-screen px-gutter py-20">
+    <div class="max-w-container-max mx-auto">
+      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+              Kelola Berita
+            </h1>
+            <p class="text-on-surface-variant">Tambah, edit, dan hapus artikel berita desa</p>
+          </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="save-success" class="hidden bg-green-50 text-green-700 border border-green-200 rounded-xl p-4 mb-6"></div>
+        <div id="save-error" class="hidden bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 mb-6"></div>
+
+        <!-- Create Form -->
+        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
+          <h3 class="font-label-lg text-on-surface mb-4">Tambah Berita Baru</h3>
+          <form id="create-form" class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="news-title" class="block text-on-surface font-label-md mb-2">Judul Berita *</label>
+                <input
+                  type="text"
+                  id="news-title"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Contoh: Pembangunan Irigasi Desa"
+                />
+              </div>
+              <div>
+                <label for="news-category" class="block text-on-surface font-label-md mb-2">Kategori *</label>
+                <select
+                  id="news-category"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                >
+                  <option value="">Pilih Kategori</option>
+                  <option value="Pembangunan">Pembangunan</option>
+                  <option value="Pemerintahan">Pemerintahan</option>
+                  <option value="Sosial">Sosial</option>
+                  <option value="Ekonomi">Ekonomi</option>
+                  <option value="Pendidikan">Pendidikan</option>
+                  <option value="Kesehatan">Kesehatan</option>
+                  <option value="Keagamaan">Keagamaan</option>
+                  <option value="Olahraga">Olahraga</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="news-file" class="block text-on-surface font-label-md mb-2">Gambar (JPEG, PNG, WebP, GIF, max 5MB) *</label>
+              <input
+                type="file"
+                id="news-file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:opacity-80"
+              />
+            </div>
+            <div>
+              <label for="news-content" class="block text-on-surface font-label-md mb-2">Konten *</label>
+              <textarea
+                id="news-content"
+                rows="6"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y"
+                placeholder="Tulis isi berita di sini..."
+              ></textarea>
+            </div>
+            <div id="create-error" class="hidden text-error text-sm"></div>
+            <div id="create-success" class="hidden text-green-600 text-sm"></div>
+            <button
+              type="submit"
+              id="create-btn"
+              class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 self-start disabled:opacity-50 disabled:cursor-not-allowed font-bold flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-xl">add</span>
+              Tambah Berita
+            </button>
+          </form>
+        </div>
+
+        <!-- News List -->
+        <div>
+          <h3 class="font-label-lg text-on-surface mb-4">Daftar Berita</h3>
+          <div id="news-list" class="flex flex-col gap-3">
+            <p class="text-on-surface-variant text-body-md">Memuat berita...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="edit-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-surface rounded-2xl shadow-xl border border-outline-variant w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-outline-variant flex items-center justify-between">
+        <h3 class="font-headline-sm text-on-surface font-bold">Edit Berita</h3>
+        <button onclick="closeEditModal()" class="text-on-surface-variant hover:text-on-surface transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="edit-form" class="p-6 flex flex-col gap-4">
+        <input type="hidden" id="edit-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="edit-title" class="block text-on-surface font-label-md mb-2">Judul Berita *</label>
+            <input
+              type="text"
+              id="edit-title"
+              required
+              class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            />
+          </div>
+          <div>
+            <label for="edit-category" class="block text-on-surface font-label-md mb-2">Kategori *</label>
+            <select
+              id="edit-category"
+              required
+              class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            >
+              <option value="Pembangunan">Pembangunan</option>
+              <option value="Pemerintahan">Pemerintahan</option>
+              <option value="Sosial">Sosial</option>
+              <option value="Ekonomi">Ekonomi</option>
+              <option value="Pendidikan">Pendidikan</option>
+              <option value="Kesehatan">Kesehatan</option>
+              <option value="Keagamaan">Keagamaan</option>
+              <option value="Olahraga">Olahraga</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="edit-file" class="block text-on-surface font-label-md mb-2">Gambar Baru (opsional)</label>
+          <input
+            type="file"
+            id="edit-file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:opacity-80"
+          />
+        </div>
+        <div>
+          <label for="edit-content" class="block text-on-surface font-label-md mb-2">Konten *</label>
+          <textarea
+            id="edit-content"
+            rows="6"
+            required
+            class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y"
+          ></textarea>
+        </div>
+        <div id="edit-error" class="hidden text-error text-sm"></div>
+        <div class="flex gap-3 justify-end">
+          <button
+            type="button"
+            onclick="closeEditModal()"
+            class="px-6 py-3 rounded-xl font-label-md border border-outline text-on-surface hover:bg-surface-container transition-all"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            id="edit-btn"
+            class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-bold"
+          >
+            Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const createForm = document.getElementById("create-form") as HTMLFormElement;
+  const createBtn = document.getElementById("create-btn") as HTMLButtonElement;
+  const createError = document.getElementById("create-error") as HTMLDivElement;
+  const createSuccess = document.getElementById("create-success") as HTMLDivElement;
+  const listDiv = document.getElementById("news-list") as HTMLDivElement;
+
+  const editForm = document.getElementById("edit-form") as HTMLFormElement;
+  const editModal = document.getElementById("edit-modal") as HTMLDivElement;
+  const editBtn = document.getElementById("edit-btn") as HTMLButtonElement;
+  const editError = document.getElementById("edit-error") as HTMLDivElement;
+
+  let newsItems: any[] = [];
+
+  async function loadNews() {
+    listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Memuat berita...</p>';
+
+    try {
+      const res = await fetch("/api/news");
+      newsItems = await res.json();
+
+      if (!newsItems.length) {
+        listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada berita.</p>';
+        return;
+      }
+
+      listDiv.innerHTML = newsItems
+        .map(
+          (item: any, idx: number) => `
+          <div class="flex items-center gap-4 p-4 bg-background rounded-xl border border-outline-variant">
+            <div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low shrink-0">
+              <img
+                src="/api/news/image/${item.id}?v=${encodeURIComponent(item.image)}"
+                alt="${item.title.replace(/"/g, "&quot;")}"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container">${item.category}</span>
+                <span class="text-xs text-on-surface-variant">${item.date}</span>
+              </div>
+              <span class="font-semibold text-on-surface block truncate">${item.title}</span>
+              <span class="text-sm text-on-surface-variant block truncate">${item.excerpt}</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button
+                onclick="openEditModal(${idx})"
+                class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-sm hover:opacity-90 transition-all active:scale-95 flex items-center gap-1"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>
+                Edit
+              </button>
+              <button
+                onclick="deleteNews(${item.id}, '${item.title.replace(/'/g, "\\'")}')"
+                class="bg-error-container text-on-error-container px-4 py-2 rounded-lg font-label-sm hover:opacity-90 transition-all active:scale-95 flex items-center gap-1"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+                Hapus
+              </button>
+            </div>
+          </div>
+        `,
+        )
+        .join("");
+    } catch {
+      listDiv.innerHTML = '<p class="text-error text-body-md">Gagal memuat berita.</p>';
+    }
+  }
+
+  (window as any).deleteNews = async function (id: number, title: string) {
+    if (!confirm(`Hapus berita "${title}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/news/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        alert("Gagal menghapus berita.");
+        return;
+      }
+      loadNews();
+    } catch {
+      alert("Gagal menghapus berita.");
+    }
+  };
+
+  (window as any).openEditModal = function (idx: number) {
+    const item = newsItems[idx];
+    (document.getElementById("edit-id") as HTMLInputElement).value = item.id;
+    (document.getElementById("edit-title") as HTMLInputElement).value = item.title;
+    (document.getElementById("edit-category") as HTMLSelectElement).value = item.category;
+    (document.getElementById("edit-content") as HTMLTextAreaElement).value = item.content || "";
+    (document.getElementById("edit-file") as HTMLInputElement).value = "";
+    editError.classList.add("hidden");
+    editModal.classList.remove("hidden");
+  };
+
+  (window as any).closeEditModal = function () {
+    editModal.classList.add("hidden");
+  };
+
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    editError.classList.add("hidden");
+
+    const id = (document.getElementById("edit-id") as HTMLInputElement).value;
+    const title = (document.getElementById("edit-title") as HTMLInputElement).value.trim();
+    const category = (document.getElementById("edit-category") as HTMLSelectElement).value;
+    const content = (document.getElementById("edit-content") as HTMLTextAreaElement).value.trim();
+    const fileInput = document.getElementById("edit-file") as HTMLInputElement;
+    const file = fileInput.files?.[0] || null;
+
+    if (!title || !category || !content) {
+      editError.textContent = "Semua field wajib diisi.";
+      editError.classList.remove("hidden");
+      return;
+    }
+
+    editBtn.disabled = true;
+    editBtn.textContent = "Menyimpan...";
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("content", content);
+    if (file) formData.append("file", file);
+
+    try {
+      const res = await fetch(`/api/news/${id}`, { method: "PUT", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        editError.textContent = data.error || "Gagal menyimpan berita.";
+        editError.classList.remove("hidden");
+        editBtn.disabled = false;
+        editBtn.textContent = "Simpan Perubahan";
+        return;
+      }
+
+      editModal.classList.add("hidden");
+      editBtn.disabled = false;
+      editBtn.textContent = "Simpan Perubahan";
+      loadNews();
+    } catch {
+      editError.textContent = "Terjadi kesalahan. Coba lagi nanti.";
+      editError.classList.remove("hidden");
+      editBtn.disabled = false;
+      editBtn.textContent = "Simpan Perubahan";
+    }
+  });
+
+  createForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    createError.classList.add("hidden");
+    createSuccess.classList.add("hidden");
+
+    const title = (document.getElementById("news-title") as HTMLInputElement).value.trim();
+    const category = (document.getElementById("news-category") as HTMLSelectElement).value;
+    const content = (document.getElementById("news-content") as HTMLTextAreaElement).value.trim();
+    const fileInput = document.getElementById("news-file") as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (!title || !category || !content || !file) {
+      createError.textContent = "Semua field wajib diisi.";
+      createError.classList.remove("hidden");
+      return;
+    }
+
+    createBtn.disabled = true;
+    createBtn.innerHTML = '<span class="material-symbols-outlined text-xl">hourglass_empty</span> Mengunggah...';
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("content", content);
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/news", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        createError.textContent = data.error || "Gagal menambah berita.";
+        createError.classList.remove("hidden");
+        createBtn.disabled = false;
+        createBtn.innerHTML = '<span class="material-symbols-outlined text-xl">add</span> Tambah Berita';
+        return;
+      }
+
+      createSuccess.textContent = "Berita berhasil ditambahkan!";
+      createSuccess.classList.remove("hidden");
+      createForm.reset();
+      createBtn.disabled = false;
+      createBtn.innerHTML = '<span class="material-symbols-outlined text-xl">add</span> Tambah Berita';
+      loadNews();
+    } catch {
+      createError.textContent = "Terjadi kesalahan. Coba lagi nanti.";
+      createError.classList.remove("hidden");
+      createBtn.disabled = false;
+      createBtn.innerHTML = '<span class="material-symbols-outlined text-xl">add</span> Tambah Berita';
+    }
+  });
+
+  loadNews();
+</script>
