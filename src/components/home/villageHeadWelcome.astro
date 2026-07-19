@@ -1,11 +1,11 @@
 ---
-const sambutan =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime iste dolorum deleniti voluptates harum totam perferendis libero ipsa, architecto commodi blanditiis, officia, ducimus repellat autem? Dicta vitae nam odit ipsa.";
+interface Props {
+  sambutan: string;
+  kepalaDesaName: string;
+  kepalaDesaImage: string;
+}
 
-const kepalaDesa = "Dr. Ir. Kepa Ladesa";
-
-const kepalaDesaImage =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuCIVznAlW8Ze5Kwi4FmAqA4zNIZiuNkumg7gQKUmJeuDQgA3SW4KlWJR9G_h3tiwmizfL2oKEv2YybW6u9J_UEVP6noUQaegyS11uZmgsLfmGOqqZIOQTQiZJQxqW9AYVWFI5w2coNFN5H9IbZmKqJU7HpHiYba0lZ_4aE_a5E10X8As8rz61EbnO4gVq_pCth_Bd8I-fG23lsxWsraGRNSi1NFycPQ1sN5tBJ3qlGdTNz8phtVF30jweA25C36RmisiCke6S4Krn8";
+const { sambutan, kepalaDesaName, kepalaDesaImage } = Astro.props;
 ---
 
 <section class="py-section-padding-desktop bg-surface-bright">
@@ -34,7 +34,7 @@ const kepalaDesaImage =
         </p>
         <div class="mb-8">
           <h4 class="font-headline-md text-headline-md text-primary">
-            {kepalaDesa}
+            {kepalaDesaName}
           </h4>
           <p class="text-on-surface-variant opacity-70">
             Kepala Desa Umbu Pabal

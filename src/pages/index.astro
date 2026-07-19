@@ -11,11 +11,46 @@ export const prerender = false;
 const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
+
+// NOTE: control panel
+const hero_title = "Membangun Masa Depan Berbasis Nilai Tradisi.";
+const hero_desc =
+  "Kami berdedikasi untuk menciptakan lingkungan yang mandiri, inovatif, dan berkelanjutan bagi seluruh warga dan generasi mendatang.";
+
+const vhw_sambutan =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime iste dolorum deleniti voluptates harum totam perferendis libero ipsa, architecto commodi blanditiis, officia, ducimus repellat autem? Dicta vitae nam odit ipsa.";
+const vhw_kepalaDesaName = "Dr. Ir. Kepa Ladesa";
+const vhw_kepalaDesaImage =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCIVznAlW8Ze5Kwi4FmAqA4zNIZiuNkumg7gQKUmJeuDQgA3SW4KlWJR9G_h3tiwmizfL2oKEv2YybW6u9J_UEVP6noUQaegyS11uZmgsLfmGOqqZIOQTQiZJQxqW9AYVWFI5w2coNFN5H9IbZmKqJU7HpHiYba0lZ_4aE_a5E10X8As8rz61EbnO4gVq_pCth_Bd8I-fG23lsxWsraGRNSi1NFycPQ1sN5tBJ3qlGdTNz8phtVF30jweA25C36RmisiCke6S4Krn8";
+
+const vm_vision =
+  "Menjadi desa digital percontohan nasional yang mandiri secara ekonomi, unggul dalam sumber daya manusia, dan tetap menjaga kelestarian ekosistem hutan tropis.";
+const vm_missions = [
+  {
+    title: "Transformasi Digital",
+    description:
+      "Mengintegrasikan teknologi dalam setiap layanan administrasi dan edukasi masyarakat.",
+  },
+  {
+    title: "Pelayanan Terpadu",
+    description:
+      "Memberikan pelayanan yang cepat, transparan, dan mudah diakses oleh masyarakat.",
+  },
+  {
+    title: "Pemberdayaan Masyarakat",
+    description:
+      "Mendorong partisipasi aktif masyarakat dalam pembangunan desa.",
+  },
+];
 ---
 
 <Layout title="Desa Umbu Pabal" activePage="home" session={session}>
-  <Hero />
-  <VillageHeadWelcome />
+  <Hero hero_title={hero_title} hero_desc={hero_desc} />
+  <VillageHeadWelcome
+    sambutan={vhw_sambutan}
+    kepalaDesaName={vhw_kepalaDesaName}
+    kepalaDesaImage={vhw_kepalaDesaImage}
+  />
   <!-- <InfoBento /> -->
-  <VisionMission />
+  <VisionMission vision={vm_vision} missions={vm_missions} />
 </Layout>
