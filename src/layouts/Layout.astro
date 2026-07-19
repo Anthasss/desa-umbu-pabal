@@ -133,19 +133,36 @@ const layananItems = [
           <div class="flex items-center gap-3">
             {
               session ? (
-                <a
-                  href="/dashboard"
-                  class="block rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95"
-                >
-                  <img
-                    src={avatarUrl}
-                    alt={avatarName}
-                    class="w-10 h-10 rounded-full"
-                  />
-                </a>
+                <div class="relative" id="user-menu-container">
+                  <button
+                    id="user-menu-toggle"
+                    class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
+                  >
+                    <img
+                      src={avatarUrl}
+                      alt={avatarName}
+                      class="w-10 h-10 rounded-full"
+                    />
+                  </button>
+                  <div
+                    id="user-menu-dropdown"
+                    class="hidden absolute right-0 top-full mt-2 min-w-[180px] bg-surface rounded-xl shadow-[0px_8px_30px_rgba(0,0,0,0.12)] border border-outline-variant py-2 z-50"
+                  >
+                    <div class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate">
+                      {avatarName}
+                    </div>
+                    <button
+                      id="header-logout-btn"
+                      class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+                    >
+                      <span class="material-symbols-outlined text-[18px]">logout</span>
+                      Keluar
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <a
-                  href="/dashboard"
+                  href="/login"
                   class="bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center"
                 >
                   Masuk
@@ -206,16 +223,36 @@ const layananItems = [
         </div>
         {
           session ? (
-            <a href="/dashboard" class="flex justify-center">
-              <img
-                src={avatarUrl}
-                alt={avatarName}
-                class="w-10 h-10 rounded-full"
-              />
-            </a>
+            <div class="flex flex-col items-center gap-2" id="mobile-user-menu-container">
+              <button
+                id="mobile-user-menu-toggle"
+                class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
+              >
+                <img
+                  src={avatarUrl}
+                  alt={avatarName}
+                  class="w-10 h-10 rounded-full"
+                />
+              </button>
+              <div
+                id="mobile-user-menu-dropdown"
+                class="hidden w-full bg-surface rounded-xl border border-outline-variant py-2"
+              >
+                <div class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate">
+                  {avatarName}
+                </div>
+                <button
+                  id="mobile-header-logout-btn"
+                  class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+                >
+                  <span class="material-symbols-outlined text-[18px]">logout</span>
+                  Keluar
+                </button>
+              </div>
+            </div>
           ) : (
             <a
-              href="/dashboard"
+              href="/login"
               class="bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md text-center hover:opacity-80 transition-all active:scale-95"
             >
               Masuk
@@ -330,6 +367,45 @@ const layananItems = [
           }
         });
       }
+
+      // User menu toggle (desktop)
+      const userMenuToggle = document.getElementById("user-menu-toggle");
+      const userMenuDropdown = document.getElementById("user-menu-dropdown");
+
+      userMenuToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userMenuDropdown?.classList.toggle("hidden");
+      });
+
+      // User menu toggle (mobile)
+      const mobileUserMenuToggle = document.getElementById("mobile-user-menu-toggle");
+      const mobileUserMenuDropdown = document.getElementById("mobile-user-menu-dropdown");
+
+      mobileUserMenuToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileUserMenuDropdown?.classList.toggle("hidden");
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener("click", () => {
+        userMenuDropdown?.classList.add("hidden");
+        mobileUserMenuDropdown?.classList.add("hidden");
+      });
+
+      // Logout handlers
+      async function handleLogout() {
+        const { authClient } = await import("../lib/auth-client");
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              window.location.href = "/login";
+            },
+          },
+        });
+      }
+
+      document.getElementById("header-logout-btn")?.addEventListener("click", handleLogout);
+      document.getElementById("mobile-header-logout-btn")?.addEventListener("click", handleLogout);
     </script>
       </Fragment>
     )}

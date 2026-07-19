@@ -96,7 +96,7 @@ const adminNavItems = [
             class="w-auto h-10"
           />
           <span class="font-headline-md text-headline-md font-bold text-primary"
-            >Admin Panel</span
+            >Admin</span
           >
         </div>
         <button
@@ -130,34 +130,39 @@ const adminNavItems = [
           ))
         }
         <hr class="border-outline-variant my-2" />
-        <a
-          href="/dashboard"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
-        >
-          <span class="material-symbols-outlined text-[20px]">dashboard</span>
-          Dashboard
-        </a>
-        <div class="flex items-center gap-3 px-4 py-3">
-          {
-            avatarUrl && (
-              <img
-                src={avatarUrl}
-                alt={avatarName}
-                class="w-8 h-8 rounded-full"
-              />
-            )
-          }
-          <span class="text-on-surface font-semibold text-sm truncate"
-            >{avatarName}</span
+        <div class="flex flex-col items-center gap-2 px-4 py-2">
+          <button
+            id="admin-mobile-avatar-toggle"
+            class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
           >
+            {
+              avatarUrl && (
+                <img
+                  src={avatarUrl}
+                  alt={avatarName}
+                  class="w-10 h-10 rounded-full"
+                />
+              )
+            }
+          </button>
+          <div
+            id="admin-mobile-user-dropdown"
+            class="hidden w-full bg-surface rounded-xl border border-outline-variant py-2"
+          >
+            <div
+              class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate"
+            >
+              {avatarName}
+            </div>
+            <button
+              id="admin-mobile-logout"
+              class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+            >
+              <span class="material-symbols-outlined text-[18px]">logout</span>
+              Keluar
+            </button>
+          </div>
         </div>
-        <button
-          id="admin-mobile-logout"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
-        >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
-          Keluar
-        </button>
       </div>
     </header>
 
@@ -174,7 +179,7 @@ const adminNavItems = [
           class="w-auto h-10"
         />
         <span class="font-headline-md text-headline-md font-bold text-primary"
-          >Admin Panel</span
+          >Admin</span
         >
       </div>
 
@@ -199,36 +204,39 @@ const adminNavItems = [
       </nav>
 
       <div
-        class="px-4 py-4 border-t border-outline-variant flex flex-col gap-3"
+        class="px-4 py-4 border-t border-outline-variant flex flex-col items-center gap-2"
       >
-        <a
-          href="/dashboard"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
+        <button
+          id="admin-sidebar-avatar-toggle"
+          class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
         >
-          <span class="material-symbols-outlined text-[20px]">dashboard</span>
-          Dashboard
-        </a>
-        <div class="flex items-center gap-3 px-4 py-2">
           {
             avatarUrl && (
               <img
                 src={avatarUrl}
                 alt={avatarName}
-                class="w-9 h-9 rounded-full"
+                class="w-10 h-10 rounded-full"
               />
             )
           }
-          <span class="text-on-surface font-semibold text-sm truncate"
-            >{avatarName}</span
-          >
-        </div>
-        <button
-          id="admin-sidebar-logout"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
-        >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
-          Keluar
         </button>
+        <div
+          id="admin-sidebar-user-dropdown"
+          class="hidden w-full bg-surface rounded-xl border border-outline-variant py-2"
+        >
+          <div
+            class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate"
+          >
+            {avatarName}
+          </div>
+          <button
+            id="admin-sidebar-logout"
+            class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+          >
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            Keluar
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -253,6 +261,38 @@ const adminNavItems = [
           }
         });
       }
+
+      // Admin mobile avatar toggle
+      const mobileAvatarToggle = document.getElementById(
+        "admin-mobile-avatar-toggle",
+      );
+      const mobileUserDropdown = document.getElementById(
+        "admin-mobile-user-dropdown",
+      );
+
+      mobileAvatarToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileUserDropdown?.classList.toggle("hidden");
+      });
+
+      // Admin sidebar avatar toggle
+      const sidebarAvatarToggle = document.getElementById(
+        "admin-sidebar-avatar-toggle",
+      );
+      const sidebarUserDropdown = document.getElementById(
+        "admin-sidebar-user-dropdown",
+      );
+
+      sidebarAvatarToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidebarUserDropdown?.classList.toggle("hidden");
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener("click", () => {
+        mobileUserDropdown?.classList.add("hidden");
+        sidebarUserDropdown?.classList.add("hidden");
+      });
 
       // Logout handlers
       async function handleLogout() {
