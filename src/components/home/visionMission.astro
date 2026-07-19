@@ -1,24 +1,14 @@
 ---
-const visionMissionDesc =
-  "Panduan strategis kami dalam mewujudkan Desa Umbu Pabal sebagai pusat ekonomi kreatif dan kelestarian alam.";
+interface Mission {
+  title: string;
+  description: string;
+}
+interface Props {
+  vision: string;
+  missions: Mission[];
+}
 
-const missions = [
-  {
-    title: "Transformasi Digital",
-    description:
-      "Mengintegrasikan teknologi dalam setiap layanan administrasi dan edukasi masyarakat.",
-  },
-  {
-    title: "Pelayanan Terpadu",
-    description:
-      "Memberikan pelayanan yang cepat, transparan, dan mudah diakses oleh masyarakat.",
-  },
-  {
-    title: "Pemberdayaan Masyarakat",
-    description:
-      "Mendorong partisipasi aktif masyarakat dalam pembangunan desa.",
-  },
-];
+const { vision, missions } = Astro.props as Props;
 ---
 
 <section
@@ -39,9 +29,6 @@ const missions = [
     <!-- NOTE: title and description -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="font-headline-lg text-headline-lg mb-6">Visi &amp; Misi</h2>
-      <p class="text-primary-fixed opacity-90 text-body-lg">
-        {visionMissionDesc}
-      </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -57,11 +44,7 @@ const missions = [
           </div>
           <h3 class="font-headline-md text-headline-md">Visi Kami</h3>
         </div>
-        <p class="font-body-lg leading-relaxed">
-          "Menjadi desa digital percontohan nasional yang mandiri secara
-          ekonomi, unggul dalam sumber daya manusia, dan tetap menjaga
-          kelestarian ekosistem hutan tropis."
-        </p>
+        <p class="font-body-lg leading-relaxed">{vision}</p>
       </div>
 
       <!-- NOTE: Mission -->

@@ -1,5 +1,18 @@
 ---
-const geographyItems = [
+interface GeographyItem {
+  icon: string;
+  label: string;
+  value: string;
+  containerClass?: string;
+}
+
+interface Props {
+  geographyItems?: GeographyItem[];
+}
+
+const { geographyItems } = Astro.props;
+
+const defaultItems: GeographyItem[] = [
   {
     icon: "landscape",
     label: "Luas Wilayah Total",
@@ -19,6 +32,10 @@ const geographyItems = [
     containerClass: "bg-primary-container text-white",
   },
 ];
+
+const items = geographyItems && geographyItems.length > 0
+  ? geographyItems.map(item => ({ ...item, containerClass: item.containerClass || "bg-primary-container text-white" }))
+  : defaultItems;
 ---
 
 <section
@@ -59,7 +76,7 @@ const geographyItems = [
       <!-- NOTE: Statistics Cards -->
       <div class="grid grid-cols-1 gap-4 h-full z-10">
         {
-          geographyItems.map((item) => (
+          items.map((item) => (
             <div class="bg-surface border border-outline-variant p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow h-full">
               <div class="flex items-center gap-4 h-full">
                 <div

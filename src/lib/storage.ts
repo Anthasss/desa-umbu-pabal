@@ -17,12 +17,31 @@ const ALLOWED_TYPES = [
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
+const IMAGE_ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
+
+const IMAGE_MAX_FILE_SIZE = 5 * 1024 * 1024;
+
 export function validateFile(file: File): { valid: boolean; error?: string } {
   if (!ALLOWED_TYPES.includes(file.type)) {
     return { valid: false, error: "Hanya file PDF dan DOCX yang diizinkan." };
   }
   if (file.size > MAX_FILE_SIZE) {
     return { valid: false, error: "Ukuran file maksimal 10MB." };
+  }
+  return { valid: true };
+}
+
+export function validateImage(file: File): { valid: boolean; error?: string } {
+  if (!IMAGE_ALLOWED_TYPES.includes(file.type)) {
+    return { valid: false, error: "Hanya file gambar (JPEG, PNG, WebP, GIF) yang diizinkan." };
+  }
+  if (file.size > IMAGE_MAX_FILE_SIZE) {
+    return { valid: false, error: "Ukuran gambar maksimal 5MB." };
   }
   return { valid: true };
 }
@@ -77,4 +96,21 @@ export async function downloadFile(
     body: res.body!,
     contentType: res.headers.get("content-type") || "application/octet-stream",
   };
+}
+
+export async function uploadImage(
+  file: File,
+  folder: string,
+): Promise<{ url: string }> {
+  const ext = file.name.split(".").pop() || "jpg";
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const pathname = `${folder}/${Date.now()}-${safeName}`;
+
+  const blob = await put(pathname, file, {
+    access: "private",
+    addRandomSuffix: true,
+    token: getBlobToken(),
+  });
+
+  return { url: blob.url };
 }

@@ -1,3 +1,11 @@
+---
+interface Props {
+  desc?: string;
+}
+
+const { desc = "" } = Astro.props;
+---
+
 <section
   class="relative h-153.5 flex items-center justify-center overflow-hidden transition-all duration-700 opacity-100 translate-y-0"
 >
@@ -15,8 +23,7 @@
       Tentang Desa Umbu Pabal
     </h1>
     <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-primary-fixed">
-      Mewujudkan Digital Stewardship: Memadukan nilai tradisional dengan tata
-      kelola modern untuk kesejahteraan seluruh warga.
+      {desc || "Mewujudkan Digital Stewardship: Memadukan nilai tradisional dengan tata kelola modern untuk kesejahteraan seluruh warga."}
     </p>
   </div>
 </section>

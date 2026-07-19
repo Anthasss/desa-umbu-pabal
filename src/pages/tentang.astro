@@ -1,27 +1,80 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
+import { db } from "../db";
+import { siteSettings, tentangOrgMembers, tentangTimelineEvents } from "../db/schema";
 import Hero from "../components/tentang/hero.astro";
 // import HistoryText from "../components/tentang/historyText.astro";
 import OrganizationHierarchy from "../components/tentang/organizationHierarchy.astro";
 import VillageRegion from "../components/tentang/villageRegion.astro";
 // import BuildingSurveyCTA from "../components/tentang/buildingSurveyCTA.astro";
 import History from "../components/tentang/history.astro";
+import { asc } from "drizzle-orm";
 
 export const prerender = false;
 
 const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
+
+// Fetch settings
+const settingsRows = await db.select().from(siteSettings);
+const settings: Record<string, string> = {};
+for (const s of settingsRows) {
+  settings[s.key] = s.value ?? "";
+}
+
+// Fetch organization members
+const orgMembers = await db.select().from(tentangOrgMembers).orderBy(asc(tentangOrgMembers.sortOrder));
+const villageHead = orgMembers.find(m => m.isHead);
+const staffMembers = orgMembers.filter(m => !m.isHead).map(m => ({
+  name: m.name,
+  role: m.role,
+  image: m.image?.includes("blob.vercel-storage.com") ? `/api/tentang/org-members/image/${m.id}` : (m.image || ""),
+}));
+
+// Fetch timeline events
+const timelineEvents = await db.select().from(tentangTimelineEvents).orderBy(asc(tentangTimelineEvents.sortOrder));
+
+// Extract settings
+const tentangHeroDesc = settings.tentang_hero_desc || "";
+const tentangVillageArea = settings.tentang_village_area || "";
+const tentangVillageYear = settings.tentang_village_year || "";
+const tentangVillagePopulation = settings.tentang_village_population || "";
+
+// Build geography items
+const geographyItems = [
+  {
+    icon: "landscape",
+    label: "Luas Wilayah Total",
+    value: tentangVillageArea || "1.250 Ha",
+    containerClass: "bg-primary-container text-white",
+  },
+  {
+    icon: "calendar_today",
+    label: "Tahun Berdiri",
+    value: tentangVillageYear || "1824",
+    containerClass: "bg-primary-container text-white",
+  },
+  {
+    icon: "groups_3",
+    label: "Jumlah Populasi",
+    value: tentangVillagePopulation || "1234 jiwa",
+    containerClass: "bg-primary-container text-white",
+  },
+];
 ---
 
 <Layout title="Tentang Desa - Desa Umbu Pabal" activePage="tentangKami" session={session}>
-  <Hero />
+  <Hero desc={tentangHeroDesc} />
   <!-- <HistoryText /> -->
-  <OrganizationHierarchy />
-  <VillageRegion />
+  <OrganizationHierarchy
+    villageHead={villageHead ? { name: villageHead.name, role: villageHead.role, image: villageHead.image?.includes("blob.vercel-storage.com") ? `/api/tentang/org-members/image/${villageHead.id}` : (villageHead.image || "") } : undefined}
+    staffMembers={staffMembers}
+  />
+  <VillageRegion geographyItems={geographyItems} />
   <!-- <BuildingSurveyCTA /> -->
-  <History />
+  <History timelineEvents={timelineEvents.map(e => ({ year: e.year, title: e.title, description: e.description }))} />
 
   <script is:inline>
     // Fade-in animation on scroll using IntersectionObserver

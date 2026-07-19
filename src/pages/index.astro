@@ -1,21 +1,52 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
+import { db } from "../db";
+import { siteSettings, vmMissions } from "../db/schema";
 import Hero from "../components/home/hero.astro";
 import VillageHeadWelcome from "../components/home/villageHeadWelcome.astro";
 // import InfoBento from "../components/home/infoBento.astro";
 import VisionMission from "../components/home/visionMission.astro";
+import { asc } from "drizzle-orm";
 
 export const prerender = false;
 
 const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
+
+// NOTE: control panel - fetched from database
+const settingsRows = await db.select().from(siteSettings);
+const settings: Record<string, string> = {};
+for (const s of settingsRows) {
+  settings[s.key] = s.value ?? "";
+}
+
+const missionsRows = await db.select().from(vmMissions).orderBy(asc(vmMissions.sortOrder));
+
+const hero_title = settings.hero_title || "";
+const hero_desc = settings.hero_desc || "";
+
+const vhw_sambutan = settings.vhw_sambutan || "";
+const vhw_kepalaDesaName = settings.vhw_kepalaDesaName || "";
+const vhw_kepalaDesaImage = settings.vhw_kepalaDesaImage
+  ? `/api/settings/image/vhw_kepalaDesaImage?v=${encodeURIComponent(settings.vhw_kepalaDesaImage)}`
+  : "";
+
+const vm_vision = settings.vm_vision || "";
+const vm_missions = missionsRows.map((m) => ({
+  title: m.title,
+  description: m.description,
+}));
 ---
 
 <Layout title="Desa Umbu Pabal" activePage="home" session={session}>
-  <Hero />
-  <VillageHeadWelcome />
+  <Hero hero_title={hero_title} hero_desc={hero_desc} />
+  <VillageHeadWelcome
+    sambutan={vhw_sambutan}
+    kepalaDesaName={vhw_kepalaDesaName}
+    kepalaDesaImage={vhw_kepalaDesaImage}
+  />
   <!-- <InfoBento /> -->
-  <VisionMission />
+  <VisionMission vision={vm_vision} missions={vm_missions} />
 </Layout>

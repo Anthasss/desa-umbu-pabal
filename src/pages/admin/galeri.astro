@@ -1,0 +1,200 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Kelola Galeri - Admin Panel" activePage="admin-galeri" session={session}>
+  <div class="min-h-screen px-gutter py-20">
+    <div class="max-w-container-max mx-auto">
+      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+              Kelola Galeri
+            </h1>
+            <p class="text-on-surface-variant">Unggah dan hapus foto galeri desa</p>
+          </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
+          <h3 class="font-label-lg text-on-surface mb-4">Unggah Foto Baru</h3>
+          <form id="upload-form" class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="gallery-file" class="block text-on-surface font-label-md mb-2">Foto (JPEG, PNG, WebP, GIF, maks 5MB) *</label>
+                <input
+                  type="file"
+                  id="gallery-file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:opacity-80"
+                />
+              </div>
+              <div>
+                <label for="gallery-title" class="block text-on-surface font-label-md mb-2">Judul Foto *</label>
+                <input
+                  type="text"
+                  id="gallery-title"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Contoh: Sawah Terasering"
+                />
+              </div>
+            </div>
+            <div id="upload-error" class="hidden text-error text-sm"></div>
+            <div id="upload-success" class="hidden text-green-600 text-sm"></div>
+            <button
+              type="submit"
+              id="upload-btn"
+              class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 self-start disabled:opacity-50 disabled:cursor-not-allowed font-bold flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-xl">upload</span>
+              Unggah Foto
+            </button>
+          </form>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div>
+          <h3 class="font-label-lg text-on-surface mb-4">Daftar Foto</h3>
+          <div id="gallery-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <p class="text-on-surface-variant text-body-md">Memuat foto...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById("upload-form") as HTMLFormElement;
+  const fileInput = document.getElementById("gallery-file") as HTMLInputElement;
+  const titleInput = document.getElementById("gallery-title") as HTMLInputElement;
+  const uploadBtn = document.getElementById("upload-btn") as HTMLButtonElement;
+  const errorDiv = document.getElementById("upload-error") as HTMLDivElement;
+  const successDiv = document.getElementById("upload-success") as HTMLDivElement;
+  const listDiv = document.getElementById("gallery-list") as HTMLDivElement;
+
+  async function loadImages() {
+    listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Memuat foto...</p>';
+
+    try {
+      const res = await fetch("/api/gallery");
+      const images = await res.json();
+
+      if (!images.length) {
+        listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada foto.</p>';
+        return;
+      }
+
+      listDiv.innerHTML = images
+        .map(
+          (img: any) => `
+          <div class="bg-background rounded-xl border border-outline-variant overflow-hidden group">
+            <div class="aspect-square overflow-hidden bg-surface-container-low">
+              <img
+                src="/api/gallery/image/${img.id}?v=${encodeURIComponent(img.imageUrl)}"
+                alt="${img.title.replace(/"/g, "&quot;")}"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-4 flex items-center justify-between gap-3">
+              <span class="font-semibold text-on-surface truncate">${img.title}</span>
+              <button
+                onclick="deleteImage(${img.id}, '${img.title.replace(/'/g, "\\'")}')"
+                class="bg-error-container text-on-error-container px-4 py-2 rounded-lg font-label-sm hover:opacity-90 transition-all active:scale-95 shrink-0 flex items-center gap-1"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+                Hapus
+              </button>
+            </div>
+          </div>
+        `,
+        )
+        .join("");
+    } catch {
+      listDiv.innerHTML = '<p class="text-error text-body-md">Gagal memuat foto.</p>';
+    }
+  }
+
+  (window as any).deleteImage = async function (id: number, title: string) {
+    if (!confirm(`Hapus foto "${title}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/gallery/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        alert("Gagal menghapus foto.");
+        return;
+      }
+      loadImages();
+    } catch {
+      alert("Gagal menghapus foto.");
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorDiv.classList.add("hidden");
+    successDiv.classList.add("hidden");
+
+    const file = fileInput.files?.[0];
+    const title = titleInput.value.trim();
+
+    if (!file || !title) {
+      errorDiv.textContent = "Foto dan judul wajib diisi.";
+      errorDiv.classList.remove("hidden");
+      return;
+    }
+
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = "Mengunggah...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("title", title);
+
+    try {
+      const res = await fetch("/api/gallery", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorDiv.textContent = data.error || "Gagal mengunggah foto.";
+        errorDiv.classList.remove("hidden");
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = '<span class="material-symbols-outlined text-xl">upload</span> Unggah Foto';
+        return;
+      }
+
+      successDiv.textContent = "Foto berhasil diunggah!";
+      successDiv.classList.remove("hidden");
+      titleInput.value = "";
+      fileInput.value = "";
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = '<span class="material-symbols-outlined text-xl">upload</span> Unggah Foto';
+      loadImages();
+    } catch {
+      errorDiv.textContent = "Terjadi kesalahan. Coba lagi nanti.";
+      errorDiv.classList.remove("hidden");
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = '<span class="material-symbols-outlined text-xl">upload</span> Unggah Foto';
+    }
+  });
+
+  loadImages();
+</script>
