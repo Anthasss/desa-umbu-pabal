@@ -17,25 +17,19 @@ if (session.user.role !== "admin") {
 }
 ---
 
-<Layout title="Admin Panel - Desa Umbu Pabal" session={session}>
+<Layout title="Admin Panel - Desa Umbu Pabal" activePage="admin" session={session}>
   <div class="min-h-screen px-gutter py-20">
     <div class="max-w-container-max mx-auto">
       <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
           <div>
             <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
-              Admin Panel
+              Kelola Pengguna
             </h1>
             <p class="text-on-surface-variant">
               Kelola pengguna dan reset password
             </p>
           </div>
-          <a
-            href="/dashboard"
-            class="bg-on-surface-variant text-on-primary px-6 py-2.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 self-start"
-          >
-            Kembali ke Dashboard
-          </a>
         </div>
 
         <!-- Search Section -->

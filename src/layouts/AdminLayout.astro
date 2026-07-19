@@ -1,0 +1,183 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  activePage?: string;
+  session?: { user: { name: string; role?: string | null } } | null;
+}
+
+const { title, activePage = "admin", session = null } = Astro.props;
+
+const avatarName = session?.user?.name || "";
+const avatarUrl = avatarName
+  ? `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&background=012d1d&color=fff&bold=true`
+  : "";
+
+const adminNavItems = [
+  { page: "admin", label: "Kelola Pengguna", href: "/admin", icon: "manage_accounts" },
+  { page: "admin-letters", label: "Kelola Surat", href: "/admin/letters", icon: "mail" },
+  { page: "admin-templates", label: "Kelola Template", href: "/admin/templates", icon: "description" },
+  { page: "admin-kotak-saran", label: "Kotak Saran", href: "/admin/kotak-saran", icon: "feedback" },
+];
+---
+
+<!doctype html>
+<html class="light" lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>{title}</title>
+    <link rel="icon" href="/lambang-sumba-tengah.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+    <!-- Mobile Top Bar -->
+    <header class="lg:hidden fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm">
+      <nav class="px-gutter flex justify-between items-center h-16">
+        <div class="flex gap-3 items-center">
+          <img src="/lambang-sumba-tengah.png" alt="lambang" class="w-auto h-10" />
+          <span class="font-headline-md text-headline-md font-bold text-primary">Admin Panel</span>
+        </div>
+        <button
+          id="admin-mobile-toggle"
+          class="p-2 text-on-surface-variant hover:text-primary focus:outline-none"
+        >
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+      </nav>
+
+      <!-- Mobile Drawer -->
+      <div
+        id="admin-mobile-menu"
+        class="hidden w-full bg-surface border-t border-outline-variant py-4 px-gutter flex flex-col gap-2 shadow-inner"
+      >
+        {adminNavItems.map((item) => (
+          <a
+            class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
+              activePage === item.page
+                ? "bg-primary-container text-on-primary-container font-semibold"
+                : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
+            }`}
+            href={item.href}
+          >
+            <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+        <hr class="border-outline-variant my-2" />
+        <a
+          href="/dashboard"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
+        >
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+        <div class="flex items-center gap-3 px-4 py-3">
+          {avatarUrl && (
+            <img src={avatarUrl} alt={avatarName} class="w-8 h-8 rounded-full" />
+          )}
+          <span class="text-on-surface font-semibold text-sm truncate">{avatarName}</span>
+        </div>
+        <button
+          id="admin-mobile-logout"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- Desktop Sidebar -->
+    <aside class="hidden lg:flex fixed inset-y-0 left-0 w-64 bg-surface border-r border-outline-variant flex-col z-50">
+      <div class="px-6 py-6 flex gap-3 items-center border-b border-outline-variant">
+        <img src="/lambang-sumba-tengah.png" alt="lambang" class="w-auto h-10" />
+        <span class="font-headline-md text-headline-md font-bold text-primary">Admin Panel</span>
+      </div>
+
+      <nav class="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
+        {adminNavItems.map((item) => (
+          <a
+            class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
+              activePage === item.page
+                ? "bg-primary-container text-on-primary-container font-semibold"
+                : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
+            }`}
+            href={item.href}
+          >
+            <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
+      <div class="px-4 py-4 border-t border-outline-variant flex flex-col gap-3">
+        <a
+          href="/dashboard"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
+        >
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          Dashboard
+        </a>
+        <div class="flex items-center gap-3 px-4 py-2">
+          {avatarUrl && (
+            <img src={avatarUrl} alt={avatarName} class="w-9 h-9 rounded-full" />
+          )}
+          <span class="text-on-surface font-semibold text-sm truncate">{avatarName}</span>
+        </div>
+        <button
+          id="admin-sidebar-logout"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          Keluar
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="pt-16 lg:pt-0 lg:ml-64 min-h-screen">
+      <slot />
+    </main>
+
+    <script>
+      // Mobile menu toggle
+      const toggleBtn = document.getElementById("admin-mobile-toggle");
+      const mobileMenu = document.getElementById("admin-mobile-menu");
+
+      if (toggleBtn && mobileMenu) {
+        toggleBtn.addEventListener("click", () => {
+          mobileMenu.classList.toggle("hidden");
+          const icon = toggleBtn.querySelector("span");
+          if (icon) {
+            icon.textContent = mobileMenu.classList.contains("hidden") ? "menu" : "close";
+          }
+        });
+      }
+
+      // Logout handlers
+      async function handleLogout() {
+        const { authClient } = await import("../lib/auth-client");
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              window.location.href = "/login";
+            },
+          },
+        });
+      }
+
+      document.getElementById("admin-sidebar-logout")?.addEventListener("click", handleLogout);
+      document.getElementById("admin-mobile-logout")?.addEventListener("click", handleLogout);
+    </script>
+  </body>
+</html>
