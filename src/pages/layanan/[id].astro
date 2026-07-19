@@ -17,7 +17,7 @@ const session = await auth.api.getSession({
 });
 ---
 
-<Layout title={`Template Surat - Desa Umbu Pabal`} activePage="layanan">
+<Layout title={`Template Surat - Desa Umbu Pabal`} activePage="layanan" session={session}>
   <section class="max-w-[1200px] mx-auto px-gutter py-20">
     {!template ? (
       <div class="text-center py-20">

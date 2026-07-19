@@ -1,8 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 ---
 
-<Layout title="Agenda Kegiatan Desa Umbu Pabal" activePage="event">
+<Layout title="Agenda Kegiatan Desa Umbu Pabal" activePage="event" session={session}>
   <!-- Hero Section -->
   <section class="hero-pattern py-section-padding-mobile md:py-section-padding-desktop">
     <div class="max-w-container-max mx-auto px-gutter text-center">

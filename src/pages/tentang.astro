@@ -1,14 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
 import Hero from "../components/tentang/hero.astro";
 // import HistoryText from "../components/tentang/historyText.astro";
 import OrganizationHierarchy from "../components/tentang/organizationHierarchy.astro";
 import VillageRegion from "../components/tentang/villageRegion.astro";
 // import BuildingSurveyCTA from "../components/tentang/buildingSurveyCTA.astro";
 import History from "../components/tentang/history.astro";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 ---
 
-<Layout title="Tentang Desa - Desa Umbu Pabal" activePage="tentangKami">
+<Layout title="Tentang Desa - Desa Umbu Pabal" activePage="tentangKami" session={session}>
   <Hero />
   <!-- <HistoryText /> -->
   <OrganizationHierarchy />

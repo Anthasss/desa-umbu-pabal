@@ -1,12 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
 import Hero from "../components/home/hero.astro";
 import VillageHeadWelcome from "../components/home/villageHeadWelcome.astro";
 // import InfoBento from "../components/home/infoBento.astro";
 import VisionMission from "../components/home/visionMission.astro";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 ---
 
-<Layout title="Desa Umbu Pabal" activePage="home">
+<Layout title="Desa Umbu Pabal" activePage="home" session={session}>
   <Hero />
   <VillageHeadWelcome />
   <!-- <InfoBento /> -->
