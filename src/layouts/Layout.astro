@@ -16,7 +16,11 @@ const navItems = [
   // { page: "event", label: "Event", href: "/event" },
   { page: "galeri", label: "Galeri", href: "/galeri" },
   // { page: "budaya", label: "Budaya", href: "/budaya" },
-  // { page: "layanan", label: "Layanan", href: "/layanan" },
+];
+
+const layananItems = [
+  { label: "Surat Saya", href: "/layanan", icon: "mail" },
+  { label: "Kirim Surat", href: "/layanan/surat-baru", icon: "edit_document" },
 ];
 ---
 
@@ -74,15 +78,41 @@ const navItems = [
                 </a>
               ))
             }
+            <div class="relative group" id="layanan-dropdown">
+              <button
+                class={`font-body-md text-body-md transition-colors flex items-center gap-1 cursor-pointer ${
+                  activePage === "layanan"
+                    ? "text-primary font-bold border-b-2 border-primary pb-1"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                Layanan
+                <span class="material-symbols-outlined text-[16px] transition-transform group-hover:rotate-180">expand_more</span>
+              </button>
+              <div class="absolute top-full left-0 pt-2 hidden group-hover:block z-50">
+                <div class="bg-surface rounded-xl shadow-[0px_8px_30px_rgba(0,0,0,0.12)] border border-outline-variant py-2 min-w-[200px]">
+                  {
+                    layananItems.map((item) => (
+                      <a
+                        class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
+                        href={item.href}
+                      >
+                        <span class="material-symbols-outlined text-[18px]">{item.icon}</span>
+                        {item.label}
+                      </a>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center gap-">
-            <!-- Contact Button -->
-            <!-- <a -->
-            <!--   href="/layanan" -->
-            <!--   class="bg-secondary text-on-secondary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center" -->
-            <!-- > -->
-            <!--   Hubungi Kami -->
-            <!-- </a> -->
+          <div class="flex items-center gap-3">
+            <a
+              href="/dashboard"
+              class="bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md hover:opacity-80 transition-all active:scale-95 block text-center"
+            >
+              Masuk
+            </a>
             <!-- Mobile menu toggle button -->
             <button
               id="mobile-menu-toggle"
@@ -113,6 +143,30 @@ const navItems = [
             </a>
           ))
         }
+        <div class="flex flex-col gap-2">
+          <span class={`font-body-md text-body-md font-bold ${activePage === "layanan" ? "text-primary" : "text-on-surface-variant"}`}>
+            Layanan
+          </span>
+          <div class="flex flex-col pl-4 gap-2">
+            {
+              layananItems.map((item) => (
+                <a
+                  class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2"
+                  href={item.href}
+                >
+                  <span class="material-symbols-outlined text-[16px]">{item.icon}</span>
+                  {item.label}
+                </a>
+              ))
+            }
+          </div>
+        </div>
+        <a
+          href="/dashboard"
+          class="bg-primary text-on-primary px-5 py-2.5 rounded-full font-label-md text-center hover:opacity-80 transition-all active:scale-95"
+        >
+          Masuk
+        </a>
       </div>
     </header>
 

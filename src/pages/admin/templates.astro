@@ -1,0 +1,221 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Kelola Template - Admin Panel">
+  <div class="min-h-screen px-gutter py-20">
+    <div class="max-w-container-max mx-auto">
+      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+              Kelola Template Surat
+            </h1>
+            <p class="text-on-surface-variant">Tambah, lihat, dan hapus template surat</p>
+          </div>
+          <div class="flex gap-3">
+            <a href="/admin" class="bg-on-surface-variant text-on-primary px-6 py-2.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95">
+              Admin Panel
+            </a>
+            <a href="/admin/letters" class="bg-secondary text-on-secondary px-6 py-2.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95">
+              Kelola Surat
+            </a>
+          </div>
+        </div>
+
+        <!-- Add Template Form -->
+        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
+          <h3 class="font-label-lg text-on-surface mb-4">Tambah Template Baru</h3>
+          <form id="add-template-form" class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="tpl-title" class="block text-on-surface font-label-md mb-2">Judul Template *</label>
+                <input
+                  type="text"
+                  id="tpl-title"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Contoh: Surat Keterangan Domisili"
+                />
+              </div>
+              <div>
+                <label for="tpl-file" class="block text-on-surface font-label-md mb-2">File (PDF/DOCX, max 10MB) *</label>
+                <input
+                  type="file"
+                  id="tpl-file"
+                  accept=".pdf,.docx"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:opacity-80"
+                />
+              </div>
+            </div>
+            <div>
+              <label for="tpl-desc" class="block text-on-surface font-label-md mb-2">Deskripsi (opsional)</label>
+              <textarea
+                id="tpl-desc"
+                rows="2"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                placeholder="Penjelasan singkat tentang template ini..."
+              ></textarea>
+            </div>
+            <div id="add-error" class="hidden text-error text-sm"></div>
+            <div id="add-success" class="hidden text-green-600 text-sm"></div>
+            <button
+              type="submit"
+              id="add-btn"
+              class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 self-start disabled:opacity-50 disabled:cursor-not-allowed font-bold"
+            >
+              Tambah Template
+            </button>
+          </form>
+        </div>
+
+        <!-- Templates List -->
+        <div>
+          <h3 class="font-label-lg text-on-surface mb-4">Daftar Template</h3>
+          <div id="templates-list" class="flex flex-col gap-3">
+            <p class="text-on-surface-variant text-body-md">Memuat template...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById("add-template-form") as HTMLFormElement;
+  const titleInput = document.getElementById("tpl-title") as HTMLInputElement;
+  const fileInput = document.getElementById("tpl-file") as HTMLInputElement;
+  const descInput = document.getElementById("tpl-desc") as HTMLTextAreaElement;
+  const addBtn = document.getElementById("add-btn") as HTMLButtonElement;
+  const errorDiv = document.getElementById("add-error") as HTMLDivElement;
+  const successDiv = document.getElementById("add-success") as HTMLDivElement;
+  const listDiv = document.getElementById("templates-list") as HTMLDivElement;
+
+  async function loadTemplates() {
+    listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Memuat template...</p>';
+
+    try {
+      const res = await fetch("/api/templates");
+      const templates = await res.json();
+
+      if (!templates.length) {
+        listDiv.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada template.</p>';
+        return;
+      }
+
+      listDiv.innerHTML = templates
+        .map(
+          (t: any) => `
+          <div class="flex items-center justify-between p-4 bg-background rounded-xl border border-outline-variant">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 bg-primary-fixed rounded-lg flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-xl">${t.fileType === "pdf" ? "picture_as_pdf" : "description"}</span>
+              </div>
+              <div>
+                <span class="font-semibold text-on-surface">${t.title}</span>
+                <div class="flex items-center gap-2 text-sm text-on-surface-variant">
+                  <span class="uppercase font-bold">${t.fileType}</span>
+                  <span>·</span>
+                  <span>${new Date(t.createdAt).toLocaleDateString("id-ID")}</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onclick="deleteTemplate(${t.id}, '${t.title.replace(/'/g, "\\'")}')"
+              class="bg-error-container text-on-error-container px-4 py-2 rounded-lg font-label-sm hover:opacity-90 transition-all active:scale-95"
+            >
+              Hapus
+            </button>
+          </div>
+        `,
+        )
+        .join("");
+    } catch {
+      listDiv.innerHTML = '<p class="text-error text-body-md">Gagal memuat template.</p>';
+    }
+  }
+
+  (window as any).deleteTemplate = async function (id: number, title: string) {
+    if (!confirm(`Hapus template "${title}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/templates/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        alert("Gagal menghapus template.");
+        return;
+      }
+      loadTemplates();
+    } catch {
+      alert("Gagal menghapus template.");
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorDiv.classList.add("hidden");
+    successDiv.classList.add("hidden");
+
+    const title = titleInput.value.trim();
+    const file = fileInput.files?.[0];
+    const description = descInput.value.trim();
+
+    if (!title || !file) {
+      errorDiv.textContent = "Judul dan file wajib diisi.";
+      errorDiv.classList.remove("hidden");
+      return;
+    }
+
+    addBtn.disabled = true;
+    addBtn.textContent = "Mengunggah...";
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("file", file);
+    if (description) formData.append("description", description);
+
+    try {
+      const res = await fetch("/api/templates", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorDiv.textContent = data.error || "Gagal menambah template.";
+        errorDiv.classList.remove("hidden");
+        addBtn.disabled = false;
+        addBtn.textContent = "Tambah Template";
+        return;
+      }
+
+      successDiv.textContent = "Template berhasil ditambahkan!";
+      successDiv.classList.remove("hidden");
+      titleInput.value = "";
+      fileInput.value = "";
+      descInput.value = "";
+      addBtn.disabled = false;
+      addBtn.textContent = "Tambah Template";
+      loadTemplates();
+    } catch {
+      errorDiv.textContent = "Terjadi kesalahan. Coba lagi nanti.";
+      errorDiv.classList.remove("hidden");
+      addBtn.disabled = false;
+      addBtn.textContent = "Tambah Template";
+    }
+  });
+
+  loadTemplates();
+</script>

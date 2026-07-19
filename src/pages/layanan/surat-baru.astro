@@ -1,0 +1,226 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Kirim Surat Baru - Desa Umbu Pabal" activePage="layanan">
+  <section class="relative h-[400px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img
+        class="w-full h-full object-cover"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBour6fg3F6hJkfooFWJUPQ0BX81M5yMIyjQdX8LyDg5kqsNQ75tk69GSBy-NxQIPHHdoNYPTZaix0i8ai2bBPfYmDOsSdhBB_cJQBRUc13YjG-cy9u-hleFv6zZbGciEmo7SRzjPkrAyB8WUJTDSwWyXf9yZ-NDOiYtTPUKc0loSS_rTa7WUPZr4KdUpMOatQT-1q0A0JKPWmfMae7Sbp3EE2C9yJlY_eaHwsQ5mF0Z0duf5ymd0axwPVBRPGGhgC08MWY3_15fBc"
+      />
+      <div class="absolute inset-0 bg-primary/60 mix-blend-multiply"></div>
+    </div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-gutter w-full text-on-primary">
+      <h1 class="font-headline-xl text-headline-xl mb-4 font-bold text-3xl md:text-4xl">Layanan Mandiri Masyarakat</h1>
+      <p class="font-body-lg text-body-lg opacity-90 max-w-2xl">Memudahkan warga dalam mengurus administrasi desa secara online. Cepat, transparan, dan efisien dari genggaman Anda.</p>
+    </div>
+  </section>
+
+  <section class="relative -mt-16 z-20 px-gutter mb-section-padding-desktop">
+    <div class="max-w-[1200px] mx-auto animate-fade">
+      <div class="bg-surface-bright p-8 rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant">
+        <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+          <div class="flex-1 w-full">
+            <h3 class="font-headline-md text-headline-md text-primary mb-2 font-bold text-lg">Cek Status Permohonan</h3>
+            <p class="text-on-surface-variant font-body-md">Masukkan nomor registrasi untuk melacak progres surat Anda.</p>
+          </div>
+          <div class="flex-1 w-full flex gap-2">
+            <input
+              class="flex-1 bg-surface-container-low border border-outline px-4 py-3 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none transition-all"
+              placeholder="Contoh: 1"
+              type="text"
+              id="tracking-input"
+            />
+            <button id="tracking-btn" class="bg-secondary text-on-secondary px-8 py-3 rounded-full font-label-md text-label-md hover:opacity-90 transition-opacity cursor-pointer">Cek Status</button>
+          </div>
+        </div>
+        <div id="tracking-result" class="hidden mt-6 p-4 rounded-xl border border-outline-variant bg-surface-container-low">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-[1200px] mx-auto px-gutter mb-section-padding-desktop">
+    <div class="text-center mb-12">
+      <h2 class="font-headline-lg text-headline-lg text-primary mb-2 text-2xl font-bold font-headline-lg">Prosedur Pengajuan</h2>
+      <div class="h-1 w-20 bg-secondary-container mx-auto rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+      <div class="hidden md:block absolute top-1/2 left-1/4 right-1/4 h-0.5 bg-outline-variant -z-10"></div>
+      <div class="flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mb-6 shadow-lg">
+          <span class="material-symbols-outlined text-white">task</span>
+        </div>
+        <h4 class="font-headline-md text-headline-md mb-2 text-lg font-bold">1. Pilih Jenis Surat</h4>
+        <p class="text-on-surface-variant font-body-md">Pilih kategori surat keterangan yang Anda butuhkan dari daftar yang tersedia.</p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mb-6 shadow-lg">
+          <span class="material-symbols-outlined text-white">edit_document</span>
+        </div>
+        <h4 class="font-headline-md text-headline-md mb-2 text-lg font-bold">2. Isi Formulir</h4>
+        <p class="text-on-surface-variant font-body-md">Unduh template, lengkapi data diri, dan unggah dokumen pendukung yang diperlukan secara digital.</p>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-full bg-primary text-on-primary flex items-center justify-center mb-6 shadow-lg">
+          <span class="material-symbols-outlined text-white">inventory</span>
+        </div>
+        <h4 class="font-headline-md text-headline-md mb-2 text-lg font-bold">3. Ambil di Kantor Desa</h4>
+        <p class="text-on-surface-variant font-body-md">Setelah status dinyatakan selesai, Anda dapat mengambil fisik surat di kantor desa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-container-low py-section-padding-desktop">
+    <div class="max-w-[1200px] mx-auto px-gutter">
+      <div class="mb-12">
+        <h2 class="font-headline-lg text-headline-lg text-primary text-2xl font-bold">Daftar Template Surat</h2>
+        <p class="text-on-surface-variant mt-2 font-body-md">Unduh template yang tersedia, lalu kirim surat Anda melalui sistem ini.</p>
+      </div>
+      <div id="templates-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="col-span-full text-center py-12">
+          <span class="material-symbols-outlined text-4xl text-on-surface-variant animate-pulse">hourglass_empty</span>
+          <p class="text-on-surface-variant mt-2">Memuat template...</p>
+        </div>
+      </div>
+      <div id="templates-empty" class="hidden text-center py-16">
+        <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-4">folder_open</span>
+        <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Belum ada template</h3>
+        <p class="text-on-surface-variant">Admin belum mengunggah template surat apa pun.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-section-padding-desktop">
+    <div class="max-w-[1200px] mx-auto px-gutter">
+      <div class="bg-secondary-container rounded-3xl p-12 overflow-hidden relative flex flex-col md:flex-row items-center gap-12">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-secondary opacity-10 rounded-full -mr-32 -mt-32"></div>
+        <div class="relative z-10 flex-1">
+          <h2 class="font-headline-lg text-headline-lg text-on-secondary-container mb-4 font-bold text-3xl">Butuh Bantuan Mendesak?</h2>
+          <p class="text-on-secondary-container/80 text-body-lg mb-8 font-body-lg text-lg">Staf kantor desa siap membantu Anda jika terdapat kendala dalam pengisian formulir online atau butuh konsultasi cepat.</p>
+          <div class="flex flex-wrap gap-4">
+            <a class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-all font-bold" href="tel:123456">
+              <span class="material-symbols-outlined text-[20px]">call</span> Hubungi Kantor Desa
+            </a>
+          </div>
+        </div>
+        <div class="relative z-10 w-full md:w-1/3">
+          <img
+            class="w-full aspect-square object-cover rounded-2xl shadow-xl"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAf9nhP9NTk7V_tsT05IEB5lXfudm_6ANIcSqg1ME6ZmBU8imSi9t5ZGmc02Q2WGYAnIu1WI7GBsiFs_5w3UWAQ_eVZWzHeSg3xFSp9_OjMmJAw5Ev4HDsiX4p5FwfyhJjXPtseVyMylwqLqC8xGAJ7N1-ePg2qU7fB4cglX4ukd63PZWM23daTO7GgefbCqPz8pJQ1C3xa9vEN0Q5RtUXS0xcuM1K1O-ph8GohDpQj3Zma05ag8l1Rv7aDTTXxEd6iHInt03Wtvh8"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const STATUS_LABELS = {
+      dikirim: "Dikirim",
+      direview: "Sedang Direview",
+      diterima: "Diterima",
+      ditolak: "Ditolak",
+    };
+    const STATUS_COLORS = {
+      dikirim: "bg-blue-100 text-blue-800",
+      direview: "bg-yellow-100 text-yellow-800",
+      diterima: "bg-green-100 text-green-800",
+      ditolak: "bg-red-100 text-red-800",
+    };
+
+    function renderFileIcon(fileType) {
+      if (fileType === "pdf") return "picture_as_pdf";
+      if (fileType === "docx") return "description";
+      return "insert_drive_file";
+    }
+
+    async function loadTemplates() {
+      const grid = document.getElementById("templates-grid");
+      const empty = document.getElementById("templates-empty");
+
+      try {
+        const res = await fetch("/api/templates");
+        const templates = await res.json();
+
+        if (!templates.length) {
+          grid.classList.add("hidden");
+          empty.classList.remove("hidden");
+          return;
+        }
+
+        grid.innerHTML = templates
+          .map(
+            (t) => `
+            <div class="bg-surface-bright p-6 rounded-2xl border border-outline-variant hover:shadow-[0px_10px_30px_rgba(0,0,0,0.08)] transition-all flex flex-col">
+              <div class="flex items-start gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center text-primary shrink-0">
+                  <span class="material-symbols-outlined">${renderFileIcon(t.fileType)}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-headline-md text-headline-md text-primary font-bold text-lg truncate">${t.title}</h3>
+                  <span class="inline-block px-2 py-0.5 bg-surface-container-high rounded text-xs text-on-surface-variant uppercase font-bold">${t.fileType}</span>
+                </div>
+              </div>
+              ${t.description ? `<p class="text-on-surface-variant font-body-md text-sm mb-6 line-clamp-2">${t.description}</p>` : '<div class="mb-6"></div>'}
+              <div class="flex gap-2 mt-auto">
+                <a href="/api/templates/download/${t.id}" class="flex-1 bg-surface-container-highest text-on-surface-variant py-2.5 rounded-full font-label-md text-label-md text-center hover:bg-primary hover:text-on-primary transition-colors font-bold">
+                  Unduh
+                </a>
+                <a href="/layanan/${t.id}" class="flex-1 bg-primary text-on-primary py-2.5 rounded-full font-label-md text-label-md text-center hover:opacity-90 transition-opacity font-bold">
+                  Kirim Surat
+                </a>
+              </div>
+            </div>
+          `,
+          )
+          .join("");
+      } catch {
+        grid.innerHTML = '<p class="col-span-full text-center text-error py-8">Gagal memuat template.</p>';
+      }
+    }
+
+    async function trackLetter() {
+      const input = document.getElementById("tracking-input");
+      const result = document.getElementById("tracking-result");
+      const id = input.value.trim();
+
+      if (!id) {
+        result.classList.add("hidden");
+        return;
+      }
+
+      result.classList.remove("hidden");
+      result.innerHTML = '<p class="text-on-surface-variant text-sm">Mencari...</p>';
+
+      try {
+        const res = await fetch(`/api/letters/track?id=${id}`);
+        if (!res.ok) {
+          result.innerHTML = '<p class="text-error text-sm">Surat tidak ditemukan. Periksa nomor registrasi Anda.</p>';
+          return;
+        }
+        const letter = await res.json();
+        const statusClass = STATUS_COLORS[letter.status] || "bg-gray-100 text-gray-800";
+        result.innerHTML = `
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-on-surface">${letter.templateTitle}</span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">${STATUS_LABELS[letter.status] || letter.status}</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">Diajukan pada: ${new Date(letter.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}</p>
+            ${letter.rejectionReason ? `<p class="text-error text-sm mt-2">Alasan penolakan: ${letter.rejectionReason}</p>` : ""}
+          </div>
+        `;
+      } catch {
+        result.innerHTML = '<p class="text-error text-sm">Gagal mengecek status. Coba lagi nanti.</p>';
+      }
+    }
+
+    document.getElementById("tracking-btn").addEventListener("click", trackLetter);
+    document.getElementById("tracking-input").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") trackLetter();
+    });
+
+    loadTemplates();
+  </script>
+</Layout>

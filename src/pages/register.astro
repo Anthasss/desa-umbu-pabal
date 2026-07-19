@@ -1,0 +1,114 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Daftar - Desa Umbu Pabal">
+  <div class="min-h-screen flex items-center justify-center px-gutter py-20">
+    <div class="w-full max-w-md">
+      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant">
+        <h1 class="font-headline-md text-headline-md font-bold text-primary text-center mb-2">
+          Daftar
+        </h1>
+        <p class="text-on-surface-variant text-center mb-8">
+          Buat akun baru
+        </p>
+
+        <form id="register-form" class="flex flex-col gap-5">
+          <div>
+            <label for="name" class="block text-on-surface font-label-md mb-2">
+              Nama
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              placeholder="Masukkan nama"
+            />
+          </div>
+
+          <div>
+            <label for="email" class="block text-on-surface font-label-md mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              placeholder="Masukkan email"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-on-surface font-label-md mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              minlength="8"
+              class="w-full px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              placeholder="Masukkan password (min. 8 karakter)"
+            />
+          </div>
+
+          <div id="error-message" class="hidden text-error text-sm"></div>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full bg-primary text-on-primary px-6 py-3 rounded-xl font-label-lg hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Daftar
+          </button>
+        </form>
+
+        <p class="text-center mt-6 text-on-surface-variant">
+          Sudah punya akun?
+          <a href="/login" class="text-primary font-semibold hover:underline">
+            Masuk
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { authClient } from "../lib/auth-client";
+
+  const form = document.getElementById("register-form") as HTMLFormElement;
+  const errorMsg = document.getElementById("error-message") as HTMLDivElement;
+  const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorMsg.classList.add("hidden");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Mendaftar...";
+
+    const name = (document.getElementById("name") as HTMLInputElement).value;
+    const email = (document.getElementById("email") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
+
+    const { error } = await authClient.signUp.email(
+      { name, email, password },
+      {
+        onSuccess: () => {
+          window.location.href = "/dashboard";
+        },
+        onError: (ctx) => {
+          errorMsg.textContent = ctx.error.message;
+          errorMsg.classList.remove("hidden");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Daftar";
+        },
+      }
+    );
+  });
+</script>

@@ -1,0 +1,124 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="Surat Saya - Desa Umbu Pabal" activePage="layanan">
+  <section class="relative h-[300px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img
+        class="w-full h-full object-cover"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBour6fg3F6hJkfooFWJUPQ0BX81M5yMIyjQdX8LyDg5kqsNQ75tk69GSBy-NxQIPHHdoNYPTZaix0i8ai2bBPfYmDOsSdhBB_cJQBRUc13YjG-cy9u-hleFv6zZbGciEmo7SRzjPkrAyB8WUJTDSwWyXf9yZ-NDOiYtTPUKc0loSS_rTa7WUPZr4KdUpMOatQT-1q0A0JKPWmfMae7Sbp3EE2C9yJlY_eaHwsQ5mF0Z0duf5ymd0axwPVBRPGGhgC08MWY3_15fBc"
+      />
+      <div class="absolute inset-0 bg-primary/60 mix-blend-multiply"></div>
+    </div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-gutter w-full text-on-primary">
+      <h1 class="font-headline-xl text-headline-xl mb-4 font-bold text-3xl md:text-4xl">Surat Saya</h1>
+      <p class="font-body-lg text-body-lg opacity-90 max-w-2xl">Pantau status semua surat yang telah Anda kirim ke kantor desa.</p>
+    </div>
+  </section>
+
+  <section class="max-w-[1200px] mx-auto px-gutter py-section-padding-desktop">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div>
+        <h2 class="font-headline-lg text-headline-lg text-primary font-bold text-2xl">Daftar Surat</h2>
+        <p class="text-on-surface-variant mt-1 font-body-md">Semua surat yang telah Anda ajukan beserta statusnya.</p>
+      </div>
+      <a href="/layanan/surat-baru" class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md hover:opacity-90 transition-all active:scale-95 inline-flex items-center gap-2 font-bold self-start">
+        <span class="material-symbols-outlined text-[18px]">add_circle</span> Kirim Surat Baru
+      </a>
+    </div>
+
+    <div id="letters-container" class="flex flex-col gap-4">
+      <div class="text-center py-12">
+        <span class="material-symbols-outlined text-4xl text-on-surface-variant animate-pulse">hourglass_empty</span>
+        <p class="text-on-surface-variant mt-2">Memuat surat...</p>
+      </div>
+    </div>
+
+    <div id="letters-empty" class="hidden text-center py-16">
+      <span class="material-symbols-outlined text-5xl text-on-surface-variant mb-4">mail</span>
+      <h3 class="font-headline-md text-headline-md text-on-surface mb-2">Belum ada surat</h3>
+      <p class="text-on-surface-variant mb-6">Anda belum mengirim surat apa pun melalui sistem ini.</p>
+      <a href="/layanan/surat-baru" class="bg-primary text-on-primary px-8 py-3 rounded-full font-label-md hover:opacity-90 transition-opacity inline-flex items-center gap-2 font-bold">
+        <span class="material-symbols-outlined text-[18px]">add_circle</span> Kirim Surat Sekarang
+      </a>
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  const STATUS_LABELS = {
+    dikirim: "Dikirim",
+    direview: "Sedang Direview",
+    diterima: "Diterima",
+    ditolak: "Ditolak",
+  };
+  const STATUS_COLORS = {
+    dikirim: "bg-blue-100 text-blue-800",
+    direview: "bg-yellow-100 text-yellow-800",
+    diterima: "bg-green-100 text-green-800",
+    ditolak: "bg-red-100 text-red-800",
+  };
+
+  async function loadLetters() {
+    const container = document.getElementById("letters-container");
+    const empty = document.getElementById("letters-empty");
+
+    try {
+      const res = await fetch("/api/letters/my");
+      if (!res.ok) {
+        container.innerHTML = '<p class="text-error text-center py-8">Gagal memuat surat. Silakan muat ulang halaman.</p>';
+        return;
+      }
+
+      const letters = await res.json();
+
+      if (!letters.length) {
+        container.classList.add("hidden");
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      container.innerHTML = letters
+        .map(
+          (l) => `
+          <div class="bg-surface-bright p-6 rounded-2xl border border-outline-variant hover:shadow-[0px_10px_30px_rgba(0,0,0,0.08)] transition-all">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary-fixed rounded-xl flex items-center justify-center text-primary shrink-0">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <h3 class="font-headline-md text-headline-md text-primary font-bold text-lg">${l.templateTitle}</h3>
+                  <p class="text-on-surface-variant text-sm">Diajukan pada: ${new Date(l.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+                  ${l.rejectionReason ? `<p class="text-error text-sm mt-1">Alasan penolakan: ${l.rejectionReason}</p>` : ""}
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold ${STATUS_COLORS[l.status] || "bg-gray-100 text-gray-800"}">
+                  ${STATUS_LABELS[l.status] || l.status}
+                </span>
+              </div>
+            </div>
+          </div>
+        `,
+        )
+        .join("");
+    } catch {
+      container.innerHTML = '<p class="text-error text-center py-8">Gagal memuat surat. Silakan muat ulang halaman.</p>';
+    }
+  }
+
+  loadLetters();
+</script>

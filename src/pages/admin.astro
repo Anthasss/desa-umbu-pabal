@@ -1,0 +1,240 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout title="Admin Panel - Desa Umbu Pabal">
+  <div class="min-h-screen px-gutter py-20">
+    <div class="max-w-container-max mx-auto">
+      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+              Admin Panel
+            </h1>
+            <p class="text-on-surface-variant">
+              Kelola pengguna dan reset password
+            </p>
+          </div>
+          <a
+            href="/dashboard"
+            class="bg-on-surface-variant text-on-primary px-6 py-2.5 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 self-start"
+          >
+            Kembali ke Dashboard
+          </a>
+        </div>
+
+        <!-- Search Section -->
+        <div class="mb-8">
+          <h3 class="font-label-lg text-on-surface mb-4">Cari Pengguna</h3>
+          <div class="flex gap-3">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Cari berdasarkan email atau nama..."
+              class="flex-1 px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            />
+            <button
+              id="search-btn"
+              class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95"
+            >
+              Cari
+            </button>
+          </div>
+        </div>
+
+        <!-- Users List -->
+        <div id="users-container" class="mb-8">
+          <h3 class="font-label-lg text-on-surface mb-4">Daftar Pengguna</h3>
+          <div id="users-list" class="flex flex-col gap-3">
+            <p class="text-on-surface-variant text-body-md">Memuat pengguna...</p>
+          </div>
+        </div>
+
+        <!-- Reset Password Section -->
+        <div id="reset-section" class="hidden">
+          <h3 class="font-label-lg text-on-surface mb-4">Reset Password</h3>
+          <div class="bg-background rounded-xl p-6 border border-outline-variant">
+            <div class="mb-4">
+              <p class="text-on-surface-variant text-body-md">
+                Pengguna: <span id="reset-user-name" class="font-semibold text-on-surface"></span>
+                (<span id="reset-user-email" class="text-on-surface-variant"></span>)
+              </p>
+              <input type="hidden" id="reset-user-id" />
+            </div>
+            <div class="flex flex-col gap-4">
+              <div>
+                <label for="new-password" class="block text-on-surface font-label-md mb-2">
+                  Password Baru
+                </label>
+                <input
+                  type="password"
+                  id="new-password"
+                  required
+                  minlength="8"
+                  class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Masukkan password baru (min. 8 karakter)"
+                />
+              </div>
+              <div id="reset-error" class="hidden text-error text-sm"></div>
+              <div id="reset-success" class="hidden text-green-600 text-sm"></div>
+              <div class="flex gap-3">
+                <button
+                  id="reset-btn"
+                  class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Reset Password
+                </button>
+                <button
+                  id="cancel-reset-btn"
+                  class="bg-on-surface-variant text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95"
+                >
+                  Batal
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { authClient } from "../lib/auth-client";
+
+  const searchInput = document.getElementById("search-input") as HTMLInputElement;
+  const searchBtn = document.getElementById("search-btn") as HTMLButtonElement;
+  const usersList = document.getElementById("users-list") as HTMLDivElement;
+  const resetSection = document.getElementById("reset-section") as HTMLDivElement;
+  const resetUserName = document.getElementById("reset-user-name") as HTMLSpanElement;
+  const resetUserEmail = document.getElementById("reset-user-email") as HTMLSpanElement;
+  const resetUserId = document.getElementById("reset-user-id") as HTMLInputElement;
+  const newPasswordInput = document.getElementById("new-password") as HTMLInputElement;
+  const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
+  const cancelResetBtn = document.getElementById("cancel-reset-btn") as HTMLButtonElement;
+  const resetError = document.getElementById("reset-error") as HTMLDivElement;
+  const resetSuccess = document.getElementById("reset-success") as HTMLDivElement;
+
+  async function loadUsers(search?: string) {
+    usersList.innerHTML = '<p class="text-on-surface-variant text-body-md">Memuat pengguna...</p>';
+
+    const query: Record<string, any> = { limit: 50 };
+    if (search) {
+      query.searchValue = search;
+      query.searchField = search.includes("@") ? "email" : "name";
+    }
+
+    const { data, error } = await authClient.admin.listUsers({ query });
+
+    if (error) {
+      usersList.innerHTML = `<p class="text-error text-body-md">Gagal memuat pengguna: ${error.message}</p>`;
+      return;
+    }
+
+    if (!data || !data.users || data.users.length === 0) {
+      usersList.innerHTML = '<p class="text-on-surface-variant text-body-md">Tidak ada pengguna ditemukan.</p>';
+      return;
+    }
+
+    usersList.innerHTML = data.users
+      .map(
+        (user) => `
+        <div class="flex items-center justify-between p-4 bg-background rounded-xl border border-outline-variant">
+          <div class="flex flex-col gap-1">
+            <span class="font-semibold text-on-surface">${user.name}</span>
+            <span class="text-on-surface-variant text-sm">${user.email}</span>
+            <span class="text-xs ${
+              user.role === "admin" ? "text-primary font-semibold" : "text-on-surface-variant"
+            }">
+              Role: ${user.role || "user"}
+            </span>
+          </div>
+          <button
+            onclick="openResetModal('${user.id}', '${user.name}', '${user.email}')"
+            class="bg-secondary text-on-secondary px-4 py-2 rounded-lg font-label-sm hover:opacity-90 transition-all active:scale-95"
+          >
+            Reset Password
+          </button>
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  (window as any).openResetModal = function (userId: string, name: string, email: string) {
+    resetUserId.value = userId;
+    resetUserName.textContent = name;
+    resetUserEmail.textContent = email;
+    newPasswordInput.value = "";
+    resetError.classList.add("hidden");
+    resetSuccess.classList.add("hidden");
+    resetSection.classList.remove("hidden");
+    resetSection.scrollIntoView({ behavior: "smooth" });
+  };
+
+  searchBtn?.addEventListener("click", () => {
+    loadUsers(searchInput.value.trim());
+  });
+
+  searchInput?.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      loadUsers(searchInput.value.trim());
+    }
+  });
+
+  cancelResetBtn?.addEventListener("click", () => {
+    resetSection.classList.add("hidden");
+  });
+
+  resetBtn?.addEventListener("click", async () => {
+    const userId = resetUserId.value;
+    const newPassword = newPasswordInput.value;
+
+    if (!newPassword || newPassword.length < 8) {
+      resetError.textContent = "Password harus minimal 8 karakter.";
+      resetError.classList.remove("hidden");
+      return;
+    }
+
+    resetBtn.disabled = true;
+    resetBtn.textContent = "Merreset...";
+    resetError.classList.add("hidden");
+    resetSuccess.classList.add("hidden");
+
+    const { error } = await authClient.admin.setUserPassword({
+      newPassword,
+      userId,
+    });
+
+    if (error) {
+      resetError.textContent = `Gagal reset password: ${error.message}`;
+      resetError.classList.remove("hidden");
+      resetBtn.disabled = false;
+      resetBtn.textContent = "Reset Password";
+      return;
+    }
+
+    resetSuccess.textContent = "Password berhasil direset!";
+    resetSuccess.classList.remove("hidden");
+    resetBtn.disabled = false;
+    resetBtn.textContent = "Reset Password";
+    newPasswordInput.value = "";
+  });
+
+  loadUsers();
+</script>
