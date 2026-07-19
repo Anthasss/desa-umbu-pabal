@@ -1,0 +1,18 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "references": {
+    "storage": {
+      "path": "src/lib/storage.ts",
+      "description": "Vercel Blob upload/download/delete utilities. Store is private — always use access:'private' and serve images through proxy endpoints."
+    },
+    "schema": {
+      "path": "src/db/schema.ts",
+      "description": "Drizzle ORM database schema. Key tables: site_settings (key-value), vm_missions, news, letter_templates, letter_submissions, feedback, user."
+    },
+    "auth": {
+      "path": "src/lib/auth.ts",
+      "description": "better-auth server config with admin plugin. Admin role check: session.user.role === 'admin'."
+    }
+  }
+}
