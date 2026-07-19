@@ -15,14 +15,60 @@ const avatarUrl = avatarName
   : "";
 
 const adminNavItems = [
-  { page: "admin", label: "Kelola Pengguna", href: "/admin", icon: "manage_accounts" },
-  { page: "admin-letters", label: "Kelola Surat", href: "/admin/letters", icon: "mail" },
-  { page: "admin-templates", label: "Kelola Template", href: "/admin/templates", icon: "description" },
-  { page: "admin-kotak-saran", label: "Kotak Saran", href: "/admin/kotak-saran", icon: "feedback" },
-  { page: "admin-settings", label: "Pengaturan Situs", href: "/admin/settings", icon: "settings" },
-  { page: "admin-tentang", label: "Pengaturan Tentang", href: "/admin/tentang", icon: "info" },
-  { page: "admin-galeri", label: "Kelola Galeri", href: "/admin/galeri", icon: "photo_library" },
-  { page: "admin-berita", label: "Kelola Berita", href: "/admin/berita", icon: "article" },
+  {
+    page: "admin",
+    label: "Dashboard",
+    href: "/admin",
+    icon: "dashboard",
+  },
+  {
+    page: "admin-pengguna",
+    label: "Kelola Pengguna",
+    href: "/admin/pengguna",
+    icon: "manage_accounts",
+  },
+  {
+    page: "admin-letters",
+    label: "Kelola Surat",
+    href: "/admin/letters",
+    icon: "mail",
+  },
+  {
+    page: "admin-templates",
+    label: "Kelola Template",
+    href: "/admin/templates",
+    icon: "description",
+  },
+  {
+    page: "admin-kotak-saran",
+    label: "Kotak Saran",
+    href: "/admin/kotak-saran",
+    icon: "feedback",
+  },
+  {
+    page: "admin-settings",
+    label: "Kelola Home",
+    href: "/admin/settings",
+    icon: "settings",
+  },
+  {
+    page: "admin-tentang",
+    label: "Kelola Tentang",
+    href: "/admin/tentang",
+    icon: "info",
+  },
+  {
+    page: "admin-galeri",
+    label: "Kelola Galeri",
+    href: "/admin/galeri",
+    icon: "photo_library",
+  },
+  {
+    page: "admin-berita",
+    label: "Kelola Berita",
+    href: "/admin/berita",
+    icon: "article",
+  },
 ];
 ---
 
@@ -45,11 +91,19 @@ const adminNavItems = [
   </head>
   <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
     <!-- Mobile Top Bar -->
-    <header class="lg:hidden fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm">
+    <header
+      class="lg:hidden fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm"
+    >
       <nav class="px-gutter flex justify-between items-center h-16">
         <div class="flex gap-3 items-center">
-          <img src="/lambang-sumba-tengah.png" alt="lambang" class="w-auto h-10" />
-          <span class="font-headline-md text-headline-md font-bold text-primary">Admin Panel</span>
+          <img
+            src="/lambang-sumba-tengah.png"
+            alt="lambang"
+            class="w-auto h-10"
+          />
+          <span class="font-headline-md text-headline-md font-bold text-primary"
+            >Admin</span
+          >
         </div>
         <button
           id="admin-mobile-toggle"
@@ -64,87 +118,131 @@ const adminNavItems = [
         id="admin-mobile-menu"
         class="hidden w-full bg-surface border-t border-outline-variant py-4 px-gutter flex flex-col gap-2 shadow-inner"
       >
-        {adminNavItems.map((item) => (
-          <a
-            class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
-              activePage === item.page
-                ? "bg-primary-container text-on-primary-container font-semibold"
-                : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
-            }`}
-            href={item.href}
-          >
-            <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
-            {item.label}
-          </a>
-        ))}
+        {
+          adminNavItems.map((item) => (
+            <a
+              class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
+                activePage === item.page
+                  ? "bg-primary-container text-on-primary-container font-semibold"
+                  : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
+              }`}
+              href={item.href}
+            >
+              <span class="material-symbols-outlined text-[20px]">
+                {item.icon}
+              </span>
+              {item.label}
+            </a>
+          ))
+        }
         <hr class="border-outline-variant my-2" />
-        <a
-          href="/dashboard"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
-        >
-          <span class="material-symbols-outlined text-[20px]">dashboard</span>
-          Dashboard
-        </a>
-        <div class="flex items-center gap-3 px-4 py-3">
-          {avatarUrl && (
-            <img src={avatarUrl} alt={avatarName} class="w-8 h-8 rounded-full" />
-          )}
-          <span class="text-on-surface font-semibold text-sm truncate">{avatarName}</span>
+        <div class="flex flex-col items-center gap-2 px-4 py-2">
+          <button
+            id="admin-mobile-avatar-toggle"
+            class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
+          >
+            {
+              avatarUrl && (
+                <img
+                  src={avatarUrl}
+                  alt={avatarName}
+                  class="w-10 h-10 rounded-full"
+                />
+              )
+            }
+          </button>
+          <div
+            id="admin-mobile-user-dropdown"
+            class="hidden w-full bg-surface rounded-xl border border-outline-variant py-2"
+          >
+            <div
+              class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate"
+            >
+              {avatarName}
+            </div>
+            <button
+              id="admin-mobile-logout"
+              class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+            >
+              <span class="material-symbols-outlined text-[18px]">logout</span>
+              Keluar
+            </button>
+          </div>
         </div>
-        <button
-          id="admin-mobile-logout"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
-        >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
-          Keluar
-        </button>
       </div>
     </header>
 
     <!-- Desktop Sidebar -->
-    <aside class="hidden lg:flex fixed inset-y-0 left-0 w-64 bg-surface border-r border-outline-variant flex-col z-50">
-      <div class="px-6 py-6 flex gap-3 items-center border-b border-outline-variant">
-        <img src="/lambang-sumba-tengah.png" alt="lambang" class="w-auto h-10" />
-        <span class="font-headline-md text-headline-md font-bold text-primary">Admin Panel</span>
+    <aside
+      class="hidden lg:flex fixed inset-y-0 left-0 w-64 bg-surface border-r border-outline-variant flex-col z-50"
+    >
+      <div
+        class="px-6 py-6 flex gap-3 items-center border-b border-outline-variant"
+      >
+        <img
+          src="/lambang-sumba-tengah.png"
+          alt="lambang"
+          class="w-auto h-10"
+        />
+        <span class="font-headline-md text-headline-md font-bold text-primary"
+          >Admin</span
+        >
       </div>
 
       <nav class="flex-1 px-4 py-6 flex flex-col gap-1 overflow-y-auto">
-        {adminNavItems.map((item) => (
-          <a
-            class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
-              activePage === item.page
-                ? "bg-primary-container text-on-primary-container font-semibold"
-                : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
-            }`}
-            href={item.href}
-          >
-            <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
-            {item.label}
-          </a>
-        ))}
+        {
+          adminNavItems.map((item) => (
+            <a
+              class={`flex items-center gap-3 px-4 py-3 rounded-xl font-body-md transition-colors ${
+                activePage === item.page
+                  ? "bg-primary-container text-on-primary-container font-semibold"
+                  : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
+              }`}
+              href={item.href}
+            >
+              <span class="material-symbols-outlined text-[20px]">
+                {item.icon}
+              </span>
+              {item.label}
+            </a>
+          ))
+        }
       </nav>
 
-      <div class="px-4 py-4 border-t border-outline-variant flex flex-col gap-3">
-        <a
-          href="/dashboard"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-body-md"
-        >
-          <span class="material-symbols-outlined text-[20px]">dashboard</span>
-          Dashboard
-        </a>
-        <div class="flex items-center gap-3 px-4 py-2">
-          {avatarUrl && (
-            <img src={avatarUrl} alt={avatarName} class="w-9 h-9 rounded-full" />
-          )}
-          <span class="text-on-surface font-semibold text-sm truncate">{avatarName}</span>
-        </div>
+      <div
+        class="px-4 py-4 border-t border-outline-variant flex flex-col items-center gap-2"
+      >
         <button
-          id="admin-sidebar-logout"
-          class="flex items-center gap-3 px-4 py-3 rounded-xl text-error hover:bg-error-container transition-colors font-body-md w-full text-left cursor-pointer"
+          id="admin-sidebar-avatar-toggle"
+          class="rounded-full overflow-hidden w-10 h-10 hover:opacity-80 transition-all active:scale-95 cursor-pointer"
         >
-          <span class="material-symbols-outlined text-[20px]">logout</span>
-          Keluar
+          {
+            avatarUrl && (
+              <img
+                src={avatarUrl}
+                alt={avatarName}
+                class="w-10 h-10 rounded-full"
+              />
+            )
+          }
         </button>
+        <div
+          id="admin-sidebar-user-dropdown"
+          class="hidden w-full bg-surface rounded-xl border border-outline-variant py-2"
+        >
+          <div
+            class="px-4 py-2 border-b border-outline-variant text-on-surface font-semibold text-sm truncate"
+          >
+            {avatarName}
+          </div>
+          <button
+            id="admin-sidebar-logout"
+            class="flex items-center gap-3 px-4 py-2.5 w-full text-left text-error hover:bg-error-container transition-colors font-body-md cursor-pointer"
+          >
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            Keluar
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -163,10 +261,44 @@ const adminNavItems = [
           mobileMenu.classList.toggle("hidden");
           const icon = toggleBtn.querySelector("span");
           if (icon) {
-            icon.textContent = mobileMenu.classList.contains("hidden") ? "menu" : "close";
+            icon.textContent = mobileMenu.classList.contains("hidden")
+              ? "menu"
+              : "close";
           }
         });
       }
+
+      // Admin mobile avatar toggle
+      const mobileAvatarToggle = document.getElementById(
+        "admin-mobile-avatar-toggle",
+      );
+      const mobileUserDropdown = document.getElementById(
+        "admin-mobile-user-dropdown",
+      );
+
+      mobileAvatarToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        mobileUserDropdown?.classList.toggle("hidden");
+      });
+
+      // Admin sidebar avatar toggle
+      const sidebarAvatarToggle = document.getElementById(
+        "admin-sidebar-avatar-toggle",
+      );
+      const sidebarUserDropdown = document.getElementById(
+        "admin-sidebar-user-dropdown",
+      );
+
+      sidebarAvatarToggle?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidebarUserDropdown?.classList.toggle("hidden");
+      });
+
+      // Close dropdowns on outside click
+      document.addEventListener("click", () => {
+        mobileUserDropdown?.classList.add("hidden");
+        sidebarUserDropdown?.classList.add("hidden");
+      });
 
       // Logout handlers
       async function handleLogout() {
@@ -180,8 +312,12 @@ const adminNavItems = [
         });
       }
 
-      document.getElementById("admin-sidebar-logout")?.addEventListener("click", handleLogout);
-      document.getElementById("admin-mobile-logout")?.addEventListener("click", handleLogout);
+      document
+        .getElementById("admin-sidebar-logout")
+        ?.addEventListener("click", handleLogout);
+      document
+        .getElementById("admin-mobile-logout")
+        ?.addEventListener("click", handleLogout);
     </script>
   </body>
 </html>

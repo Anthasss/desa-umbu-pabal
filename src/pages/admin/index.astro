@@ -1,0 +1,380 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+import { db } from "../../db";
+import {
+  user,
+  letterSubmissions,
+  letterTemplates,
+  feedback,
+  news,
+  galleryImages,
+  tentangOrgMembers,
+} from "../../db/schema";
+import { count, desc, eq } from "drizzle-orm";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/");
+}
+
+const [
+  [totalUsers],
+  [totalSurat],
+  [pendingSurat],
+  [acceptedSurat],
+  [rejectedSurat],
+  [totalFeedback],
+  [totalBerita],
+  [totalGaleri],
+  [totalTemplate],
+  [totalAnggota],
+] = await Promise.all([
+  db.select({ value: count() }).from(user),
+  db.select({ value: count() }).from(letterSubmissions),
+  db
+    .select({ value: count() })
+    .from(letterSubmissions)
+    .where(eq(letterSubmissions.status, "dikirim")),
+  db
+    .select({ value: count() })
+    .from(letterSubmissions)
+    .where(eq(letterSubmissions.status, "diterima")),
+  db
+    .select({ value: count() })
+    .from(letterSubmissions)
+    .where(eq(letterSubmissions.status, "ditolak")),
+  db.select({ value: count() }).from(feedback),
+  db.select({ value: count() }).from(news),
+  db.select({ value: count() }).from(galleryImages),
+  db.select({ value: count() }).from(letterTemplates),
+  db.select({ value: count() }).from(tentangOrgMembers),
+]);
+
+const recentSurat = await db
+  .select({
+    id: letterSubmissions.id,
+    fileName: letterSubmissions.fileName,
+    status: letterSubmissions.status,
+    createdAt: letterSubmissions.createdAt,
+  })
+  .from(letterSubmissions)
+  .orderBy(desc(letterSubmissions.createdAt))
+  .limit(5);
+
+const recentFeedback = await db
+  .select({
+    id: feedback.id,
+    message: feedback.message,
+    createdAt: feedback.createdAt,
+  })
+  .from(feedback)
+  .orderBy(desc(feedback.createdAt))
+  .limit(5);
+
+const statusColor: Record<string, string> = {
+  dikirim: "bg-blue-100 text-blue-700",
+  direview: "bg-yellow-100 text-yellow-700",
+  diterima: "bg-green-100 text-green-700",
+  ditolak: "bg-red-100 text-red-700",
+};
+---
+
+<Layout title="Dashboard - Admin Panel" activePage="admin" session={session}>
+  <div class="min-h-screen px-gutter py-4">
+    <div class="max-w-container-max mx-auto">
+      <div class="mb-8">
+        <h1
+          class="font-headline-md text-headline-md font-bold text-primary mb-2"
+        >
+          Dashboard
+        </h1>
+        <p class="text-on-surface-variant">Ringkasan data Desa Umbu Pabal</p>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >manage_accounts</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalUsers.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Total Pengguna</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >mail</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalSurat.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Total Surat</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-tertiary-container"
+                >mark_email_unread</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {pendingSurat.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">
+            Menunggu Review
+          </div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-secondary-container"
+                >feedback</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalFeedback.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Total Feedback</div>
+        </div>
+      </div>
+
+      <!-- Letter Status -->
+      <div class="grid grid-cols-2 gap-4 mb-8">
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined text-[20px] text-green-700"
+                >check_circle</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {acceptedSurat.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Diterima</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined text-[20px] text-red-700"
+                >cancel</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {rejectedSurat.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Ditolak</div>
+        </div>
+      </div>
+
+      <!-- Content Overview -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >article</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalBerita.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Berita</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >photo_library</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalGaleri.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Galeri</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >description</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalTemplate.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Template</div>
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <div class="flex items-center gap-3 mb-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center"
+            >
+              <span
+                class="material-symbols-outlined text-[20px] text-on-primary-container"
+                >groups</span
+              >
+            </div>
+          </div>
+          <div class="text-headline-md font-bold text-on-surface">
+            {totalAnggota.value}
+          </div>
+          <div class="text-body-sm text-on-surface-variant">Anggota Desa</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Surat -->
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <h2 class="font-title-lg text-on-surface font-semibold mb-4">
+            Surat Terbaru
+          </h2>
+          {
+            recentSurat.length === 0 ? (
+              <p class="text-on-surface-variant text-body-md">
+                Belum ada surat masuk.
+              </p>
+            ) : (
+              <div class="flex flex-col gap-3">
+                {recentSurat.map((s) => (
+                  <div class="flex items-center justify-between p-3 bg-background rounded-xl border border-outline-variant">
+                    <div class="flex flex-col gap-1 min-w-0">
+                      <span class="font-semibold text-on-surface text-sm truncate">
+                        {s.fileName}
+                      </span>
+                      <span class="text-xs text-on-surface-variant">
+                        {new Date(s.createdAt).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <span
+                      class={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${statusColor[s.status] || "bg-gray-100 text-gray-700"}`}
+                    >
+                      {s.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        <!-- Recent Feedback -->
+        <div
+          class="bg-surface rounded-2xl shadow-lg p-6 border border-outline-variant"
+        >
+          <h2 class="font-title-lg text-on-surface font-semibold mb-4">
+            Feedback Terbaru
+          </h2>
+          {
+            recentFeedback.length === 0 ? (
+              <p class="text-on-surface-variant text-body-md">
+                Belum ada feedback.
+              </p>
+            ) : (
+              <div class="flex flex-col gap-3">
+                {recentFeedback.map((f) => (
+                  <div class="p-3 bg-background rounded-xl border border-outline-variant">
+                    <p class="text-on-surface text-sm line-clamp-2">
+                      {f.message}
+                    </p>
+                    <span class="text-xs text-on-surface-variant mt-1 block">
+                      {new Date(f.createdAt).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
