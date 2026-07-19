@@ -17,34 +17,63 @@ if (session.user.role !== "admin") {
 }
 ---
 
-<Layout title="Pengaturan Situs - Admin Panel" activePage="admin-settings" session={session}>
+<Layout
+  title="Pengaturan Situs - Admin Panel"
+  activePage="admin-settings"
+  session={session}
+>
   <div class="min-h-screen px-gutter py-20">
     <div class="max-w-container-max mx-auto">
-      <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+      <div
+        class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8"
+      >
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8"
+        >
           <div>
-            <h1 class="font-headline-md text-headline-md font-bold text-primary mb-2">
+            <h1
+              class="font-headline-md text-headline-md font-bold text-primary mb-2"
+            >
               Pengaturan Situs
             </h1>
-            <p class="text-on-surface-variant">Kelola konten yang ditampilkan di halaman utama</p>
+            <p class="text-on-surface-variant">
+              Kelola konten yang ditampilkan di halaman utama
+            </p>
           </div>
         </div>
 
         <!-- Status messages -->
-        <div id="save-success" class="hidden bg-green-50 text-green-700 border border-green-200 rounded-xl p-4 mb-6">
+        <div
+          id="save-success"
+          class="hidden bg-green-50 text-green-700 border border-green-200 rounded-xl p-4 mb-6"
+        >
           Pengaturan berhasil disimpan!
         </div>
-        <div id="save-error" class="hidden bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 mb-6"></div>
+        <div
+          id="save-error"
+          class="hidden bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 mb-6"
+        >
+        </div>
 
         <!-- Hero Section -->
-        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
-          <h3 class="font-label-lg text-on-surface mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-xl">hero</span>
-            Hero
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >home</span
+            >
+            Landing
           </h3>
           <div class="flex flex-col gap-4">
             <div>
-              <label for="hero-title" class="block text-on-surface font-label-md mb-2">Judul Hero *</label>
+              <label
+                for="hero-title"
+                class="block text-on-surface font-label-md mb-2"
+                >Teks Utama*</label
+              >
               <input
                 type="text"
                 id="hero-title"
@@ -52,7 +81,11 @@ if (session.user.role !== "admin") {
               />
             </div>
             <div>
-              <label for="hero-desc" class="block text-on-surface font-label-md mb-2">Deskripsi Hero *</label>
+              <label
+                for="hero-desc"
+                class="block text-on-surface font-label-md mb-2"
+                >Teks Deskripsi*</label
+              >
               <textarea
                 id="hero-desc"
                 rows="3"
@@ -63,14 +96,24 @@ if (session.user.role !== "admin") {
         </div>
 
         <!-- Village Head Welcome Section -->
-        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
-          <h3 class="font-label-lg text-on-surface mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-xl">person</span>
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >person</span
+            >
             Sambutan Kepala Desa
           </h3>
           <div class="flex flex-col gap-4">
             <div>
-              <label for="vhw-sambutan" class="block text-on-surface font-label-md mb-2">Sambutan *</label>
+              <label
+                for="vhw-sambutan"
+                class="block text-on-surface font-label-md mb-2"
+                >Sambutan *</label
+              >
               <textarea
                 id="vhw-sambutan"
                 rows="4"
@@ -78,7 +121,11 @@ if (session.user.role !== "admin") {
               ></textarea>
             </div>
             <div>
-              <label for="vhw-name" class="block text-on-surface font-label-md mb-2">Nama Kepala Desa *</label>
+              <label
+                for="vhw-name"
+                class="block text-on-surface font-label-md mb-2"
+                >Nama Kepala Desa *</label
+              >
               <input
                 type="text"
                 id="vhw-name"
@@ -86,7 +133,9 @@ if (session.user.role !== "admin") {
               />
             </div>
             <div>
-              <label class="block text-on-surface font-label-md mb-2">Foto Kepala Desa</label>
+              <label class="block text-on-surface font-label-md mb-2"
+                >Foto Kepala Desa</label
+              >
               <div class="flex items-start gap-4">
                 <div class="flex-1">
                   <input
@@ -95,12 +144,25 @@ if (session.user.role !== "admin") {
                     accept="image/jpeg,image/png,image/webp,image/gif"
                     class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary-container file:text-on-primary-container hover:file:opacity-80"
                   />
-                  <p class="text-on-surface-variant text-sm mt-1">JPEG, PNG, WebP, atau GIF. Maks 5MB.</p>
+                  <p class="text-on-surface-variant text-sm mt-1">
+                    JPEG, PNG, WebP, atau GIF. Maks 5MB.
+                  </p>
                 </div>
-                <div id="vhw-image-preview" class="w-24 h-24 rounded-xl overflow-hidden border border-outline-variant bg-surface-container-low shrink-0">
-                  <img id="vhw-image-preview-img" class="w-full h-full object-cover hidden" alt="Preview" />
-                  <div id="vhw-image-placeholder" class="w-full h-full flex items-center justify-center text-on-surface-variant">
-                    <span class="material-symbols-outlined text-3xl">image</span>
+                <div
+                  id="vhw-image-preview"
+                  class="w-24 h-24 rounded-xl overflow-hidden border border-outline-variant bg-surface-container-low shrink-0"
+                >
+                  <img
+                    id="vhw-image-preview-img"
+                    class="w-full h-full object-cover hidden"
+                    alt="Preview"
+                  />
+                  <div
+                    id="vhw-image-placeholder"
+                    class="w-full h-full flex items-center justify-center text-on-surface-variant"
+                  >
+                    <span class="material-symbols-outlined text-3xl">image</span
+                    >
                   </div>
                 </div>
               </div>
@@ -110,14 +172,23 @@ if (session.user.role !== "admin") {
         </div>
 
         <!-- Vision & Missions Section -->
-        <div class="bg-background rounded-xl p-6 border border-outline-variant mb-8">
-          <h3 class="font-label-lg text-on-surface mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-xl">visibility</span>
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >visibility</span
+            >
             Visi &amp; Misi
           </h3>
           <div class="flex flex-col gap-4">
             <div>
-              <label for="vm-vision" class="block text-on-surface font-label-md mb-2">Visi *</label>
+              <label
+                for="vm-vision"
+                class="block text-on-surface font-label-md mb-2">Visi *</label
+              >
               <textarea
                 id="vm-vision"
                 rows="3"
@@ -126,9 +197,13 @@ if (session.user.role !== "admin") {
             </div>
 
             <div>
-              <label class="block text-on-surface font-label-md mb-2">Misi</label>
+              <label class="block text-on-surface font-label-md mb-2"
+                >Misi</label
+              >
               <div id="missions-list" class="flex flex-col gap-3">
-                <p class="text-on-surface-variant text-body-md">Memuat misi...</p>
+                <p class="text-on-surface-variant text-body-md">
+                  Memuat misi...
+                </p>
               </div>
               <button
                 type="button"
@@ -160,15 +235,29 @@ if (session.user.role !== "admin") {
 <script>
   const heroTitle = document.getElementById("hero-title") as HTMLInputElement;
   const heroDesc = document.getElementById("hero-desc") as HTMLTextAreaElement;
-  const vhwSambutan = document.getElementById("vhw-sambutan") as HTMLTextAreaElement;
+  const vhwSambutan = document.getElementById(
+    "vhw-sambutan",
+  ) as HTMLTextAreaElement;
   const vhwName = document.getElementById("vhw-name") as HTMLInputElement;
-  const vhwImageFile = document.getElementById("vhw-image-file") as HTMLInputElement;
-  const vhwImageUrl = document.getElementById("vhw-image-url") as HTMLInputElement;
-  const vhwImagePreviewImg = document.getElementById("vhw-image-preview-img") as HTMLImageElement;
-  const vhwImagePlaceholder = document.getElementById("vhw-image-placeholder") as HTMLDivElement;
+  const vhwImageFile = document.getElementById(
+    "vhw-image-file",
+  ) as HTMLInputElement;
+  const vhwImageUrl = document.getElementById(
+    "vhw-image-url",
+  ) as HTMLInputElement;
+  const vhwImagePreviewImg = document.getElementById(
+    "vhw-image-preview-img",
+  ) as HTMLImageElement;
+  const vhwImagePlaceholder = document.getElementById(
+    "vhw-image-placeholder",
+  ) as HTMLDivElement;
   const vmVision = document.getElementById("vm-vision") as HTMLTextAreaElement;
-  const missionsList = document.getElementById("missions-list") as HTMLDivElement;
-  const addMissionBtn = document.getElementById("add-mission-btn") as HTMLButtonElement;
+  const missionsList = document.getElementById(
+    "missions-list",
+  ) as HTMLDivElement;
+  const addMissionBtn = document.getElementById(
+    "add-mission-btn",
+  ) as HTMLButtonElement;
   const saveBtn = document.getElementById("save-btn") as HTMLButtonElement;
   const saveSuccess = document.getElementById("save-success") as HTMLDivElement;
   const saveError = document.getElementById("save-error") as HTMLDivElement;
@@ -189,7 +278,8 @@ if (session.user.role !== "admin") {
 
   function renderMissions() {
     if (missions.length === 0) {
-      missionsList.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada misi.</p>';
+      missionsList.innerHTML =
+        '<p class="text-on-surface-variant text-body-md">Belum ada misi.</p>';
       return;
     }
 
@@ -291,7 +381,10 @@ if (session.user.role !== "admin") {
     formData.append("file", file);
 
     try {
-      const res = await fetch("/api/settings/upload-image", { method: "POST", body: formData });
+      const res = await fetch("/api/settings/upload-image", {
+        method: "POST",
+        body: formData,
+      });
       const data = await res.json();
 
       if (!res.ok) {
