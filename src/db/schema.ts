@@ -184,3 +184,30 @@ export const vmMissions = pgTable("vm_missions", {
     .$onUpdate(() => new Date())
     .notNull(),
 });
+
+export const tentangOrgMembers = pgTable("tentang_org_members", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  role: varchar("role", { length: 200 }).notNull(),
+  image: text("image"),
+  isHead: boolean("is_head").default(false).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+export const tentangTimelineEvents = pgTable("tentang_timeline_events", {
+  id: serial("id").primaryKey(),
+  year: varchar("year", { length: 20 }).notNull(),
+  title: varchar("title", { length: 200 }).notNull(),
+  description: text("description").notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});

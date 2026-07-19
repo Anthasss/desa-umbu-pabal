@@ -1,0 +1,730 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+if (!session) {
+  return Astro.redirect("/login");
+}
+
+if (session.user.role !== "admin") {
+  return Astro.redirect("/dashboard");
+}
+---
+
+<Layout
+  title="Pengaturan Tentang - Admin Panel"
+  activePage="admin-tentang"
+  session={session}
+>
+  <div class="min-h-screen px-gutter py-20">
+    <div class="max-w-container-max mx-auto">
+      <div
+        class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8"
+      >
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8"
+        >
+          <div>
+            <h1
+              class="font-headline-md text-headline-md font-bold text-primary mb-2"
+            >
+              Pengaturan Halaman Tentang
+            </h1>
+            <p class="text-on-surface-variant">
+              Kelola konten yang ditampilkan di halaman Tentang Desa
+            </p>
+          </div>
+        </div>
+
+        <!-- Status messages -->
+        <div
+          id="save-success"
+          class="hidden bg-green-50 text-green-700 border border-green-200 rounded-xl p-4 mb-6"
+        >
+          Pengaturan berhasil disimpan!
+        </div>
+        <div
+          id="save-error"
+          class="hidden bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 mb-6"
+        >
+        </div>
+
+        <!-- Hero Section -->
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >info</span
+            >
+            Hero Deskripsi
+          </h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <label
+                for="tentang-hero-desc"
+                class="block text-on-surface font-label-md mb-2"
+                >Deskripsi Hero</label
+              >
+              <textarea
+                id="tentang-hero-desc"
+                rows="3"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organization Hierarchy Section -->
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >group</span
+            >
+            Struktur Organisasi
+          </h3>
+          <div id="org-members-list" class="space-y-4 mb-4"></div>
+          <button
+            id="add-member-btn"
+            type="button"
+            class="bg-primary text-on-primary px-4 py-2 rounded-xl font-label-md hover:opacity-90 transition-opacity"
+          >
+            + Tambah Anggota
+          </button>
+        </div>
+
+        <!-- Village Region Stats Section -->
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >landscape</span
+            >
+            Statistik Wilayah
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label
+                for="village-area"
+                class="block text-on-surface font-label-md mb-2"
+                >Luas Wilayah</label
+              >
+              <input
+                type="text"
+                id="village-area"
+                placeholder="1.250 Ha"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+            </div>
+            <div>
+              <label
+                for="village-year"
+                class="block text-on-surface font-label-md mb-2"
+                >Tahun Berdiri</label
+              >
+              <input
+                type="text"
+                id="village-year"
+                placeholder="1824"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+            </div>
+            <div>
+              <label
+                for="village-population"
+                class="block text-on-surface font-label-md mb-2"
+                >Jumlah Populasi</label
+              >
+              <input
+                type="text"
+                id="village-population"
+                placeholder="1234 jiwa"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >timeline</span
+            >
+            Garis Waktu Sejarah
+          </h3>
+          <div id="timeline-list" class="space-y-4 mb-4"></div>
+          <button
+            id="add-timeline-btn"
+            type="button"
+            class="bg-primary text-on-primary px-4 py-2 rounded-xl font-label-md hover:opacity-90 transition-opacity"
+          >
+            + Tambah Peristiwa
+          </button>
+        </div>
+
+        <!-- Save Button -->
+        <div class="flex justify-end">
+          <button
+            id="save-btn"
+            type="button"
+            class="bg-primary text-on-primary px-8 py-3 rounded-xl font-label-md hover:opacity-90 transition-all active:scale-95 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Simpan Semua
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Description Edit Modal -->
+  <div
+    id="desc-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+  >
+    <div
+      id="desc-modal-backdrop"
+      class="absolute inset-0 bg-black/50 transition-opacity"
+    ></div>
+    <div
+      class="relative bg-surface rounded-2xl shadow-xl border border-outline-variant w-full max-w-2xl max-h-[80vh] flex flex-col"
+    >
+      <div class="flex items-center justify-between p-6 pb-0">
+        <h3 class="font-headline-md text-headline-md text-primary font-bold">
+          Edit Deskripsi
+        </h3>
+        <button
+          id="desc-modal-close"
+          type="button"
+          class="p-2 text-on-surface-variant hover:text-on-surface rounded-full hover:bg-surface-container transition-colors"
+        >
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-6 flex-1 overflow-y-auto">
+        <label
+          for="desc-modal-textarea"
+          class="block text-on-surface font-label-md mb-2"
+          >Deskripsi Peristiwa</label
+        >
+        <textarea
+          id="desc-modal-textarea"
+          rows="12"
+          class="w-full px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+          placeholder="Tuliskan deskripsi peristiwa di sini..."
+        ></textarea>
+      </div>
+      <div class="flex justify-end gap-3 p-6 pt-0">
+        <button
+          id="desc-modal-cancel"
+          type="button"
+          class="px-6 py-2 rounded-xl border border-outline text-on-surface font-label-md hover:bg-surface-container transition-colors"
+        >
+          Batal
+        </button>
+        <button
+          id="desc-modal-save"
+          type="button"
+          class="bg-primary text-on-primary px-6 py-2 rounded-xl font-label-md hover:opacity-90 transition-opacity"
+        >
+          Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    // State
+    let orgMembers = [];
+    let timelineEvents = [];
+
+    // DOM Elements
+    const tentangHeroDesc = document.getElementById("tentang-hero-desc");
+    const villageArea = document.getElementById("village-area");
+    const villageYear = document.getElementById("village-year");
+    const villagePopulation = document.getElementById("village-population");
+    const orgMembersList = document.getElementById("org-members-list");
+    const timelineList = document.getElementById("timeline-list");
+    const addMemberBtn = document.getElementById("add-member-btn");
+    const addTimelineBtn = document.getElementById("add-timeline-btn");
+    const saveBtn = document.getElementById("save-btn");
+    const saveSuccess = document.getElementById("save-success");
+    const saveError = document.getElementById("save-error");
+
+    // Load data
+    async function loadData() {
+      try {
+        // Load settings
+        const settingsRes = await fetch("/api/settings");
+        const settingsData = await settingsRes.json();
+        const settings = settingsData.settings || {};
+        
+        tentangHeroDesc.value = settings.tentang_hero_desc || "";
+        villageArea.value = settings.tentang_village_area || "";
+        villageYear.value = settings.tentang_village_year || "";
+        villagePopulation.value = settings.tentang_village_population || "";
+
+        // Load org members
+        const membersRes = await fetch("/api/tentang/org-members");
+        if (membersRes.ok) {
+          orgMembers = await membersRes.json();
+          renderOrgMembers();
+        }
+
+        // Load timeline events
+        const timelineRes = await fetch("/api/tentang/timeline");
+        if (timelineRes.ok) {
+          timelineEvents = await timelineRes.json();
+          renderTimeline();
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+
+    // Render org members
+    function renderOrgMembers() {
+      if (orgMembers.length === 0) {
+        orgMembersList.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada anggota.</p>';
+        return;
+      }
+
+      orgMembersList.innerHTML = orgMembers
+        .map(
+          (member, index) => {
+            const hasImage = member.image && member.image.length > 0;
+            const previewUrl = hasImage
+              ? (member.image.includes("blob.vercel-storage.com")
+                  ? `/api/tentang/org-members/image/${member.id || "new_" + index}?v=${encodeURIComponent(member.image)}`
+                  : member.image)
+              : "";
+            return `
+        <div class="flex gap-3 items-start p-4 bg-surface rounded-xl border border-outline-variant">
+          <div class="flex flex-col items-center gap-2 shrink-0">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-outline-variant bg-background flex items-center justify-center relative group">
+              <img
+                id="member-preview-${index}"
+                class="w-full h-full object-cover ${hasImage ? "" : "hidden"}"
+                alt="${member.name || "Anggota"}"
+                src="${previewUrl}"
+              />
+              <div id="member-placeholder-${index}" class="w-full h-full flex items-center justify-center text-on-surface-variant ${hasImage ? "hidden" : ""}">
+                <span class="material-symbols-outlined text-3xl">person</span>
+              </div>
+              <label class="absolute inset-0 cursor-pointer flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+                <span class="material-symbols-outlined text-white text-xl">photo_camera</span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  class="hidden member-image-input"
+                  data-index="${index}"
+                />
+              </label>
+            </div>
+            <input type="hidden" class="member-image-url" data-index="${index}" value="${member.image || ""}" />
+          </div>
+          <div class="flex-1 flex flex-col gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div>
+                <label class="text-on-surface-variant text-label-sm mb-1 block">Nama</label>
+                <input
+                  type="text"
+                  value="${member.name.replace(/"/g, "&quot;")}"
+                  data-index="${index}"
+                  data-field="name"
+                  class="member-input w-full px-3 py-2 rounded-lg border border-outline bg-background text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Nama lengkap"
+                />
+              </div>
+              <div>
+                <label class="text-on-surface-variant text-label-sm mb-1 block">Jabatan</label>
+                <input
+                  type="text"
+                  value="${member.role.replace(/"/g, "&quot;")}"
+                  data-index="${index}"
+                  data-field="role"
+                  class="member-input w-full px-3 py-2 rounded-lg border border-outline bg-background text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Jabatan"
+                />
+              </div>
+            </div>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="kepala-desa"
+                ${member.isHead ? "checked" : ""}
+                class="member-is-head w-4 h-4 border-outline text-primary focus:ring-primary"
+                data-index="${index}"
+              />
+              <span class="text-on-surface-variant text-label-md">Kepala Desa</span>
+            </label>
+          </div>
+          <div class="flex flex-col gap-1 shrink-0">
+            <button
+              type="button"
+              onclick="moveMember(${index}, -1)"
+              class="p-1 text-on-surface-variant hover:text-primary transition-colors ${index === 0 ? "opacity-30 pointer-events-none" : ""}"
+              title="Pindah ke atas"
+            >
+              <span class="material-symbols-outlined text-lg">arrow_upward</span>
+            </button>
+            <button
+              type="button"
+              onclick="moveMember(${index}, 1)"
+              class="p-1 text-on-surface-variant hover:text-primary transition-colors ${index === orgMembers.length - 1 ? "opacity-30 pointer-events-none" : ""}"
+              title="Pindah ke bawah"
+            >
+              <span class="material-symbols-outlined text-lg">arrow_downward</span>
+            </button>
+            <button
+              type="button"
+              onclick="removeMember(${index})"
+              class="p-1 text-error hover:text-error transition-colors"
+              title="Hapus"
+            >
+              <span class="material-symbols-outlined text-lg">delete</span>
+            </button>
+          </div>
+        </div>
+      `;
+          }
+        )
+        .join("");
+
+      // Attach input listeners
+      orgMembersList.querySelectorAll(".member-input").forEach((el) => {
+        el.addEventListener("input", (e) => {
+          const target = e.target;
+          const idx = parseInt(target.dataset.index);
+          const field = target.dataset.field;
+          orgMembers[idx][field] = target.value;
+        });
+      });
+
+      // Attach radio listeners
+      orgMembersList.querySelectorAll(".member-is-head").forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          orgMembers.forEach((m, i) => { m.isHead = i === idx; });
+          renderOrgMembers();
+        });
+      });
+
+      // Attach image upload listeners
+      orgMembersList.querySelectorAll(".member-image-input").forEach((input) => {
+        input.addEventListener("change", async (e) => {
+          const target = e.target;
+          const idx = parseInt(target.dataset.index);
+          const file = target.files?.[0];
+          if (!file) return;
+
+          const formData = new FormData();
+          formData.append("file", file);
+          const oldUrl = orgMembers[idx].image || "";
+          if (oldUrl) formData.append("oldUrl", oldUrl);
+
+          try {
+            const res = await fetch("/api/tentang/org-members/upload-image", {
+              method: "POST",
+              body: formData,
+            });
+            const data = await res.json();
+            if (!res.ok) {
+              alert(data.error || "Gagal mengunggah gambar.");
+              return;
+            }
+            orgMembers[idx].image = data.url;
+            renderOrgMembers();
+          } catch {
+            alert("Gagal mengunggah gambar.");
+          }
+        });
+      });
+    }
+
+    // Render timeline events
+    function renderTimeline() {
+      if (timelineEvents.length === 0) {
+        timelineList.innerHTML = '<p class="text-on-surface-variant text-body-md">Belum ada peristiwa.</p>';
+        return;
+      }
+
+      timelineList.innerHTML = timelineEvents
+        .map(
+          (event, index) => {
+            const desc = event.description || "";
+            const preview = desc.length > 60 ? desc.substring(0, 60) + "..." : (desc || "Belum ada deskripsi");
+            return `
+        <div class="flex gap-3 items-start p-4 bg-surface rounded-xl border border-outline-variant">
+          <div class="shrink-0 w-8 h-8 rounded-full border border-outline flex items-center justify-center font-bold text-sm text-on-surface-variant">
+            ${index + 1}
+          </div>
+          <div class="flex-1 flex flex-col gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div>
+                <label class="text-on-surface-variant text-label-sm mb-1 block">Tahun</label>
+                <input
+                  type="text"
+                  value="${event.year.replace(/"/g, "&quot;")}"
+                  data-index="${index}"
+                  data-field="year"
+                  class="event-input w-full px-3 py-2 rounded-lg border border-outline bg-background text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="cth: 1824"
+                />
+              </div>
+              <div>
+                <label class="text-on-surface-variant text-label-sm mb-1 block">Judul</label>
+                <input
+                  type="text"
+                  value="${event.title.replace(/"/g, "&quot;")}"
+                  data-index="${index}"
+                  data-field="title"
+                  class="event-input w-full px-3 py-2 rounded-lg border border-outline bg-background text-on-surface font-body-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  placeholder="Judul peristiwa"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="text-on-surface-variant text-label-sm mb-1 block">Deskripsi</label>
+              <button
+                type="button"
+                onclick="openDescModal(${index})"
+                class="w-full text-left px-3 py-2 rounded-lg border border-outline bg-background text-on-surface font-body-md text-sm hover:ring-2 hover:ring-primary hover:border-transparent transition-all flex items-center gap-2 group"
+              >
+                <span class="flex-1 ${desc ? "text-on-surface" : "text-on-surface-variant italic"}">${preview.replace(/</g, "&lt;")}</span>
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary text-lg shrink-0">edit</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1 shrink-0">
+            <button
+              type="button"
+              onclick="moveEvent(${index}, -1)"
+              class="p-1 text-on-surface-variant hover:text-primary transition-colors ${index === 0 ? "opacity-30 pointer-events-none" : ""}"
+              title="Pindah ke atas"
+            >
+              <span class="material-symbols-outlined text-lg">arrow_upward</span>
+            </button>
+            <button
+              type="button"
+              onclick="moveEvent(${index}, 1)"
+              class="p-1 text-on-surface-variant hover:text-primary transition-colors ${index === timelineEvents.length - 1 ? "opacity-30 pointer-events-none" : ""}"
+              title="Pindah ke bawah"
+            >
+              <span class="material-symbols-outlined text-lg">arrow_downward</span>
+            </button>
+            <button
+              type="button"
+              onclick="removeEvent(${index})"
+              class="p-1 text-error hover:text-error transition-colors"
+              title="Hapus"
+            >
+              <span class="material-symbols-outlined text-lg">delete</span>
+            </button>
+          </div>
+        </div>
+      `;
+          }
+        )
+        .join("");
+
+      // Attach input listeners
+      timelineList.querySelectorAll(".event-input").forEach((el) => {
+        el.addEventListener("input", (e) => {
+          const target = e.target;
+          const idx = parseInt(target.dataset.index);
+          const field = target.dataset.field;
+          timelineEvents[idx][field] = target.value;
+        });
+      });
+    }
+
+    // Move/reorder functions
+    (window).moveMember = function (index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= orgMembers.length) return;
+      const temp = orgMembers[index];
+      orgMembers[index] = orgMembers[newIndex];
+      orgMembers[newIndex] = temp;
+      renderOrgMembers();
+    };
+
+    (window).removeMember = function (index) {
+      orgMembers.splice(index, 1);
+      renderOrgMembers();
+    };
+
+    (window).moveEvent = function (index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= timelineEvents.length) return;
+      const temp = timelineEvents[index];
+      timelineEvents[index] = timelineEvents[newIndex];
+      timelineEvents[newIndex] = temp;
+      renderTimeline();
+    };
+
+    (window).removeEvent = function (index) {
+      timelineEvents.splice(index, 1);
+      renderTimeline();
+    };
+
+    // Description modal
+    let editingDescIndex = -1;
+    const descModal = document.getElementById("desc-modal");
+    const descModalBackdrop = document.getElementById("desc-modal-backdrop");
+    const descModalTextarea = document.getElementById("desc-modal-textarea");
+    const descModalSave = document.getElementById("desc-modal-save");
+    const descModalCancel = document.getElementById("desc-modal-cancel");
+    const descModalClose = document.getElementById("desc-modal-close");
+
+    (window).openDescModal = function (index) {
+      editingDescIndex = index;
+      descModalTextarea.value = timelineEvents[index].description || "";
+      descModal.classList.remove("hidden");
+      descModalTextarea.focus();
+    };
+
+    function closeDescModal() {
+      descModal.classList.add("hidden");
+      editingDescIndex = -1;
+    }
+
+    descModalSave.addEventListener("click", () => {
+      if (editingDescIndex >= 0) {
+        timelineEvents[editingDescIndex].description = descModalTextarea.value;
+        renderTimeline();
+      }
+      closeDescModal();
+    });
+
+    descModalCancel.addEventListener("click", closeDescModal);
+    descModalClose.addEventListener("click", closeDescModal);
+    descModalBackdrop.addEventListener("click", closeDescModal);
+
+    descModalTextarea.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeDescModal();
+    });
+
+    // Add new member
+    addMemberBtn.addEventListener("click", () => {
+      orgMembers.push({ name: "", role: "", image: "", isHead: false });
+      renderOrgMembers();
+      const inputs = orgMembersList.querySelectorAll('[data-field="name"]');
+      const last = inputs[inputs.length - 1];
+      if (last) last.focus();
+    });
+
+    // Add new timeline event
+    addTimelineBtn.addEventListener("click", () => {
+      timelineEvents.push({ year: "", title: "", description: "" });
+      renderTimeline();
+      const inputs = timelineList.querySelectorAll('[data-field="year"]');
+      const last = inputs[inputs.length - 1];
+      if (last) last.focus();
+    });
+
+    function showSuccess() {
+      saveSuccess.classList.remove("hidden");
+      saveError.classList.add("hidden");
+      setTimeout(() => saveSuccess.classList.add("hidden"), 3000);
+    }
+
+    function showError(msg) {
+      saveError.textContent = msg;
+      saveError.classList.remove("hidden");
+      saveSuccess.classList.add("hidden");
+    }
+
+    // Save all data
+    saveBtn.addEventListener("click", async () => {
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Menyimpan...";
+      saveSuccess.classList.add("hidden");
+      saveError.classList.add("hidden");
+
+      try {
+        // Save settings
+        const settingsPayload = {
+          tentang_hero_desc: tentangHeroDesc.value.trim(),
+          tentang_village_area: villageArea.value.trim(),
+          tentang_village_year: villageYear.value.trim(),
+          tentang_village_population: villagePopulation.value.trim(),
+        };
+
+        const settingsRes = await fetch("/api/settings", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ settings: settingsPayload }),
+        });
+
+        if (!settingsRes.ok) {
+          const data = await settingsRes.json();
+          showError(data.error || "Gagal menyimpan pengaturan.");
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Simpan Semua";
+          return;
+        }
+
+        // Save org members
+        const membersRes = await fetch("/api/tentang/org-members", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ members: orgMembers }),
+        });
+
+        if (!membersRes.ok) {
+          const data = await membersRes.json();
+          showError(data.error || "Gagal menyimpan struktur organisasi.");
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Simpan Semua";
+          return;
+        }
+
+        // Save timeline events
+        const timelineRes = await fetch("/api/tentang/timeline", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ events: timelineEvents }),
+        });
+
+        if (!timelineRes.ok) {
+          const data = await timelineRes.json();
+          showError(data.error || "Gagal menyimpan garis waktu.");
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Simpan Semua";
+          return;
+        }
+
+        showSuccess();
+      } catch (error) {
+        console.error("Error saving:", error);
+        showError("Terjadi kesalahan. Coba lagi nanti.");
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Simpan Semua";
+    });
+
+    // Initialize
+    loadData();
+  </script>
+</Layout>

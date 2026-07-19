@@ -1,5 +1,17 @@
 ---
-const timelineEvents = [
+interface TimelineEvent {
+  year: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  timelineEvents?: TimelineEvent[];
+}
+
+const { timelineEvents } = Astro.props;
+
+const defaultEvents: TimelineEvent[] = [
   {
     year: "1824",
     title: "Awal Pemukiman Agraris",
@@ -25,6 +37,8 @@ const timelineEvents = [
       "Menerapkan teknologi digital, sensor IoT pertanian, dan layanan mandiri online demi efisiensi tanpa mengorbankan nilai sosial dan budaya adat.",
   },
 ];
+
+const events = timelineEvents && timelineEvents.length > 0 ? timelineEvents : defaultEvents;
 ---
 
 <section class="py-section-padding-desktop bg-surface-bright">
@@ -41,7 +55,7 @@ const timelineEvents = [
       class="relative border-l border-outline-variant max-w-3xl mx-auto pl-8 space-y-12"
     >
       {
-        timelineEvents.map((event) => (
+        events.map((event) => (
           <div class="relative">
             <div class="absolute -left-10.25 top-1.5 bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center border-4 border-white shadow" />
             <span class="text-secondary font-headline-md text-xl font-bold block">
