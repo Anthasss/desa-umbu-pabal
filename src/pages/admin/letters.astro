@@ -17,7 +17,7 @@ if (session.user.role !== "admin") {
 }
 ---
 
-<Layout title="Kelola Surat - Admin Panel">
+<Layout title="Kelola Surat - Admin Panel" session={session}>
   <div class="min-h-screen px-gutter py-20">
     <div class="max-w-container-max mx-auto">
       <div class="bg-surface rounded-2xl shadow-lg p-8 border border-outline-variant mb-8">

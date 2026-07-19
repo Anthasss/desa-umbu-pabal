@@ -1,8 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 ---
 
-<Layout title="Kirim Surat Baru - Desa Umbu Pabal" activePage="layanan">
+<Layout title="Kirim Surat Baru - Desa Umbu Pabal" activePage="layanan" session={session}>
   <section class="relative h-[400px] flex items-center overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img

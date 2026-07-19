@@ -1,6 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
 import Hero from "../components/galeri/hero.astro";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 
 const categories = [
   { label: "Semua", value: "all" },
@@ -90,7 +97,7 @@ const galleryItemsRaw = [
 const galleryItems = [...galleryItemsRaw, ...galleryItemsRaw];
 ---
 
-<Layout title="Galeri Desa - Desa Umbu Pabal" activePage="galeri">
+<Layout title="Galeri Desa - Desa Umbu Pabal" activePage="galeri" session={session}>
   <Hero />
 
   <!-- Category Filter -->

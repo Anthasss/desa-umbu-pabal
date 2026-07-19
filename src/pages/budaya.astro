@@ -1,8 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { auth } from "../lib/auth";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
 ---
 
-<Layout title="Warisan Budaya - Desa Umbu Pabal" activePage="budaya">
+<Layout title="Warisan Budaya - Desa Umbu Pabal" activePage="budaya" session={session}>
   <!-- Hero Section -->
   <section
     class="relative h-125 flex items-center justify-center overflow-hidden"
