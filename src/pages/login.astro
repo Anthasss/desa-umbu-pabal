@@ -39,15 +39,24 @@ const session = await auth.api.getSession({
             <label for="password" class="block text-on-surface font-label-md mb-2">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              minlength="8"
-              class="w-full px-4 py-3 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-              placeholder="Masukkan password"
-            />
+            <div class="relative">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minlength="8"
+                class="w-full px-4 py-3 pr-12 rounded-xl border border-outline bg-background text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                placeholder="Masukkan password"
+              />
+              <button
+                type="button"
+                id="toggle-password"
+                class="absolute right-3 top-0 h-full z-10 flex items-center text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                <span class="material-symbols-outlined text-[22px]">visibility</span>
+              </button>
+            </div>
           </div>
 
           <div id="error-message" class="hidden text-error text-sm"></div>
@@ -78,6 +87,16 @@ const session = await auth.api.getSession({
   const form = document.getElementById("login-form") as HTMLFormElement;
   const errorMsg = document.getElementById("error-message") as HTMLDivElement;
   const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+
+  const toggleBtn = document.getElementById("toggle-password");
+  const passwordInput = document.getElementById("password") as HTMLInputElement;
+  const toggleIcon = toggleBtn?.querySelector("span");
+
+  toggleBtn?.addEventListener("click", () => {
+    const isPassword = passwordInput.type === "password";
+    passwordInput.type = isPassword ? "text" : "password";
+    if (toggleIcon) toggleIcon.textContent = isPassword ? "visibility_off" : "visibility";
+  });
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
