@@ -1,0 +1,170 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { auth } from "../../lib/auth";
+import { db } from "../../db";
+import { news } from "../../db/schema";
+import { eq, ne, and, desc } from "drizzle-orm";
+
+export const prerender = false;
+
+const session = await auth.api.getSession({
+  headers: Astro.request.headers,
+});
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/berita");
+}
+
+const [article] = await db.select().from(news).where(eq(news.slug, slug));
+
+if (!article) {
+  return Astro.redirect("/berita");
+}
+
+const relatedNews = await db
+  .select()
+  .from(news)
+  .where(and(eq(news.category, article.category), ne(news.id, article.id)))
+  .orderBy(desc(news.id))
+  .limit(3);
+
+const categoryStyles: Record<string, string> = {
+  Pembangunan: "bg-blue-500 text-white",
+  Pemerintahan: "bg-indigo-500 text-white",
+  Sosial: "bg-pink-500 text-white",
+  Ekonomi: "bg-green-500 text-white",
+  Pendidikan: "bg-purple-500 text-white",
+  Kesehatan: "bg-red-500 text-white",
+  Keagamaan: "bg-teal-500 text-white",
+  Olahraga: "bg-orange-500 text-white",
+  Lainnya: "bg-gray-500 text-white",
+};
+
+const badgeClass = categoryStyles[article.category] || "bg-gray-500 text-white";
+const imageUrl = `/api/news/image/${article.id}?v=${encodeURIComponent(article.image)}`;
+const paragraphs = article.content
+  ? article.content.split("\n").filter((p: string) => p.trim())
+  : [];
+---
+
+<Layout
+  title={`${article.title} - Desa Umbu Pabal`}
+  activePage="berita"
+  session={session}
+>
+  <div
+    class="max-w-[900px] mx-auto px-6 py-section-padding-mobile md:py-section-padding-desktop"
+  >
+    <!-- Header -->
+    <header class="space-y-6 mb-6">
+      <div class="flex items-center gap-4">
+        <span
+          class={`px-4 py-1 rounded-full font-label-md text-label-md uppercase tracking-wide font-bold ${badgeClass}`}
+        >
+          {article.category}
+        </span>
+        <span
+          class="text-on-surface-variant font-label-md text-label-md flex items-center gap-1"
+        >
+          <span class="material-symbols-outlined text-[18px]"
+            >calendar_today</span
+          >
+          {article.date}
+        </span>
+      </div>
+      <h1
+        class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-primary leading-tight font-bold text-3xl md:text-4xl"
+      >
+        {article.title}
+      </h1>
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant"
+        >
+          <span class="material-symbols-outlined text-primary">person</span>
+        </div>
+        <span class="font-label-md text-label-md text-on-surface"
+          >Ditulis oleh <span class="text-primary font-bold">Admin Desa</span
+          ></span
+        >
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    <div
+      class="relative rounded-xl overflow-hidden shadow-sm aspect-[1.37] lg:aspect-video mb-10"
+    >
+      <img
+        alt={article.title}
+        class="w-full h-full object-cover"
+        src={imageUrl}
+      />
+    </div>
+
+    <!-- Article Body -->
+    <div
+      class="text-on-surface-variant font-body-md text-body-md leading-relaxed space-y-6 mt-6 mb-16 text-justified"
+    >
+      {
+        paragraphs.length > 0 ? (
+          paragraphs.map((p: string) => (
+            <p class="text-on-surface font-body-lg text-body-lg text-justified">{p}</p>
+          ))
+        ) : (
+          <p class="text-on-surface-variant italic">
+            Belum ada konten untuk berita ini.
+          </p>
+        )
+      }
+    </div>
+
+    <!-- Back Link -->
+    <div class="mb-16">
+      <a
+        href="/berita"
+        class="inline-flex items-center gap-2 text-primary font-label-md font-bold hover:underline"
+      >
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Kembali ke Berita
+      </a>
+    </div>
+
+    <!-- Related News -->
+    {
+      relatedNews.length > 0 && (
+        <section class="border-t border-outline-variant pt-10">
+          <h2 class="font-headline-md text-headline-md text-on-surface font-bold mb-6">
+            Berita Terkait
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {relatedNews.map((item: any) => (
+              <a
+                href={`/berita/${item.slug}`}
+                class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300"
+              >
+                <div class="h-40 overflow-hidden">
+                  <img
+                    alt={item.title}
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    src={`/api/news/image/${item.id}?v=${encodeURIComponent(item.image)}`}
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-4">
+                  <span class="text-on-surface-variant text-xs block mb-1">
+                    {item.date}
+                  </span>
+                  <h3 class="font-semibold text-on-surface text-sm leading-snug group-hover:text-secondary transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Layout>

@@ -9,6 +9,7 @@ export const news = pgTable("news", {
   date: varchar("date", { length: 100 }).notNull(),
   title: varchar("title", { length: 500 }).notNull(),
   excerpt: text("excerpt").notNull(),
+  content: text("content"),
 });
 
 export const user = pgTable("user", {

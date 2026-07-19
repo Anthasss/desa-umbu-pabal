@@ -2,7 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
 import Hero from "../components/berita/hero.astro";
-import { categoryStyles, categories, newsItems } from "../data/berita";
+import { db } from "../db";
+import { news } from "../db/schema";
+import { desc } from "drizzle-orm";
 
 export const prerender = false;
 
@@ -10,13 +12,27 @@ const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
 
-const newsItemsDouble = [...newsItems, ...newsItems];
+const allNews = await db.select().from(news).orderBy(desc(news.id));
+
+const categories = ["Semua", ...new Set(allNews.map((n) => n.category))];
+
+const categoryStyles: Record<string, string> = {
+  Pembangunan: "bg-blue-500 text-white",
+  Pemerintahan: "bg-indigo-500 text-white",
+  Sosial: "bg-pink-500 text-white",
+  Ekonomi: "bg-green-500 text-white",
+  Pendidikan: "bg-purple-500 text-white",
+  Kesehatan: "bg-red-500 text-white",
+  Keagamaan: "bg-teal-500 text-white",
+  Olahraga: "bg-orange-500 text-white",
+  Lainnya: "bg-gray-500 text-white",
+};
 ---
 
 <Layout title="Berita Desa - Desa Umbu Pabal" activePage="berita" session={session}>
   <Hero />
   <!-- Search + Category Filter -->
-  <div class="bg-surface-container-low py-4 mb-8 px-6 sticky top-20 z-40">
+  <div class="bg-surface-container-low py-4 mb-8 px-6">
     <div
       class="max-w-[1200px] mx-auto flex flex-col sm:flex-row gap-4 sm:items-center justify-between"
     >
@@ -82,7 +98,7 @@ const newsItemsDouble = [...newsItems, ...newsItems];
   </section>
 </Layout>
 
-<script is:inline define:vars={{ newsItems: newsItemsDouble, categoryStyles }}>
+<script is:inline define:vars={{ newsItems: allNews, categoryStyles }}>
   const PAGE_SIZE = 9;
   let currentPage = 0;
   let activeCategory = "all";
@@ -112,14 +128,15 @@ const newsItemsDouble = [...newsItems, ...newsItems];
       "news-card bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden group hover:shadow-lg transition-all duration-300";
     card.dataset.item = item.category;
 
-    const badgeClass = categoryStyles[item.category] || "";
+    const badgeClass = categoryStyles[item.category] || "bg-gray-500 text-white";
+    const imageUrl = `/api/news/image/${item.id}?v=${encodeURIComponent(item.image)}`;
 
     card.innerHTML = `
       <div class="h-56 overflow-hidden relative">
         <img
           alt="${item.title}"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          src="${item.image}"
+          src="${imageUrl}"
         />
         <div class="absolute top-4 left-4">
           <span class="backdrop-blur-md text-[12px] font-bold px-3 py-1 rounded uppercase tracking-wider ${badgeClass}">
@@ -165,7 +182,6 @@ const newsItemsDouble = [...newsItems, ...newsItems];
     loadingIndicator.classList.remove("hidden");
     loadingIndicator.classList.add("flex");
 
-    // Simulate async fetch delay
     setTimeout(() => {
       slice.forEach((item) => grid.appendChild(createCard(item)));
       currentPage++;
@@ -186,7 +202,6 @@ const newsItemsDouble = [...newsItems, ...newsItems];
     loadNextPage();
   }
 
-  // Infinite scroll observer
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting && !isLoading) {
@@ -196,7 +211,6 @@ const newsItemsDouble = [...newsItems, ...newsItems];
     { rootMargin: "200px" },
   );
 
-  // Filter buttons
   document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       activeCategory = btn.dataset.category;
@@ -222,7 +236,6 @@ const newsItemsDouble = [...newsItems, ...newsItems];
     });
   });
 
-  // Search input (debounced)
   let searchDebounceTimer;
   searchInput.addEventListener("input", (e) => {
     clearTimeout(searchDebounceTimer);
@@ -233,7 +246,6 @@ const newsItemsDouble = [...newsItems, ...newsItems];
     }, 300);
   });
 
-  // Initial load
   observer.observe(sentinel);
   loadNextPage();
 </script>
