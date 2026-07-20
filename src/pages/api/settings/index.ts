@@ -40,7 +40,7 @@ export const PATCH: APIRoute = async ({ request }) => {
   }
 
   // Clean up old blob images if image settings are changing
-  const imageKeys = ["vhw_kepalaDesaImage", "hero_image"];
+  const imageKeys = ["vhw_kepalaDesaImage", "hero_image", "tentang_hero_image"];
   for (const imgKey of imageKeys) {
     if (updates[imgKey] !== undefined) {
       const [existing] = await db
