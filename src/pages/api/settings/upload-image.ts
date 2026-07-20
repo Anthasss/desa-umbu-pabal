@@ -16,6 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const formData = await request.formData();
   const file = formData.get("file") as File;
+  const settingKey = (formData.get("key") as string) || "vhw_kepalaDesaImage";
 
   if (!file) {
     return new Response(
@@ -36,7 +37,7 @@ export const POST: APIRoute = async ({ request }) => {
   const [existing] = await db
     .select()
     .from(siteSettings)
-    .where(eq(siteSettings.key, "vhw_kepalaDesaImage"));
+    .where(eq(siteSettings.key, settingKey));
 
   if (existing?.value?.includes("blob.vercel-storage.com")) {
     try {
@@ -53,10 +54,10 @@ export const POST: APIRoute = async ({ request }) => {
     await db
       .update(siteSettings)
       .set({ value: url })
-      .where(eq(siteSettings.key, "vhw_kepalaDesaImage"));
+      .where(eq(siteSettings.key, settingKey));
   } else {
     await db.insert(siteSettings).values({
-      key: "vhw_kepalaDesaImage",
+      key: settingKey,
       value: url,
     });
   }
