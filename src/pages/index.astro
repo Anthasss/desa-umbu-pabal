@@ -26,6 +26,9 @@ const missionsRows = await db.select().from(vmMissions).orderBy(asc(vmMissions.s
 
 const hero_title = settings.hero_title || "";
 const hero_desc = settings.hero_desc || "";
+const hero_image = settings.hero_image
+  ? `/api/settings/image/hero_image?v=${encodeURIComponent(settings.hero_image)}`
+  : "";
 
 const vhw_sambutan = settings.vhw_sambutan || "";
 const vhw_kepalaDesaName = settings.vhw_kepalaDesaName || "";
@@ -41,7 +44,7 @@ const vm_missions = missionsRows.map((m) => ({
 ---
 
 <Layout title="Desa Umbu Pabal" activePage="home" session={session}>
-  <Hero hero_title={hero_title} hero_desc={hero_desc} />
+  <Hero hero_title={hero_title} hero_desc={hero_desc} hero_image={hero_image} />
   <VillageHeadWelcome
     sambutan={vhw_sambutan}
     kepalaDesaName={vhw_kepalaDesaName}

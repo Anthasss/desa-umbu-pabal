@@ -39,21 +39,24 @@ export const PATCH: APIRoute = async ({ request }) => {
     );
   }
 
-  // Clean up old blob image if vhw_kepalaDesaImage is changing
-  if (updates.vhw_kepalaDesaImage !== undefined) {
-    const [existing] = await db
-      .select()
-      .from(siteSettings)
-      .where(eq(siteSettings.key, "vhw_kepalaDesaImage"));
+  // Clean up old blob images if image settings are changing
+  const imageKeys = ["vhw_kepalaDesaImage", "hero_image", "tentang_hero_image"];
+  for (const imgKey of imageKeys) {
+    if (updates[imgKey] !== undefined) {
+      const [existing] = await db
+        .select()
+        .from(siteSettings)
+        .where(eq(siteSettings.key, imgKey));
 
-    const oldUrl = existing?.value ?? "";
-    const newUrl = updates.vhw_kepalaDesaImage;
+      const oldUrl = existing?.value ?? "";
+      const newUrl = updates[imgKey];
 
-    if (oldUrl && oldUrl !== newUrl && oldUrl.includes("blob.vercel-storage.com")) {
-      try {
-        await deleteFile(oldUrl);
-      } catch {
-        // Ignore deletion errors
+      if (oldUrl && oldUrl !== newUrl && oldUrl.includes("blob.vercel-storage.com")) {
+        try {
+          await deleteFile(oldUrl);
+        } catch {
+          // Ignore deletion errors
+        }
       }
     }
   }

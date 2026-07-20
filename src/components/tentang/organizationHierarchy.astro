@@ -10,7 +10,8 @@ interface Props {
   staffMembers?: Member[];
 }
 
-const defaultHeadImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuACbovTfhJi7W1B9bKN3_mAgHlK-MY48ucCTDUfEBS8mGMUNQ13-h_boGePdDiAxdESklPVnK_9NFQB5pOL18J_dDHtDN3CFTlzqkoLxWGtC5_3GGqdNr6ZWJK9-0Zy7yDkJVapo1fR3i19EfSZ4FKhZkf4BeMp5kfAXfmzpIYX3RvKtRQ3N2g0YC7gEkN_yrY6Y6d1W-Y5jM5ZFocT7-1CHLaa6X1Eh0WjRwIYHeCx3DTGheq-6c_JAMcy9sCyEt9vn5WeLVYhsD4";
+const defaultHeadImage =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuACbovTfhJi7W1B9bKN3_mAgHlK-MY48ucCTDUfEBS8mGMUNQ13-h_boGePdDiAxdESklPVnK_9NFQB5pOL18J_dDHtDN3CFTlzqkoLxWGtC5_3GGqdNr6ZWJK9-0Zy7yDkJVapo1fR3i19EfSZ4FKhZkf4BeMp5kfAXfmzpIYX3RvKtRQ3N2g0YC7gEkN_yrY6Y6d1W-Y5jM5ZFocT7-1CHLaa6X1Eh0WjRwIYHeCx3DTGheq-6c_JAMcy9sCyEt9vn5WeLVYhsD4";
 const defaultStaffImages = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuAPVZxfo__g2AocL3F4cKoC26EpbObA1J2qndoPwmE3yajDcFxzuixOF4KDwUHUPGzFYL-mvJTV7P6nvEh3bDpRXfc9adyCyWxvzH3bzyEEPvd-kINpkujqtxRWJMLtSZNL8EXDXNJlTbR6OdHULG9qcnrEUdJZOMbvjNQ_UzF9NH1i8zt9N2CVG9SIUEdcSCFo-eEp1KKqUyVlQZ0UU66TNT6TusX3XSb8L1BnZ6W17FVPkGs9oPzGnQ2OjEJt4M5KdlPqFtIbeVM",
   "https://lh3.googleusercontent.com/aida-public/AB6AXuAp5IMvd35GIP0jCDWp0Ia9puHS7T9Po4W2d7233eZtEorZe6khWrPQUUIcJy6nFR3E2ps2z_6-55taJWuidCut6Cnc5KMyP-MRWXKIC86UkZ4-YW9oIomUMrN8vDJqx6tzo5Y5gSPC8bYkWp_ptRf9KLLDozukeQX3w2T2wshHKLjHDgt9EdIzBIEkw51KCbSNpQA2RPntXsfpnYSX7BzPu8PUmd9NGeaA1Hbq-5kWxEt-9TW2x4JTMDzMuDh_CozgiyeJhrmZvsY",
@@ -23,14 +24,18 @@ const headName = villageHead?.name || "Bpk. Ahmad Subarjo";
 const headRole = villageHead?.role || "Kepala Desa";
 const headImage = villageHead?.image || defaultHeadImage;
 
-const staff = staffMembers.length > 0 ? staffMembers : [
-  { name: "Ibu Siti Aminah", role: "Sekretaris Desa" },
-  { name: "Bpk. Hendra Wijaya", role: "Bendahara Desa" },
-  { name: "Ibu Maya Lestari", role: "Kaur Pembangunan" },
-];
+const staff =
+  staffMembers.length > 0
+    ? staffMembers
+    : [
+        { name: "Ibu Siti Aminah", role: "Sekretaris Desa" },
+        { name: "Bpk. Hendra Wijaya", role: "Bendahara Desa" },
+        { name: "Ibu Maya Lestari", role: "Kaur Pembangunan" },
+      ];
 ---
 
 <section
+  id="struktur"
   class="py-section-padding-desktop px-gutter max-w-container-max mx-auto border-t border-outline-variant/30 transition-all duration-700 opacity-100 translate-y-0"
 >
   <div class="text-center mb-16">
@@ -78,7 +83,10 @@ const staff = staffMembers.length > 0 ? staffMembers : [
               <img
                 alt={member.role}
                 class="w-full h-full object-cover"
-                src={member.image || defaultStaffImages[index % defaultStaffImages.length]}
+                src={
+                  member.image ||
+                  defaultStaffImages[index % defaultStaffImages.length]
+                }
               />
             </div>
             <h4 class="font-headline-md text-headline-md text-primary">

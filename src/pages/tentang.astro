@@ -38,6 +38,9 @@ const timelineEvents = await db.select().from(tentangTimelineEvents).orderBy(asc
 
 // Extract settings
 const tentangHeroDesc = settings.tentang_hero_desc || "";
+const tentangHeroImage = settings.tentang_hero_image
+  ? `/api/settings/image/tentang_hero_image?v=${encodeURIComponent(settings.tentang_hero_image)}`
+  : "";
 const tentangVillageArea = settings.tentang_village_area || "";
 const tentangVillageYear = settings.tentang_village_year || "";
 const tentangVillagePopulation = settings.tentang_village_population || "";
@@ -66,7 +69,7 @@ const geographyItems = [
 ---
 
 <Layout title="Tentang Desa - Desa Umbu Pabal" activePage="tentangKami" session={session}>
-  <Hero desc={tentangHeroDesc} />
+  <Hero desc={tentangHeroDesc} hero_image={tentangHeroImage} />
   <!-- <HistoryText /> -->
   <OrganizationHierarchy
     villageHead={villageHead ? { name: villageHead.name, role: villageHead.role, image: villageHead.image?.includes("blob.vercel-storage.com") ? `/api/tentang/org-members/image/${villageHead.id}` : (villageHead.image || "") } : undefined}

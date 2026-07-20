@@ -1,9 +1,13 @@
 ---
 interface Props {
   desc?: string;
+  hero_image?: string;
 }
 
-const { desc = "" } = Astro.props;
+const { desc = "", hero_image } = Astro.props;
+
+const fallbackImage =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBv5DzSDYSZ0VOEhEY_mGSUnKm-rrLSNmRcWk7Lr-kUqaYmloeL5G3-l2QKEsYizA6SW70l0smWakk9dySRxsv9RyGFGGX0nRBxYWIR4GwpAuoo8-zeO03C2Q2uf4HiXWujYpV6dgCCK4RooD8VygOME97TkNWHAEicqCC6579HmjcRajMA-z6Ry4EGZz8jeGdG-8Z3bjdIlsdmZvkclJP-W9p01zJEfdE5vDv-LDGCJvE6RSX9oVByXnwGXgGh-NYEJhWpARFWKvs";
 ---
 
 <section
@@ -13,7 +17,7 @@ const { desc = "" } = Astro.props;
     <img
       alt="Desa Umbu Pabal Landscape"
       class="w-full h-full object-cover"
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv5DzSDYSZ0VOEhEY_mGSUnKm-rrLSNmRcWk7Lr-kUqaYmloeL5G3-l2QKEsYizA6SW70l0smWakk9dySRxsv9RyGFGGX0nRBxYWIR4GwpAuoo8-zeO03C2Q2uf4HiXWujYpV6dgCCK4RooD8VygOME97TkNWHAEicqCC6579HmjcRajMA-z6Ry4EGZz8jeGdG-8Z3bjdIlsdmZvkclJP-W9p01zJEfdE5vDv-LDGCJvE6RSX9oVByXnwGXgGh-NYEJhWpARFWKvs"
+      src={hero_image || fallbackImage}
     />
     <div class="absolute inset-0 bg-linear-to-b from-primary/40 to-primary/80">
     </div>

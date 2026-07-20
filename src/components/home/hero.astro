@@ -2,9 +2,13 @@
 interface Props {
   hero_title: string;
   hero_desc: string;
+  hero_image?: string;
 }
 
-const { hero_title, hero_desc } = Astro.props as Props;
+const { hero_title, hero_desc, hero_image } = Astro.props as Props;
+
+const fallbackImage =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBiKmOT9fCF7j9lL9KM8c7tL8nZh-5J5bUWkMzfeMxbNSX6Xj-tJPISJquc0D0hJ7lqfLjqWrDYvgMUXUr7iaYP0jKP0jQDwL4ketlDDP5N73nBIONqqKsmeqh_hgm_72Hg-1ziye0CK5eZ5jJ4BjWNid80PtTI9B45qZPZqcBQ08tHvTbzsN7IWsNIzZfwwFRUZjPL-_jm5NrCISBQ68EcQ_FXq_DzNbfx_o_SkNGYHOaOiK6pgSFB7h9KyUtN-p9KrI9r7mvLmD4";
 ---
 
 <section class="relative h-screen flex items-center overflow-hidden">
@@ -13,7 +17,7 @@ const { hero_title, hero_desc } = Astro.props as Props;
     <img
       class="w-full h-full object-cover"
       alt="A panoramic wide-angle photograph of a lush, emerald-green Indonesian village nestled in a misty valley at dawn."
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiKmOT9fCF7j9lL9KM8c7tL8nZh-5J5bUWkMzfeMxbNSX6Xj-tJPISJquc0D0hJ7lqfLjqWrDYvgMUXUr7iaYP0jKP0jQDwL4ketlDDP5N73nBIONqqKsmeqh_hgm_72Hg-1ziye0CK5eZ5jJ4BjWNid80PtTI9B45qZPZqcBQ08tHvTbzsN7IWsNIzZfwwFRUZjPL-_jm5NrCISBQ68EcQ_FXq_DzNbfx_o_SkNGYHOaOiK6pgSFB7h9KyUtN-p9KrI9r7mvLmD4"
+      src={hero_image || fallbackImage}
       id="heroImage"
     />
     <div class="absolute inset-0 bg-linear-to-r from-primary/60 to-transparent">
@@ -53,12 +57,12 @@ const { hero_title, hero_desc } = Astro.props as Props;
         >
           Jelajahi Desa
         </a>
-        <a
-          href="/"
-          class="text-sm md:text-lg border-2 border-on-primary text-on-primary px-8 py-4 rounded-xl font-label-md hover:bg-on-primary/10 transition-all text-center"
-        >
-          Layanan Publik
-        </a>
+        <!-- <a -->
+        <!--   href="/" -->
+        <!--   class="text-sm md:text-lg border-2 border-on-primary text-on-primary px-8 py-4 rounded-xl font-label-md hover:bg-on-primary/10 transition-all text-center" -->
+        <!-- > -->
+        <!--   Layanan Publik -->
+        <!-- </a> -->
       </div>
     </div>
   </div>
