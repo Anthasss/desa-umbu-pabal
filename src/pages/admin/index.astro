@@ -10,6 +10,7 @@ import {
   news,
   galleryImages,
   tentangOrgMembers,
+  siteSettings,
 } from "../../db/schema";
 import { count, desc, eq } from "drizzle-orm";
 
@@ -26,6 +27,9 @@ if (!session) {
 if (session.user.role !== "admin") {
   return Astro.redirect("/");
 }
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 
 const [
   [totalUsers],
@@ -98,7 +102,7 @@ const statusColor: Record<string, string> = {
         >
           Dashboard
         </h1>
-        <p class="text-on-surface-variant">Ringkasan data Desa Umbu Pabal</p>
+        <p class="text-on-surface-variant">Ringkasan data {villageName}</p>
       </div>
 
       <!-- Key Metrics -->

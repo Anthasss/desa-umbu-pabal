@@ -1,15 +1,21 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { auth } from "../../lib/auth";
+import { db } from "../../db";
+import { siteSettings } from "../../db/schema";
+import { eq } from "drizzle-orm";
 
 export const prerender = false;
 
 const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 ---
 
-<Layout title="Pembangunan Irigasi Baru Selesai Tepat Waktu - Desa Umbu Pabal" activePage="berita" session={session}>
+<Layout title={`Pembangunan Irigasi Baru Selesai Tepat Waktu - ${villageName}`} activePage="berita" session={session}>
   <div class="max-w-container-max mx-auto px-gutter py-section-padding-mobile md:py-section-padding-desktop">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
       <!-- Article Content Area -->

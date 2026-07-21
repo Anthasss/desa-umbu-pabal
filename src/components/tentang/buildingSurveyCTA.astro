@@ -1,3 +1,11 @@
+---
+interface Props {
+  villageName?: string;
+}
+
+const { villageName = "Desa Umbu Pabal" } = Astro.props;
+---
+
 <section
   class="bg-primary-container text-on-primary-container py-section-padding-desktop transition-all duration-700 opacity-100 translate-y-0"
 >
@@ -7,7 +15,7 @@
     </h2>
     <p class="font-body-lg text-body-lg mb-8 max-w-2xl mx-auto opacity-90">
       Kami selalu membuka pintu bagi ide, kolaborasi, dan kontribusi dari
-      seluruh warga untuk mewujudkan Desa Umbu Pabal yang lebih baik.
+      seluruh warga untuk mewujudkan {villageName} yang lebih baik.
     </p>
     <div class="flex flex-col sm:flex-row justify-center gap-4">
       <a

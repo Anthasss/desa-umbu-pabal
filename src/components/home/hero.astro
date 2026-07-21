@@ -3,9 +3,10 @@ interface Props {
   hero_title: string;
   hero_desc: string;
   hero_image?: string;
+  villageName?: string;
 }
 
-const { hero_title, hero_desc, hero_image } = Astro.props as Props;
+const { hero_title, hero_desc, hero_image, villageName = "Desa Umbu Pabal" } = Astro.props as Props;
 
 const fallbackImage =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuBiKmOT9fCF7j9lL9KM8c7tL8nZh-5J5bUWkMzfeMxbNSX6Xj-tJPISJquc0D0hJ7lqfLjqWrDYvgMUXUr7iaYP0jKP0jQDwL4ketlDDP5N73nBIONqqKsmeqh_hgm_72Hg-1ziye0CK5eZ5jJ4BjWNid80PtTI9B45qZPZqcBQ08tHvTbzsN7IWsNIzZfwwFRUZjPL-_jm5NrCISBQ68EcQ_FXq_DzNbfx_o_SkNGYHOaOiK6pgSFB7h9KyUtN-p9KrI9r7mvLmD4";
@@ -32,7 +33,7 @@ const fallbackImage =
         <span
           class="inline-block px-4 py-1 bg-primary text-on-primary rounded-full font-label-md mb-6"
         >
-          Selamat Datang di Desa Umbu Pabal
+          Selamat Datang di {villageName}
         </span>
         <h1
           class="inline-block font-headline-xl text-headline-xl mb-6 leading-tight"
@@ -45,7 +46,7 @@ const fallbackImage =
       <!-- NOTE: mobile texts -->
       <div class="mb-8 md:hidden">
         <p class="text-3xl font-bold">
-          Selamat datang di <br />Desa Umbu Pabal
+          Selamat datang di <br />{villageName}
         </p>
       </div>
 

@@ -7,9 +7,10 @@ interface TimelineEvent {
 
 interface Props {
   timelineEvents?: TimelineEvent[];
+  villageName?: string;
 }
 
-const { timelineEvents } = Astro.props;
+const { timelineEvents, villageName = "Desa Umbu Pabal" } = Astro.props;
 
 const defaultEvents: TimelineEvent[] = [
   {
@@ -22,7 +23,7 @@ const defaultEvents: TimelineEvent[] = [
     year: "1945",
     title: "Integrasi Administratif",
     description:
-      "Menyusul kemerdekaan Indonesia, desa secara resmi diakui dalam tata kelola pemerintahan kabupaten dengan nama resmi Desa Umbu Pabal (Desa Lestari).",
+      "Menyusul kemerdekaan Indonesia, desa secara resmi diakui dalam tata kelola pemerintahan kabupaten dengan nama resmi " + villageName + " (Desa Lestari).",
   },
   {
     year: "2004",

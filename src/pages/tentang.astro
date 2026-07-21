@@ -37,6 +37,7 @@ const staffMembers = orgMembers.filter(m => !m.isHead).map(m => ({
 const timelineEvents = await db.select().from(tentangTimelineEvents).orderBy(asc(tentangTimelineEvents.sortOrder));
 
 // Extract settings
+const villageName = settings.village_name || "Desa Umbu Pabal";
 const tentangHeroDesc = settings.tentang_hero_desc || "";
 const tentangHeroImage = settings.tentang_hero_image
   ? `/api/settings/image/tentang_hero_image?v=${encodeURIComponent(settings.tentang_hero_image)}`
@@ -68,8 +69,8 @@ const geographyItems = [
 ];
 ---
 
-<Layout title="Tentang Desa - Desa Umbu Pabal" activePage="tentangKami" session={session}>
-  <Hero desc={tentangHeroDesc} hero_image={tentangHeroImage} />
+<Layout title={`Tentang Desa - ${villageName}`} activePage="tentangKami" session={session}>
+  <Hero desc={tentangHeroDesc} hero_image={tentangHeroImage} villageName={villageName} />
   <!-- <HistoryText /> -->
   <OrganizationHierarchy
     villageHead={villageHead ? { name: villageHead.name, role: villageHead.role, image: villageHead.image?.includes("blob.vercel-storage.com") ? `/api/tentang/org-members/image/${villageHead.id}` : (villageHead.image || "") } : undefined}
@@ -77,7 +78,7 @@ const geographyItems = [
   />
   <VillageRegion geographyItems={geographyItems} />
   <!-- <BuildingSurveyCTA /> -->
-  <History timelineEvents={timelineEvents.map(e => ({ year: e.year, title: e.title, description: e.description }))} />
+  <History timelineEvents={timelineEvents.map(e => ({ year: e.year, title: e.title, description: e.description }))} villageName={villageName} />
 
   <script is:inline>
     // Fade-in animation on scroll using IntersectionObserver

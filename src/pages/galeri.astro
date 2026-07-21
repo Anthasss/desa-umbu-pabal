@@ -2,9 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
 import { db } from "../db";
-import { galleryImages } from "../db/schema";
+import { galleryImages, siteSettings } from "../db/schema";
 import Hero from "../components/galeri/hero.astro";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const prerender = false;
 
@@ -22,9 +22,12 @@ const galleryItems = dbImages.map((img) => ({
   title: img.title,
   imageUrl: img.imageUrl,
 }));
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 ---
 
-<Layout title="Galeri Desa - Desa Umbu Pabal" activePage="galeri" session={session}>
+<Layout title={`Galeri Desa - ${villageName}`} activePage="galeri" session={session}>
   <Hero />
 
   <!-- Category Filter -->

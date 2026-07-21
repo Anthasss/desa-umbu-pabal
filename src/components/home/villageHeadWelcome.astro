@@ -3,9 +3,10 @@ interface Props {
   sambutan: string;
   kepalaDesaName: string;
   kepalaDesaImage: string;
+  villageName?: string;
 }
 
-const { sambutan, kepalaDesaName, kepalaDesaImage } = Astro.props;
+const { sambutan, kepalaDesaName, kepalaDesaImage, villageName = "Desa Umbu Pabal" } = Astro.props;
 ---
 
 <section class="py-section-padding-desktop bg-surface-bright">
@@ -37,7 +38,7 @@ const { sambutan, kepalaDesaName, kepalaDesaImage } = Astro.props;
             {kepalaDesaName}
           </h4>
           <p class="text-on-surface-variant opacity-70">
-            Kepala Desa Umbu Pabal
+            Kepala Desa {villageName}
           </p>
         </div>
         <a

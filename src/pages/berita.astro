@@ -3,8 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
 import Hero from "../components/berita/hero.astro";
 import { db } from "../db";
-import { news } from "../db/schema";
-import { desc } from "drizzle-orm";
+import { news, siteSettings } from "../db/schema";
+import { desc, eq } from "drizzle-orm";
 
 export const prerender = false;
 
@@ -13,6 +13,9 @@ const session = await auth.api.getSession({
 });
 
 const allNews = await db.select().from(news).orderBy(desc(news.id));
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 
 const categories = ["Semua", ...new Set(allNews.map((n) => n.category))];
 
@@ -29,7 +32,7 @@ const categoryStyles: Record<string, string> = {
 };
 ---
 
-<Layout title="Berita Desa - Desa Umbu Pabal" activePage="berita" session={session}>
+<Layout title={`Berita Desa - ${villageName}`} activePage="berita" session={session}>
   <Hero />
   <!-- Search + Category Filter -->
   <div class="bg-surface-container-low py-4 mb-8 px-6">

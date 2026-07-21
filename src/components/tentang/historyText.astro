@@ -1,3 +1,11 @@
+---
+interface Props {
+  villageName?: string;
+}
+
+const { villageName = "Desa Umbu Pabal" } = Astro.props;
+---
+
 <section
   class="py-section-padding-desktop px-gutter max-w-container-max mx-auto transition-all duration-700 opacity-100 translate-y-0"
 >
@@ -24,7 +32,7 @@
       <p
         class="text-on-surface-variant font-body-md text-body-md leading-relaxed"
       >
-        Didirikan pada awal abad ke-19, Desa Umbu Pabal bermula sebagai
+        Didirikan pada awal abad ke-19, {villageName} bermula sebagai
         pemukiman agraris kecil yang menjunjung tinggi semangat gotong royong.
         Selama dua dekade terakhir, kami telah bertransformasi menjadi pelopor
         desa digital tanpa meninggalkan akar budaya kami.

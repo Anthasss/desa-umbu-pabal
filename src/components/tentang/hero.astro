@@ -2,9 +2,10 @@
 interface Props {
   desc?: string;
   hero_image?: string;
+  villageName?: string;
 }
 
-const { desc = "", hero_image } = Astro.props;
+const { desc = "", hero_image, villageName = "Desa Umbu Pabal" } = Astro.props;
 
 const fallbackImage =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuBv5DzSDYSZ0VOEhEY_mGSUnKm-rrLSNmRcWk7Lr-kUqaYmloeL5G3-l2QKEsYizA6SW70l0smWakk9dySRxsv9RyGFGGX0nRBxYWIR4GwpAuoo8-zeO03C2Q2uf4HiXWujYpV6dgCCK4RooD8VygOME97TkNWHAEicqCC6579HmjcRajMA-z6Ry4EGZz8jeGdG-8Z3bjdIlsdmZvkclJP-W9p01zJEfdE5vDv-LDGCJvE6RSX9oVByXnwGXgGh-NYEJhWpARFWKvs";
@@ -15,7 +16,7 @@ const fallbackImage =
 >
   <div class="absolute inset-0 z-0">
     <img
-      alt="Desa Umbu Pabal Landscape"
+      alt={`${villageName} Landscape`}
       class="w-full h-full object-cover"
       src={hero_image || fallbackImage}
     />
@@ -24,7 +25,7 @@ const fallbackImage =
   </div>
   <div class="relative z-10 text-center text-white px-gutter">
     <h1 class="text-2xl font-headline-xl sm:text-headline-xl mb-4">
-      Tentang Desa Umbu Pabal
+      Tentang {villageName}
     </h1>
     <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-primary-fixed">
       {desc || "Mewujudkan Digital Stewardship: Memadukan nilai tradisional dengan tata kelola modern untuk kesejahteraan seluruh warga."}
