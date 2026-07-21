@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { auth } from "../../lib/auth";
 import { db } from "../../db";
-import { news } from "../../db/schema";
+import { news, siteSettings } from "../../db/schema";
 import { eq, ne, and, desc } from "drizzle-orm";
 
 export const prerender = false;
@@ -22,6 +22,9 @@ const [article] = await db.select().from(news).where(eq(news.slug, slug));
 if (!article) {
   return Astro.redirect("/berita");
 }
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 
 const relatedNews = await db
   .select()
@@ -50,7 +53,7 @@ const paragraphs = article.content
 ---
 
 <Layout
-  title={`${article.title} - Desa Umbu Pabal`}
+  title={`${article.title} - ${villageName}`}
   activePage="berita"
   session={session}
 >

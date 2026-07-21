@@ -1,15 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { auth } from "../lib/auth";
+import { db } from "../db";
+import { siteSettings } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 export const prerender = false;
 
 const session = await auth.api.getSession({
   headers: Astro.request.headers,
 });
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 ---
 
-<Layout title="Warisan Budaya - Desa Umbu Pabal" activePage="budaya" session={session}>
+<Layout title={`Warisan Budaya - ${villageName}`} activePage="budaya" session={session}>
   <!-- Hero Section -->
   <section
     class="relative h-125 flex items-center justify-center overflow-hidden"
@@ -36,7 +42,7 @@ const session = await auth.api.getSession({
       </h1>
       <p class="font-body-lg text-body-lg opacity-90">
         Sejarah panjang gotong royong dan kearifan lokal yang membentuk pondasi
-        pelestarian alam di Desa Umbu Pabal.
+        pelestarian alam di {villageName}.
       </p>
     </div>
   </section>

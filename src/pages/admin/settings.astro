@@ -34,7 +34,7 @@ if (session.user.role !== "admin") {
             <h1
               class="font-headline-md text-headline-md font-bold text-primary mb-2"
             >
-              Pengaturan Situs
+              Pengaturan Halaman Utama
             </h1>
             <p class="text-on-surface-variant">
               Kelola konten yang ditampilkan di halaman utama
@@ -53,6 +53,38 @@ if (session.user.role !== "admin") {
           id="save-error"
           class="hidden bg-red-50 text-red-700 border border-red-200 rounded-xl p-4 mb-6"
         >
+        </div>
+
+        <!-- Village Name Section -->
+        <div
+          class="bg-background rounded-xl p-6 border border-outline-variant mb-8"
+        >
+          <h3
+            class="font-label-lg text-on-surface mb-4 flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >location_on</span
+            >
+            Nama Desa
+          </h3>
+          <div class="flex flex-col gap-4">
+            <div>
+              <label
+                for="village-name"
+                class="block text-on-surface font-label-md mb-2"
+                >Nama Desa *</label
+              >
+              <input
+                type="text"
+                id="village-name"
+                class="w-full px-4 py-3 rounded-xl border border-outline bg-surface text-on-surface font-body-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                placeholder="Contoh: Desa Umbu Pabal"
+              />
+              <p class="text-on-surface-variant text-sm mt-1">
+                Nama desa yang ditampilkan di seluruh halaman website.
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- Hero Section -->
@@ -269,6 +301,9 @@ if (session.user.role !== "admin") {
 </Layout>
 
 <script>
+  const villageName = document.getElementById(
+    "village-name",
+  ) as HTMLInputElement;
   const heroTitle = document.getElementById("hero-title") as HTMLInputElement;
   const heroDesc = document.getElementById("hero-desc") as HTMLTextAreaElement;
   const heroImageFile = document.getElementById(
@@ -489,6 +524,7 @@ if (session.user.role !== "admin") {
       const res = await fetch("/api/settings");
       const data = await res.json();
 
+      villageName.value = data.settings.village_name || "Desa Umbu Pabal";
       heroTitle.value = data.settings.hero_title || "";
       heroDesc.value = data.settings.hero_desc || "";
       vhwSambutan.value = data.settings.vhw_sambutan || "";
@@ -525,6 +561,7 @@ if (session.user.role !== "admin") {
     saveBtn.textContent = "Menyimpan...";
 
     const settings: Record<string, string> = {
+      village_name: villageName.value.trim() || "Desa Umbu Pabal",
       hero_title: heroTitle.value.trim(),
       hero_desc: heroDesc.value.trim(),
       hero_image: heroImageUrl.value,

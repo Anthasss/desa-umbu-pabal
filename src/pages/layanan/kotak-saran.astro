@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { auth } from "../../lib/auth";
+import { db } from "../../db";
+import { siteSettings } from "../../db/schema";
+import { eq } from "drizzle-orm";
 
 export const prerender = false;
 
@@ -11,10 +14,13 @@ const session = await auth.api.getSession({
 if (!session) {
   return Astro.redirect("/login");
 }
+
+const [villageNameRow] = await db.select().from(siteSettings).where(eq(siteSettings.key, "village_name")).limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 ---
 
 <Layout
-  title="Kotak Saran - Desa Umbu Pabal"
+  title={`Kotak Saran - ${villageName}`}
   activePage="layanan"
   session={session}
 >

@@ -1,6 +1,9 @@
 ---
 import "../styles/global.css";
 import AdminLayout from "./AdminLayout.astro";
+import { db } from "../db";
+import { siteSettings } from "../db/schema";
+import { eq } from "drizzle-orm";
 
 interface Props {
   title: string;
@@ -11,6 +14,14 @@ interface Props {
 const { title, activePage = "home", session = null } = Astro.props;
 
 const isAdmin = session?.user?.role === "admin";
+
+// Query village name from settings
+const [villageNameRow] = await db
+  .select()
+  .from(siteSettings)
+  .where(eq(siteSettings.key, "village_name"))
+  .limit(1);
+const villageName = villageNameRow?.value || "Desa Umbu Pabal";
 
 const avatarName = session?.user?.name || "";
 const avatarUrl = avatarName
@@ -74,7 +85,7 @@ const layananItems = [
           <div
             class="text-base md:font-headline-md md:text-headline-md font-bold text-primary"
           >
-            Desa Umbu Pabal
+            {villageName}
           </div>
         </div>
         <div class="flex justify-end items-center gap-6">
@@ -276,10 +287,10 @@ const layananItems = [
           <div
             class="font-headline-md text-headline-md font-bold text-on-primary mb-6"
           >
-            Desa Umbu Pabal
+            {villageName}
           </div>
           <p class="text-primary-fixed -dim font-body-md opacity-80">
-            Kawasan Pusat Pemerintahan Desa Desa Umbu Pabal, Kec. Alam Subur,
+            Kawasan Pusat Pemerintahan Desa {villageName}, Kec. Alam Subur,
             Kab. Lestari, Indonesia 65432.
           </p>
         </div>
@@ -333,7 +344,7 @@ const layananItems = [
         class="max-w-container-max mx-auto px-gutter py-8 border-t border-primary-container flex justify-center"
       >
         <p class="text-primary-fixed -dim font-body-md text-sm opacity-60">
-          © {new Date().getFullYear()} Desa Umbu Pabal. All rights reserved.
+          © {new Date().getFullYear()} {villageName}. All rights reserved.
         </p>
       </div>
     </footer>

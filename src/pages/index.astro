@@ -41,14 +41,17 @@ const vm_missions = missionsRows.map((m) => ({
   title: m.title,
   description: m.description,
 }));
+
+const villageName = settings.village_name || "Desa Umbu Pabal";
 ---
 
-<Layout title="Desa Umbu Pabal" activePage="home" session={session}>
-  <Hero hero_title={hero_title} hero_desc={hero_desc} hero_image={hero_image} />
+<Layout title={villageName} activePage="home" session={session}>
+  <Hero hero_title={hero_title} hero_desc={hero_desc} hero_image={hero_image} villageName={villageName} />
   <VillageHeadWelcome
     sambutan={vhw_sambutan}
     kepalaDesaName={vhw_kepalaDesaName}
     kepalaDesaImage={vhw_kepalaDesaImage}
+    villageName={villageName}
   />
   <!-- <InfoBento /> -->
   <VisionMission vision={vm_vision} missions={vm_missions} />

@@ -9,6 +9,10 @@ const db = drizzle({ client: sql, schema: { siteSettings, vmMissions } });
 
 const settings = [
   {
+    key: "village_name",
+    value: "Desa Umbu Pabal",
+  },
+  {
     key: "hero_title",
     value: "Membangun Masa Depan Berbasis Nilai Tradisi.",
   },
