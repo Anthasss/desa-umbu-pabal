@@ -392,9 +392,7 @@ if (session.user.role !== "admin") {
           (member, index) => {
             const hasImage = member.image && member.image.length > 0;
             const previewUrl = hasImage
-              ? (member.image.includes("blob.vercel-storage.com")
-                  ? `/api/tentang/org-members/image/${member.id || "new_" + index}?v=${encodeURIComponent(member.image)}`
-                  : member.image)
+              ? `/api/tentang/org-members/image/${member.id || "new_" + index}?v=${encodeURIComponent(member.image)}`
               : "";
             return `
         <div class="flex gap-3 items-start p-4 bg-surface rounded-xl border border-outline-variant">

@@ -30,8 +30,8 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  // Delete old image from blob storage if it exists
-  if (oldUrl && oldUrl.includes("blob.vercel-storage.com")) {
+  // Delete old image from S3 storage if it exists
+  if (oldUrl) {
     try {
       await deleteFile(oldUrl);
     } catch {

@@ -1,13 +1,53 @@
-import { put, del } from "@vercel/blob";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 
-function getBlobToken(): string {
-  const token = import.meta.env.BLOB_READ_WRITE_TOKEN;
-  if (!token) {
+function getS3Client(): S3Client {
+  const endpoint = import.meta.env.S3_ENDPOINT;
+  const accessKeyId = import.meta.env.S3_ACCESS_KEY_ID;
+  const secretAccessKey = import.meta.env.S3_SECRET_ACCESS_KEY;
+  const bucket = import.meta.env.S3_BUCKET;
+
+  if (!endpoint || !accessKeyId || !secretAccessKey || !bucket) {
     throw new Error(
-      "BLOB_READ_WRITE_TOKEN is not set. Add it to your .env file or environment variables.",
+      "S3 environment variables are not set. Add S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, and S3_BUCKET to your .env file.",
     );
   }
-  return token;
+
+  return new S3Client({
+    endpoint,
+    region: "auto",
+    credentials: { accessKeyId, secretAccessKey },
+    forcePathStyle: true,
+  });
+}
+
+function getS3Bucket(): string {
+  const bucket = import.meta.env.S3_BUCKET;
+  if (!bucket) throw new Error("S3_BUCKET is not set.");
+  return bucket;
+}
+
+function getS3Endpoint(): string {
+  const endpoint = import.meta.env.S3_ENDPOINT;
+  if (!endpoint) throw new Error("S3_ENDPOINT is not set.");
+  return endpoint;
+}
+
+/** Extract the object key from a full S3 URL. */
+function getKeyFromUrl(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    // Path style: https://endpoint/bucket/key
+    const parts = parsed.pathname.split("/").filter(Boolean);
+    if (parts.length >= 2) return parts.slice(1).join("/");
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 const ALLOWED_TYPES = [
@@ -60,41 +100,62 @@ export async function uploadFile(
   file: File,
   folder: string,
 ): Promise<{ url: string; fileName: string; fileType: string }> {
-  const ext = file.name.split(".").pop() || "bin";
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const pathname = `${folder}/${Date.now()}-${safeName}`;
+  const key = `${folder}/${Date.now()}-${safeName}`;
 
-  const blob = await put(pathname, file, {
-    access: "private",
-    addRandomSuffix: true,
-    token: getBlobToken(),
-  });
+  const arrayBuffer = await file.arrayBuffer();
+
+  const s3 = getS3Client();
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: getS3Bucket(),
+      Key: key,
+      Body: new Uint8Array(arrayBuffer),
+      ContentType: file.type || "application/octet-stream",
+    }),
+  );
+
+  const url = `${getS3Endpoint()}/${getS3Bucket()}/${key}`;
 
   return {
-    url: blob.url,
+    url,
     fileName: safeName,
     fileType: getFileType(file),
   };
 }
 
 export async function deleteFile(url: string): Promise<void> {
-  await del(url, { token: getBlobToken() });
+  const key = getKeyFromUrl(url);
+  if (!key) return; // Not a valid S3 URL, skip
+
+  const s3 = getS3Client();
+  await s3.send(
+    new DeleteObjectCommand({
+      Bucket: getS3Bucket(),
+      Key: key,
+    }),
+  );
 }
 
 export async function downloadFile(
   url: string,
 ): Promise<{ body: ReadableStream; contentType: string }> {
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${getBlobToken()}` },
-  });
+  const key = getKeyFromUrl(url);
+  if (!key) throw new Error(`Invalid S3 URL: ${url}`);
 
-  if (!res.ok) {
-    throw new Error(`Failed to download file: ${res.statusText}`);
-  }
+  const s3 = getS3Client();
+  const res = await s3.send(
+    new GetObjectCommand({
+      Bucket: getS3Bucket(),
+      Key: key,
+    }),
+  );
+
+  const body = res.Body!.transformToWebStream();
 
   return {
-    body: res.body!,
-    contentType: res.headers.get("content-type") || "application/octet-stream",
+    body,
+    contentType: res.ContentType || "application/octet-stream",
   };
 }
 
@@ -102,15 +163,22 @@ export async function uploadImage(
   file: File,
   folder: string,
 ): Promise<{ url: string }> {
-  const ext = file.name.split(".").pop() || "jpg";
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const pathname = `${folder}/${Date.now()}-${safeName}`;
+  const key = `${folder}/${Date.now()}-${safeName}`;
 
-  const blob = await put(pathname, file, {
-    access: "private",
-    addRandomSuffix: true,
-    token: getBlobToken(),
-  });
+  const arrayBuffer = await file.arrayBuffer();
 
-  return { url: blob.url };
+  const s3 = getS3Client();
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: getS3Bucket(),
+      Key: key,
+      Body: new Uint8Array(arrayBuffer),
+      ContentType: file.type || "image/jpeg",
+    }),
+  );
+
+  const url = `${getS3Endpoint()}/${getS3Bucket()}/${key}`;
+
+  return { url };
 }

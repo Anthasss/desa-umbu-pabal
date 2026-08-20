@@ -33,17 +33,17 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  // Delete old image from blob storage if it exists
+  // Delete old image from S3 storage if it exists
   const [existing] = await db
     .select()
     .from(siteSettings)
     .where(eq(siteSettings.key, settingKey));
 
-  if (existing?.value?.includes("blob.vercel-storage.com")) {
+  if (existing?.value) {
     try {
       await deleteFile(existing.value);
     } catch {
-      // Ignore deletion errors — old blob may already be gone
+      // Ignore deletion errors — old file may already be gone
     }
   }
 

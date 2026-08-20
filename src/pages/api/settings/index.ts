@@ -39,7 +39,7 @@ export const PATCH: APIRoute = async ({ request }) => {
     );
   }
 
-  // Clean up old blob images if image settings are changing
+  // Clean up old S3 images if image settings are changing
   const imageKeys = ["vhw_kepalaDesaImage", "hero_image", "tentang_hero_image"];
   for (const imgKey of imageKeys) {
     if (updates[imgKey] !== undefined) {
@@ -51,7 +51,7 @@ export const PATCH: APIRoute = async ({ request }) => {
       const oldUrl = existing?.value ?? "";
       const newUrl = updates[imgKey];
 
-      if (oldUrl && oldUrl !== newUrl && oldUrl.includes("blob.vercel-storage.com")) {
+      if (oldUrl && oldUrl !== newUrl) {
         try {
           await deleteFile(oldUrl);
         } catch {
