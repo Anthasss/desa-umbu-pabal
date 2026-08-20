@@ -30,13 +30,11 @@ export const DELETE: APIRoute = async ({ request, params }) => {
     });
   }
 
-  // Delete from blob storage
-  if (image.imageUrl.includes("blob.vercel-storage.com")) {
-    try {
-      await deleteFile(image.imageUrl);
-    } catch {
-      // Ignore deletion errors
-    }
+  // Delete image from S3 storage
+  try {
+    await deleteFile(image.imageUrl);
+  } catch {
+    // Ignore deletion errors
   }
 
   await db.delete(galleryImages).where(eq(galleryImages.id, id));

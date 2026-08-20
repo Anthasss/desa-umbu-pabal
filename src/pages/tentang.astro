@@ -30,7 +30,7 @@ const villageHead = orgMembers.find(m => m.isHead);
 const staffMembers = orgMembers.filter(m => !m.isHead).map(m => ({
   name: m.name,
   role: m.role,
-  image: m.image?.includes("blob.vercel-storage.com") ? `/api/tentang/org-members/image/${m.id}` : (m.image || ""),
+  image: m.image ? `/api/tentang/org-members/image/${m.id}` : "",
 }));
 
 // Fetch timeline events

@@ -79,7 +79,7 @@ export const PUT: APIRoute = async ({ request, params }) => {
       return new Response(JSON.stringify({ error: validation.error }), { status: 400 });
     }
 
-    if (existing.image.includes("blob.vercel-storage.com")) {
+    if (existing.image) {
       try {
         await deleteFile(existing.image);
       } catch {
@@ -137,7 +137,7 @@ export const DELETE: APIRoute = async ({ request, params }) => {
     return new Response(JSON.stringify({ error: "Berita tidak ditemukan" }), { status: 404 });
   }
 
-  if (item.image.includes("blob.vercel-storage.com")) {
+  if (item.image) {
     try {
       await deleteFile(item.image);
     } catch {
