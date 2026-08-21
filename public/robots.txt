@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://desa-umbu-pabal.vercel.app/sitemap-index.xml
